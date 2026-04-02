@@ -1,0 +1,966 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* 1. CORE VARIABLES & BASE */
+
+/* Global color palette and variables */
+:root {
+    --bg-dark: #0a0a0a;
+    --bg-card: #111111;
+    --border-color: #222222;
+    --text-main: #94a3b8;
+    --text-bright: #f8fafc;
+    --accent: #f97316;
+    --accent-dim: rgba(249, 115, 22, 0.1);
+    --green-live: #10b981;
+}
+
+/* Reset margin, padding, and box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Enable smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Base body styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar { 
+    width: 5px; 
+}
+::-webkit-scrollbar-track { 
+    background: var(--bg-dark); 
+}
+::-webkit-scrollbar-thumb { 
+    background: #333; 
+    border-radius: 10px; 
+}
+
+/* 2. SAAS NAVIGATION */
+
+/* Main fixed navbar container */
+.saas-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 65px;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1000;
+}
+
+/* Inner wrapper for navbar content */
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+}
+
+/* Brand logo text and typography */
+.brand-logo {
+    text-decoration: none;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-bright);
+    font-family: monospace;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for brand logo */
+.brand-logo:hover {
+    color: var(--accent);
+    text-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+}
+
+/* Helper classes for accent text colors */
+.accent-dot, 
+.accent-text { 
+    color: var(--accent); 
+}
+
+/* Container for all navigation links */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* Individual navigation items (Experiences, Projects, Contact) */
+.nav-item {
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+/* Hover color for nav items */
+.nav-item:hover { 
+    color: var(--text-bright); 
+}
+
+/* SaaS style underline animation for nav items */
+.nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+}
+
+/* Trigger underline width on hover */
+.nav-item:hover::after {
+    width: 100%;
+}
+
+/* Vertical separator line between links and icons */
+.nav-divider {
+    width: 1px;
+    height: 24px;
+    background: #333;
+    margin: 0 5px;
+}
+
+/* Base styling for social icons in navbar */
+.nav-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--text-main);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Hover effect specifically for GitHub icon */
+.github-link:hover svg {
+    fill: #f0f6fc;
+    transform: scale(1.2) rotate(5deg);
+}
+
+/* Hover effect specifically for LinkedIn icon */
+.linkedin-link:hover svg {
+    fill: #0a66c2;
+    transform: scale(1.2) rotate(-5deg);
+}
+
+/* Primary call-to-action button (View Resume) */
+.nav-btn-primary {
+    text-decoration: none;
+    background: var(--text-bright);
+    color: var(--bg-dark);
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: opacity 0.2s ease;
+}
+
+/* Hover effect for CTA button */
+.nav-btn-primary:hover { 
+    opacity: 0.9; 
+}
+
+/* 3. DASHBOARD CONTENT & HERO */
+
+/* Main container wrapping all dashboard sections */
+.dashboard-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 130px 40px 60px 40px;
+}
+
+/* Margin bottom for the hero section */
+.command-center {
+    margin-bottom: 100px;
+}
+
+/* Thin industrial line separator in hero */
+.cmd-separator {
+    width: 60px;
+    height: 2px;
+    background-color: var(--accent);
+    margin-bottom: 30px;
+    border-radius: 2px;
+}
+
+/* Main hero title (Name) */
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--text-bright);
+    line-height: 1.1;
+    margin-bottom: 15px;
+    letter-spacing: -2px;
+}
+
+/* Secondary hero text (Tagline) */
+.hero-tagline {
+    font-size: 1.8rem;
+    color: var(--text-bright);
+    margin-bottom: 25px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+/* General hero description paragraph */
+.hero-desc {
+    max-width: 650px;
+    font-size: 1.1rem;
+    color: var(--text-main);
+    margin-bottom: 50px;
+}
+
+/* Grid layout for the 3 brutal metrics */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Individual metric card container */
+.metric-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: 12px;
+    transition: border-color 0.3s ease;
+}
+
+/* Hover effect for metric card */
+.metric-box:hover { 
+    border-color: #444; 
+}
+
+/* Big number text inside metric card */
+.metric-value {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--text-bright);
+    margin-bottom: 5px;
+}
+
+/* Suffix for metric values (M, %, th) */
+.metric-suffix { 
+    color: var(--accent); 
+    font-size: 1.5rem; 
+    margin-left: 2px; 
+}
+
+/* Title label for the metric */
+.metric-label {
+    font-weight: 700;
+    color: var(--text-bright);
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+/* Small context text under the metric label */
+.metric-context { 
+    font-size: 0.8rem; 
+    color: #64748b; 
+}
+
+/* Keyframe animation for any pulsing elements */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(249, 115, 22, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+}
+
+/* 4. SECTIONS (CHANGELOG & DEPLOYMENTS) */
+
+/* Base styling for all main content sections */
+.saas-section {
+    padding-top: 80px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 80px;
+}
+
+/* Wrapper for section titles and subtitles */
+.section-header { 
+    margin-bottom: 50px; 
+}
+
+/* Section title typography */
+.section-header h2 {
+    font-size: 1.6rem;
+    color: var(--text-bright);
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+/* Section subtitle typography */
+.section-header p { 
+    color: #64748b; 
+    font-size: 1rem; 
+}
+
+/* Layout for experience/changelog rows */
+.changelog-row {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+/* Left column of changelog containing date and badge */
+.changelog-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Date text in changelog */
+.changelog-meta .date { 
+    font-weight: 700; 
+    color: #64748b; 
+    font-size: 0.9rem; 
+}
+
+/* Base style for category badges */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    width: fit-content;
+}
+
+/* Specific colors for different badge types */
+.badge-org { background: #1e293b; color: #3b82f6; }
+.badge-biz { background: #2d1b1b; color: #ef4444; }
+
+/* Job title text in changelog */
+.changelog-details h3 { 
+    color: var(--text-bright); 
+    margin-bottom: 15px; 
+    font-size: 1.2rem; 
+}
+
+/* Paragraph styling for changelog descriptions */
+.changelog-details p {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+/* Wrapper for project/deployment cards */
+.deploy-card {
+    display: flex;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for project cards */
+.deploy-card:hover {
+    transform: translateY(-4px);
+    border-color: #444;
+    background: #161616;
+}
+
+/* Image container for projects */
+.deploy-img { 
+    width: 300px; 
+    overflow: hidden; 
+    background: #000; 
+}
+
+/* Image scaling on hover */
+.deploy-img img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    opacity: 0.8; 
+    transition: transform 0.4s ease; 
+}
+.deploy-card:hover .deploy-img img { 
+    transform: scale(1.05); 
+    opacity: 1; 
+}
+
+/* Content area next to project image */
+.deploy-content { 
+    padding: 30px; 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+/* Wrapper for project title */
+.deploy-header-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 15px; 
+}
+
+/* Project title typography */
+.deploy-header-row h3 { 
+    color: var(--text-bright); 
+    font-size: 1.3rem; 
+    font-weight: 700; 
+}
+
+/* Project description paragraph */
+.deploy-content p { 
+    font-size: 0.95rem; 
+    margin-bottom: 20px; 
+}
+
+/* Container for skill tags */
+.deploy-tags { 
+    display: flex; 
+    gap: 10px; 
+    margin-top: auto; 
+}
+
+/* Base style for individual skill tag */
+.tag { 
+    background: #1e293b; 
+    color: #94a3b8; 
+    padding: 4px 12px; 
+    border-radius: 4px; 
+    font-size: 0.75rem; 
+    font-weight: 700; 
+}
+
+/* Specific colors for tag categories */
+.tag-hw { color: #3b82f6; }
+.tag-biz { color: #f59e0b; }
+
+/* Link menuju Archive di halaman Home */
+.archive-link-container {
+    margin-top: 40px;
+    padding-left: 10px; /* Biar sejajar sama teks card di atasnya */
+}
+
+.archive-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-bright);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.archive-link:hover {
+    color: var(--accent);
+}
+
+.archive-link .arrow-icon {
+    transition: transform 0.3s ease;
+}
+
+.archive-link:hover .arrow-icon {
+    transform: translateX(6px);
+}
+
+/* 5. CONTACT SECTION (SaaS STYLE) */
+
+/* Grid layout splitting form and info */
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 40px;
+}
+
+/* Background panel for the form */
+.contact-form-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 40px;
+    border-radius: 12px;
+}
+
+/* Spacing for input blocks */
+.form-group {
+    margin-bottom: 25px;
+}
+
+/* Labels for input fields */
+.form-group label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+/* Form input and textarea styling */
+.saas-form input,
+.saas-form textarea {
+    width: 100%;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    color: var(--text-bright);
+    padding: 15px 20px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    resize: none;
+}
+
+/* Form focus states */
+.saas-form input:focus,
+.saas-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+}
+
+/* Submit button styling */
+.btn-submit {
+    background: var(--accent);
+    color: var(--bg-dark);
+    border: none;
+    padding: 15px 30px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+/* Submit button hover effects */
+.btn-submit:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Container for right side contact info */
+.contact-info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Individual card for email, phone, location */
+.info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: border-color 0.3s ease;
+}
+
+/* Hover effect for contact info cards */
+.info-card:hover {
+    border-color: #444;
+}
+
+/* Small label inside contact info cards */
+.info-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+/* Main value text inside contact info cards */
+.info-value {
+    color: var(--text-bright);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for clickable contact info values */
+a.info-value:hover {
+    color: var(--accent);
+}
+
+/* 6. FOOTER & CASE STUDY ADAPTATION */
+
+/* Main footer wrapper */
+.saas-footer {
+    margin-top: 100px;
+    padding: 60px 40px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Inner content alignment for footer */
+.footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Footer logo/brand text */
+.footer-brand { 
+    font-size: 1.2rem; 
+    font-weight: 800; 
+    color: var(--text-bright); 
+}
+
+/* Right aligned footer text */
+.footer-right { 
+    text-align: right; 
+    font-size: 0.85rem; 
+}
+
+/* Global Case Study Style (Ensures separate pages remain intact) */
+.article-container { 
+    max-width: 800px; 
+    margin: 120px auto; 
+    padding: 0 25px;
+}
+.project-hero-img { 
+    width: 100%; 
+    border-radius: 12px; 
+    border: 1px solid var(--border-color); 
+    margin-bottom: 40px; 
+}
+.article-content h2 { 
+    color: var(--text-bright); 
+    margin: 40px 0 20px; 
+}
+.back-link { 
+    color: var(--accent); 
+    font-weight: 700; 
+    text-decoration: none; 
+    display: block; 
+    margin-bottom: 30px; 
+}
+
+/* =========================================
+   9. CASE STUDY SPECIFICS (PROJECT PAGES)
+   ========================================= */
+.saas-project-meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 50px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.meta-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.meta-value {
+    color: var(--text-bright);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.article-content h2 {
+    font-size: 1.5rem;
+    color: var(--text-bright);
+    margin: 40px 0 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.article-content p, 
+.article-content ul {
+    font-size: 1.05rem;
+    color: var(--text-main);
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.article-content ul {
+    padding-left: 20px;
+}
+
+.article-content li {
+    margin-bottom: 10px;
+}
+
+.article-content strong {
+    color: var(--text-bright);
+}
+
+.article-inline-img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+/* Hardware Breakdown Grid */
+.component-breakdown {
+    margin: 60px 0;
+    padding-top: 40px;
+    border-top: 1px solid var(--border-color);
+}
+
+.component-row {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid var(--border-color);
+    transition: border-color 0.3s ease;
+}
+
+.component-row:hover {
+    border-color: #444;
+}
+
+.component-img-box {
+    flex: 0 0 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--border-color);
+}
+
+.component-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.component-text {
+    flex: 1;
+}
+
+.component-text h3 {
+    margin: 0 0 8px 0;
+    color: var(--text-bright);
+    font-size: 1.2rem;
+}
+
+.component-text p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+/* 7. MOBILE RESPONSIVE */
+
+/* =========================================
+   8. ARCHIVE & FILTERS (PROJECTS PAGE)
+   ========================================= */
+.filter-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.saas-filter-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.saas-filter-btn:hover {
+    border-color: #444;
+    color: var(--text-bright);
+}
+
+.saas-filter-btn.active {
+    background: var(--accent);
+    color: var(--bg-dark);
+    border-color: var(--accent);
+}
+
+.hide-project {
+    display: none !important;
+}
+
+.archive-header {
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.archive-header h2 {
+    font-size: 1.6rem;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+}
+
+.saas-archive-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    margin-bottom: 80px;
+    min-width: 700px; /* Biar bisa discroll kalau di HP */
+}
+
+.saas-archive-table th {
+    padding: 15px 20px;
+    color: var(--text-main);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.saas-archive-table td {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.3s ease;
+}
+
+.saas-archive-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.saas-archive-table .year-col {
+    color: var(--accent);
+    font-family: monospace;
+    font-size: 1rem;
+    width: 100px;
+}
+
+.saas-archive-table .title-col {
+    color: var(--text-bright);
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.saas-archive-table .title-sub {
+    display: block;
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 400;
+    margin-top: 4px;
+}
+
+.saas-archive-table .link-col a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    font-weight: 600;
+}
+
+.saas-archive-table .link-col a:hover {
+    color: var(--accent);
+}
+
+/* =========================================
+   10. ULTIMATE ARCHIVE GRID (PROJECTS.HTML)
+   ========================================= */
+.projects-archive-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.projects-archive-grid .deploy-card {
+    flex-direction: column; /* Gambar di atas, teks di bawah */
+    margin-bottom: 0; /* Margin diatur oleh gap grid */
+}
+
+.projects-archive-grid .deploy-img {
+    width: 100%;
+    height: 220px; /* Bikin seragam semua gambar */
+}
+
+.projects-archive-grid .deploy-content {
+    padding: 25px;
+}
+
+/* =========================================
+   11. READING PROGRESS BAR
+   ========================================= */
+#progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: transparent;
+    z-index: 9999;
+}
+
+#progress-bar {
+    height: 100%;
+    background: var(--accent); /* Warna Amber/Orange andalan lu */
+    width: 0%;
+    transition: width 0.1s ease;
+}
+
+/* Media query for screens smaller than 900px */
+@media (max-width: 900px) {
+    .metrics-grid { grid-template-columns: 1fr; }
+    .changelog-row { grid-template-columns: 1fr; gap: 15px; }
+    .deploy-card { flex-direction: column; }
+    .deploy-img { width: 100%; height: 200px; }
+    .hero-title { font-size: 2.5rem; }
+    .nav-links .nav-item, .nav-divider { display: none; }
+    .dashboard-wrapper { padding: 100px 25px 40px 25px; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-content { flex-direction: column; gap: 20px; text-align: center; }
+    .footer-right { text-align: center; }
+    .saas-project-meta { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+    .component-row { flex-direction: column; text-align: center; }
+    .component-img-box { flex: 0 0 100px; height: 100px; }
+    .projects-archive-grid { grid-template-columns: 1fr; }
+}

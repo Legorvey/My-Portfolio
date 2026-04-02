@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaFeeder IoT: Full-Stack Ecosystem</title>
+    <meta name="description" content="Case study on building AquaFeeder IoT, an automatic fish feeder integrating ESP32, multithreaded Python Flask backend, and a dynamic web dashboard.">
+    <meta name="author" content="Aditya Cakti Chandrasa">
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body class="saas-dashboard">
+
+    <nav class="saas-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="../index.html" class="brand-logo">&lt;A&gt;</a>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html#experiences" class="nav-item">EXPERIENCES</a>
+                <a href="../index.html#projects" class="nav-item">PROJECTS</a>
+                <a href="../index.html#contact" class="nav-item">CONTACT</a>
+                <div class="nav-divider"></div>
+                
+                <a href="https://github.com/adityacakti" target="_blank" class="nav-icon github-link" title="GitHub">
+                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                
+                <a href="https://linkedin.com/in/adityachandrasa" target="_blank" class="nav-icon linkedin-link" title="LinkedIn">
+                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                
+                <a href="../Aditya_Resume.pdf" target="_blank" class="nav-btn-primary">View Résumé</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-wrapper" style="padding-top: 100px;">
+        <article class="article-container">
+            
+            <a href="../index.html#projects" class="back-link">← Back to Dashboard</a>
+            
+            <h1 class="hero-title" style="font-size: 2.5rem; margin-bottom: 10px;">AquaFeeder IoT: Full-Stack Ecosystem</h1>
+            <p style="color: var(--text-main); font-size: 1.15rem; margin-bottom: 40px; font-weight: 500;">Bridging bare-metal hardware control with a dynamic Python web backend.</p>
+
+            <img src="../images/projects/aquafeederiot/1-hero.png" alt="AquaFeeder IoT System Architecture" class="project-hero-img">
+
+            <div class="saas-project-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Role</span>
+                    <span class="meta-value">Embedded Systems & Web Dev</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Timeline</span>
+                    <span class="meta-value">June 2025</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Tech Stack</span>
+                    <span class="meta-value">ESP32, C++, Python Flask, JS</span>
+                </div>
+            </div>
+
+            <div class="article-content">
+                <h2>The Mission</h2>
+                <p>Manual fish feeding is often inconsistent, leading to unpredictable water quality and poor fish health due to overfeeding or missed schedules. The AquaFeeder IoT project was born to bridge this gap. My objective was to architect and develop an end-to-end e-feeder ecosystem. This system needed to provide precise, automated feeding schedules while offering real-time distance monitoring and remote schedule management through a seamless web interface.</p>
+
+                <h2>System Architecture & Communication</h2>
+                <p>To ensure robustness and flexibility, I avoided instant IoT platforms and built the backend from scratch. The system architecture is defined by clear HTTP communication protocols between the C++ based ESP32 client and a dynamic Python Flask server:</p>
+                <ul>
+                    <li><strong>ESP32 as Client:</strong> The hardware utilizes the <code>HTTPClient</code> library to act as a client. It reads data from the ultrasonic sensor and sends a periodic <strong>POST</strong> request to the Flask server with the food level data in a JSON payload.</li>
+                    <li><strong>Python Flask as Server:</strong> The server acts as the centralized hub. It exposes REST endpoints (<code>/api/data</code>, <code>/api/schedule</code>) to receive sensor data and serve the current feeding schedules back to the ESP32.</li>
+                </ul>
+
+                <h2>The Technical Edge: Multithreaded Backend</h2>
+                <p>This project required rigorous software engineering logic beyond standard IoT scripting. A primary challenge was managing the feeding scheduler without blocking the main web server. I solved this by leveraging Python’s <code>threading</code> library.</p>
+                <p>I engineered a background thread that runs a scheduler loop in parallel with the Flask app. This thread continuously polls the <code>schedules.json</code> file. When a scheduled time matches, it executes the feeding command. This architecture ensures that web requests for the dashboard remain lightning-fast and uninterrupted while the automation runs reliably in the background.</p>
+
+                <h2>Building the Dynamic Web Dashboard</h2>
+                <p>The frontend was designed for an intuitive user experience, served using Jinja2 templating. Instead of generic charts, I created a custom CSS-based water/food level gauge that updates dynamically. To maintain the "application-like" feel, I utilized Vanilla JavaScript (Fetch API) to perform asynchronous data fetching (AJAX). This ensures that the food level, next feeding time, and status update in real-time without requiring a single page reload.</p>
+
+                <div class="component-breakdown">
+                    <h2>Hardware Component Breakdown</h2>
+                    <p style="margin-bottom: 30px;">An inside look at the core hardware that drives the AquaFeeder automation and monitoring logic.</p>
+                    
+                    <div class="component-row">
+                        <div class="component-img-box">
+                            <img src="../images/projects/aquafeederiot/2-esp32.png" alt="ESP32 Microcontroller">
+                        </div>
+                        <div class="component-text">
+                            <h3>ESP32: The Main Brain</h3>
+                            <p>Acts as the centralized microcontroller hub. It handles Wi-Fi connectivity, performs data acquisition from the sensor, executes C++ logic for HTTP communication, and generates PWM signals to control the servo mechanism.</p>
+                        </div>
+                    </div>
+
+                    <div class="component-row">
+                        <div class="component-img-box">
+                            <img src="../images/projects/aquafeederiot/3-servosg90.png" alt="Servo SG90">
+                        </div>
+                        <div class="component-text">
+                            <h3>Servo SG90: The Actuator</h3>
+                            <p>Controls the precise physical movement of the feeding door. It receives positional commands from the ESP32, rotating to the exact angle required to release the specified amount of fish food before automatically closing.</p>
+                        </div>
+                    </div>
+
+                    <div class="component-row">
+                        <div class="component-img-box">
+                            <img src="../images/projects/aquafeederiot/4-hcsr04.png" alt="Ultrasonic Sensor HC-SR04">
+                        </div>
+                        <div class="component-text">
+                            <h3>HC-SR04: The Eyes</h3>
+                            <p>Utilizes ultrasonic sound waves to measure the distance to the food surface within the container. This raw distance data is sent to the ESP32 and backend to calculate the container’s fullness percentage in real-time.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>Physical Integration & Prototypes</h2>
+                <p>Translating simulated designs into a physical product requires meticulous prototyping. While high-fidelity documentation was lost during the intensive development and testing phases, these authentic artifacts—a screenshot from a video review and a photo of a phone showing the dynamic dashboard—prove the successful symbiosis of the full-stack system.</p>
+
+                <img src="../images/projects/aquafeederiot/5-product.png" alt="AquaFeeder Physical Integration vs Web Dashboard" class="article-inline-img" style="margin-bottom: 10px;">
+                <p style="text-align: center; font-size: 0.95rem; color: #6b7280; font-style: italic; margin-top: 0; margin-bottom: 40px;">
+                    From Video Review to Mobile Control: Proving hardware-software symbiosis despite lost high-res documentation.
+                </p>
+
+                <h2>Conclusion</h2>
+                <p>AquaFeeder IoT is more than just an automatic feeder; it is a full-stack IoT ecosystem that demonstrates rigorous integration across bare-metal logic (C++), multithreaded backend architecture (Python), and responsive web development (JavaScript). Building this solidified my understanding of concurrent programming and RESTful communication in a hardware context.</p>
+            </div>
+        </article>
+
+        <footer class="saas-footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span class="footer-brand">Aditya<span class="accent-text">.</span></span>
+                    <p>© 2026 Aditya Cakti Chandrasa.</p>
+                </div>
+                <div class="footer-right">
+                    <p>Architected in VS Code. Built with standard HTML & CSS.</p>
+                    <p>System operational. All systems nominal.</p>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <script src="../script.js"></script>
+</body>
+<div id="progress-container"><div id="progress-bar"></div></div>
+</html>
