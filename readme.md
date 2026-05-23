@@ -2,7 +2,7 @@
 
 This repository contains the complete source code for my professional portfolio and engineering dashboard, accessible at [adityac.dev](https://adityac.dev). This project is built using a high-performance static web architecture with a strict focus on optimal load speeds, semantic elements, and clean code structure.
 
-## 🚀 Technical Specifications & Stack
+## Technical Specifications & Stack
 
 - **Frontend:** Vanilla HTML5, CSS3 (Custom Variables, Flexbox, Grid), Vanilla JavaScript (Fetch API)
 - **Deployment & Hosting:** Vercel Edge Network
