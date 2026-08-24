@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap');
 
 /* 1. CORE VARIABLES & BASE */
 
@@ -28,7 +28,7 @@ html {
 
 /* Base body styling */
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
     color: var(--text-main);
     line-height: 1.6;
@@ -39,6 +39,10 @@ body {
 /* Custom scrollbar for webkit browsers */
 ::-webkit-scrollbar { 
     width: 5px; 
+}
+::selection {
+    background-color: var(--accent);
+    color: var(--bg-dark);
 }
 ::-webkit-scrollbar-track { 
     background: var(--bg-dark); 
@@ -56,9 +60,11 @@ body {
     top: 0;
     width: 100%;
     height: 65px;
-    background: rgba(10, 10, 10, 0.8);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(249, 115, 22, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     z-index: 1000;
 }
 
@@ -79,7 +85,7 @@ body {
     font-size: 1.6rem;
     font-weight: 800;
     color: var(--text-bright);
-    font-family: monospace;
+    font-family: 'JetBrains Mono', monospace;
     letter-spacing: 1px;
     transition: all 0.3s ease;
 }
@@ -91,9 +97,12 @@ body {
 }
 
 /* Helper classes for accent text colors */
-.accent-dot, 
-.accent-text { 
-    color: var(--accent); 
+.accent-dot { color: var(--accent); }
+.accent-text {
+    background: linear-gradient(135deg, #f97316, #fb923c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 /* Container for all navigation links */
@@ -245,12 +254,14 @@ body {
     border: 1px solid var(--border-color);
     padding: 30px;
     border-radius: 12px;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 /* Hover effect for metric card */
 .metric-box:hover { 
-    border-color: #444; 
+    border-color: var(--accent); 
+    box-shadow: 0 4px 20px rgba(249, 115, 22, 0.15);
+    transform: translateY(-2px);
 }
 
 /* Big number text inside metric card */
@@ -259,6 +270,7 @@ body {
     font-weight: 800;
     color: var(--text-bright);
     margin-bottom: 5px;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* Suffix for metric values (M, %, th) */
@@ -380,13 +392,14 @@ body {
     text-decoration: none;
     color: inherit;
     margin-bottom: 25px;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* Hover effect for project cards */
 .deploy-card:hover {
     transform: translateY(-4px);
-    border-color: #444;
+    border-color: rgba(249, 115, 22, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(249, 115, 22, 0.1);
     background: #161616;
 }
 
@@ -531,7 +544,7 @@ body {
     color: var(--text-bright);
     padding: 15px 20px;
     border-radius: 6px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 0.95rem;
     transition: all 0.3s ease;
     resize: none;
@@ -551,19 +564,23 @@ body {
     color: var(--bg-dark);
     border: none;
     padding: 15px 30px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 800;
     font-size: 1rem;
     border-radius: 6px;
     cursor: pointer;
     width: 100%;
-    transition: opacity 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 /* Submit button hover effects */
 .btn-submit:hover {
-    opacity: 0.9;
     transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.4);
 }
 
 /* Container for right side contact info */
@@ -810,7 +827,7 @@ a.info-value:hover {
     color: var(--text-main);
     padding: 8px 20px;
     border-radius: 6px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
@@ -873,7 +890,7 @@ a.info-value:hover {
 
 .saas-archive-table .year-col {
     color: var(--accent);
-    font-family: monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 1rem;
     width: 100px;
 }
@@ -942,7 +959,8 @@ a.info-value:hover {
 
 #progress-bar {
     height: 100%;
-    background: var(--accent); /* Warna Amber/Orange andalan lu */
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent), 0 0 5px var(--accent);
     width: 0%;
     transition: width 0.1s ease;
 }
