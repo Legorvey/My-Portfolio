@@ -101,3 +101,23 @@ window.addEventListener('scroll', () => {
         progressBar.style.width = scrolled + '%';
     }
 });
+
+// =========================================
+// 4. LOAD GLOBAL COMPONENT: FOOTER
+// =========================================
+document.addEventListener("DOMContentLoaded", () => {
+    const footerPlaceholder = document.getElementById("footer-placeholder");
+    if (footerPlaceholder) {
+        fetch("footer.html")
+            .then(response => {
+                if (!response.ok) throw new Error("Network response was not ok");
+                return response.text();
+            })
+            .then(data => {
+                footerPlaceholder.innerHTML = data;
+            })
+            .catch(error => {
+                console.error("Failed to load footer:", error);
+            });
+    }
+});
