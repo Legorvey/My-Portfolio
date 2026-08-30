@@ -4,10 +4,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        // req.body should already be parsed by Vercel if it's sent as application/json
         const payload = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-        
-        // Append the secret access key from environment variables
         payload.access_key = process.env.WEB3FORMS_ACCESS_KEY;
 
         const response = await fetch('https://api.web3forms.com/submit', {

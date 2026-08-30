@@ -1,24 +1,13 @@
-// =========================================
-// 1. PROJECTS ARCHIVE: LIVE FILTER
-// =========================================
 const filterBtns = document.querySelectorAll('.filter-btn');
 const filterItems = document.querySelectorAll('.filter-item');
-
 if (filterBtns.length > 0) {
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Hapus class active dari semua tombol
             filterBtns.forEach(b => b.classList.remove('active'));
-            // Tambahin active ke tombol yang diklik
             btn.classList.add('active');
-            
             const filterValue = btn.getAttribute('data-filter');
-            
-            // Loop semua item project
             filterItems.forEach(item => {
                 const category = item.getAttribute('data-category');
-                
-                // Logika Filter
                 if(filterValue === 'all' || category === filterValue) {
                     item.classList.remove('hide-project');
                 } else {
@@ -28,25 +17,17 @@ if (filterBtns.length > 0) {
         });
     });
 }
-
-// =========================================
-// 2. CONTACT FORM AJAX SUBMISSION
-// =========================================
 const contactForm = document.querySelector('.saas-form');
 const submitBtn = document.querySelector('.btn-submit');
-
 if (contactForm && submitBtn) {
     contactForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Mencegah halaman reload
-        
+        e.preventDefault();
         const originalText = submitBtn.innerText;
         submitBtn.innerText = 'Transmitting...'; 
         submitBtn.style.opacity = '0.7';
-
         const formData = new FormData(contactForm);
         const object = Object.fromEntries(formData);
         const json = JSON.stringify(object);
-
         fetch('/api/contact', {
             method: 'POST',
             headers: {
@@ -57,28 +38,24 @@ if (contactForm && submitBtn) {
         })
         .then(async (response) => {
             if (response.status == 200) {
-                // Sukses
                 submitBtn.innerText = 'Transmission Successful ✅';
-                submitBtn.style.background = '#10b981'; // Ijo Live
+                submitBtn.style.background = '#10b981';
                 submitBtn.style.color = '#0a0a0a';
                 submitBtn.style.opacity = '1';
                 contactForm.reset(); 
             } else {
-                // Gagal API
                 submitBtn.innerText = 'Transmission Failed ❌';
-                submitBtn.style.background = '#ef4444'; // Merah Error
+                submitBtn.style.background = '#ef4444';
                 submitBtn.style.color = '#fff';
             }
         })
         .catch(error => {
-            // Gagal Koneksi
             console.log(error);
             submitBtn.innerText = 'System Error';
             submitBtn.style.background = '#ef4444';
             submitBtn.style.color = '#fff';
         })
         .then(function() {
-            // Balikin tombol ke semula setelah 4 detik
             setTimeout(() => {
                 submitBtn.innerText = originalText;
                 submitBtn.style.background = '';
@@ -88,10 +65,6 @@ if (contactForm && submitBtn) {
         });
     });
 }
-
-// =========================================
-// 3. READING PROGRESS BAR
-// =========================================
 window.addEventListener('scroll', () => {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -101,10 +74,6 @@ window.addEventListener('scroll', () => {
         progressBar.style.width = scrolled + '%';
     }
 });
-
-// =========================================
-// 4. LOAD GLOBAL COMPONENT: FOOTER
-// =========================================
 document.addEventListener("DOMContentLoaded", () => {
     const footerPlaceholder = document.getElementById("footer-placeholder");
     if (footerPlaceholder) {
@@ -121,20 +90,13 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 });
-
-// =========================================
-// 5. MOBILE MENU TOGGLE
-// =========================================
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const navLinksDropdown = document.querySelector('.nav-links');
-
 if (mobileMenuBtn && navLinksDropdown) {
     mobileMenuBtn.addEventListener('click', () => {
         mobileMenuBtn.classList.toggle('open');
         navLinksDropdown.classList.toggle('open');
     });
-
-    // Close menu when a link is clicked
     const dropdownNavItems = document.querySelectorAll('.nav-item');
     dropdownNavItems.forEach(item => {
         item.addEventListener('click', () => {
@@ -143,31 +105,21 @@ if (mobileMenuBtn && navLinksDropdown) {
         });
     });
 }
-
-// =========================================
-// 6. SCROLL-SPY ACTIVE NAV
-// =========================================
 const scrollSections = document.querySelectorAll('.saas-section, .command-center');
 const spyNavItems = document.querySelectorAll('.nav-item');
-
 if (scrollSections.length > 0 && spyNavItems.length > 0) {
     const observerOptions = {
         root: null,
         rootMargin: '0px',
         threshold: 0.4 // Trigger when 40% of the section is visible
     };
-
     const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Remove active class from all
                 spyNavItems.forEach(item => {
                     item.classList.remove('active-nav');
                 });
-                
-                // Get the id of the intersecting section
                 const id = entry.target.getAttribute('id');
-                // Find the corresponding nav link and add active class
                 const activeLink = document.querySelector(`.nav-item[href="#${id}"]`);
                 if (activeLink) {
                     activeLink.classList.add('active-nav');
@@ -175,7 +127,6 @@ if (scrollSections.length > 0 && spyNavItems.length > 0) {
             }
         });
     }, observerOptions);
-
     scrollSections.forEach(section => {
         sectionObserver.observe(section);
     });
