@@ -4,7 +4,8 @@
   "description": "Portfolio of Aditya Chandrasa",
   "main": "index.html",
   "scripts": {
-    "dev": "live-server"
+    "dev": "live-server",
+    "build": "node scripts/generate-sitemap.js"
   },
   "keywords": [
     "portfolio",
