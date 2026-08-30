@@ -47,7 +47,7 @@ if (contactForm && submitBtn) {
         const object = Object.fromEntries(formData);
         const json = JSON.stringify(object);
 
-        fetch('https://api.web3forms.com/submit', {
+        fetch('/api/contact', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -121,3 +121,62 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 });
+
+// =========================================
+// 5. MOBILE MENU TOGGLE
+// =========================================
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const navLinksDropdown = document.querySelector('.nav-links');
+
+if (mobileMenuBtn && navLinksDropdown) {
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.classList.toggle('open');
+        navLinksDropdown.classList.toggle('open');
+    });
+
+    // Close menu when a link is clicked
+    const dropdownNavItems = document.querySelectorAll('.nav-item');
+    dropdownNavItems.forEach(item => {
+        item.addEventListener('click', () => {
+            mobileMenuBtn.classList.remove('open');
+            navLinksDropdown.classList.remove('open');
+        });
+    });
+}
+
+// =========================================
+// 6. SCROLL-SPY ACTIVE NAV
+// =========================================
+const scrollSections = document.querySelectorAll('.saas-section, .command-center');
+const spyNavItems = document.querySelectorAll('.nav-item');
+
+if (scrollSections.length > 0 && spyNavItems.length > 0) {
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.4 // Trigger when 40% of the section is visible
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Remove active class from all
+                spyNavItems.forEach(item => {
+                    item.classList.remove('active-nav');
+                });
+                
+                // Get the id of the intersecting section
+                const id = entry.target.getAttribute('id');
+                // Find the corresponding nav link and add active class
+                const activeLink = document.querySelector(`.nav-item[href="#${id}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active-nav');
+                }
+            }
+        });
+    }, observerOptions);
+
+    scrollSections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+}
