@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import * as React from "react"
+import { StaggerIn } from "@/components/motion/stagger-in"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -152,7 +153,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
           No entries match the selected filter ({formatProjectTypeLabel(selectedType)}).
         </div>
       ) : (
-        <>
+        <StaggerIn selector="tbody > tr, article">
           {/* Desktop Table (>= md) */}
           <div className="hidden md:block">
             <Table>
@@ -312,7 +313,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
               </article>
             ))}
           </div>
-        </>
+        </StaggerIn>
       )}
     </div>
   )

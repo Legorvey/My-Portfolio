@@ -346,5 +346,15 @@ Per HARD RULE ("Never invent facts, dates, metrics, or links... If something is 
     - `motosense.mdx`, `pid-control-simulator.mdx`, and `pln-thermography-internship.mdx` have **no images or `thumbnail` yet** (pages render cleanly without a thumbnail and fall back to `/images/web-thumbnail.png` for OG metadata).
     - `pid-control-simulator.mdx` has **no live demo link** yet (only GitHub repo link is present).
     - `Spatial Metal Field Display` and `Futura web platform` from the original prompt do not exist as MDX pages yet.
+- **Section G (Header & Footer Checks):**
+  - Added `MobileNav` (`src/components/layout/mobile-nav.tsx`) to `SiteHeader` so mobile viewports (including `360px`) have an accessible toggleable navigation panel (`aria-expanded`, `aria-controls`, `Escape` key handler).
+  - Verified `SiteFooter` uses `https://github.com/Legorvey`, `https://linkedin.com/in/adityachandrasa`, and `mailto:aditchandrasa1@gmail.com`.
+
+## Phase 7: Motion (`animejs` v4)
+- Verified `animejs` `4.5.0` types in `node_modules/animejs/dist/modules/` (`animate`, `stagger`, `createScope`, `svg.createDrawable`).
+- Created `StaggerIn` (`src/components/motion/stagger-in.tsx`, `'use client'`) using `createScope` with `scope.revert()` cleanup, `360ms` `outQuad` entrance (`40ms` stagger), never blocking initial SSR content and skipping animation when `prefers-reduced-motion: reduce` is active.
+- Created `DrawPath` (`src/components/motion/draw-path.tsx`, `'use client'`) using `createScope` and `svg.createDrawable` (`480ms` `outQuad` stroke draw) with `scope.revert()` cleanup and `prefers-reduced-motion` guard. (Not applied to decorative fake SVGs since no real SVG schematic exists in content yet).
+- Applied `StaggerIn` only to the home hero (`#hero`) and the project lists (featured projects grid on `/` and project rows/entries on `/projects`).
+
 
 

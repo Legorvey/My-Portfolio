@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ContactSection } from "@/components/contact/contact-section"
 import { Container } from "@/components/layout/container"
 import { getPublicImageDimensions } from "@/components/mdx/mdx-components"
+import { StaggerIn } from "@/components/motion/stagger-in"
 import { Badge } from "@/components/ui/badge"
 import { getFeatured } from "@/lib/content"
 import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
@@ -100,43 +101,45 @@ export default function HomePage() {
       />
 
       {/* Hero Section */}
-      <section id="hero" aria-labelledby="hero-heading" className="space-y-8">
-        <div className="space-y-3">
-          <div className="h-0.5 w-10 bg-primary" aria-hidden="true" />
-          <h1
-            id="hero-heading"
-            className="font-sans text-xl font-semibold tracking-tight text-foreground"
-          >
-            Aditya Chandrasa
-          </h1>
-          <p className="font-mono text-sm font-medium text-foreground">
-            Building Logic <span className="text-primary">from</span> Schematic{" "}
-            <span className="text-primary">to</span> Hardware
-          </p>
-          <p className="max-w-[72ch] text-base text-muted-foreground">
-            Electrical Engineering student focused on practical logic behind physical systems. I build prototypes that work in the lab and stay reliable in the field.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {HERO_METRICS.map((metric) => (
-            <div
-              key={metric.label}
-              className="rounded-sm border border-border bg-surface p-4"
+      <section id="hero" aria-labelledby="hero-heading">
+        <StaggerIn className="space-y-8">
+          <div className="space-y-3">
+            <div className="h-0.5 w-10 bg-primary" aria-hidden="true" />
+            <h1
+              id="hero-heading"
+              className="font-sans text-xl font-semibold tracking-tight text-foreground"
             >
-              <div className="font-mono text-xl font-semibold text-foreground">
-                {metric.value}
-                <span className="text-sm text-primary">{metric.suffix}</span>
+              Aditya Chandrasa
+            </h1>
+            <p className="font-mono text-sm font-medium text-foreground">
+              Building Logic <span className="text-primary">from</span> Schematic{" "}
+              <span className="text-primary">to</span> Hardware
+            </p>
+            <p className="max-w-[72ch] text-base text-muted-foreground">
+              Electrical Engineering student focused on practical logic behind physical systems. I build prototypes that work in the lab and stay reliable in the field.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {HERO_METRICS.map((metric) => (
+              <div
+                key={metric.label}
+                className="rounded-sm border border-border bg-surface p-4"
+              >
+                <div className="font-mono text-xl font-semibold text-foreground">
+                  {metric.value}
+                  <span className="text-sm text-primary">{metric.suffix}</span>
+                </div>
+                <div className="mt-1 font-sans text-sm font-medium text-foreground">
+                  {metric.label}
+                </div>
+                <div className="mt-0.5 font-mono text-xs text-muted-foreground">
+                  {metric.context}
+                </div>
               </div>
-              <div className="mt-1 font-sans text-sm font-medium text-foreground">
-                {metric.label}
-              </div>
-              <div className="mt-0.5 font-mono text-xs text-muted-foreground">
-                {metric.context}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </StaggerIn>
       </section>
 
       {/* Experiences Section */}
@@ -211,7 +214,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <StaggerIn className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {featuredProjects.map((project) => {
             const dims = project.thumbnail
               ? getPublicImageDimensions(project.thumbnail)
@@ -271,7 +274,7 @@ export default function HomePage() {
               </Link>
             )
           })}
-        </div>
+        </StaggerIn>
 
         <div className="mt-6">
           <Link
