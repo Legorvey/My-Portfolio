@@ -193,3 +193,21 @@ Because `vercel.json` sets `"cleanUrls": true`, `.html` extensions are stripped 
 ## Phase 1: Move Legacy Site Aside
 - Created `legacy/` and moved all legacy site assets, pages, scripts, images, `Resume.pdf`, `package.json`, `package-lock.json`, and `vercel.json` into `legacy/` via `git mv`.
 - Preserved at repository root: `.git`, `.gitignore`, `readme.md`, `GEMINI.md`, and `MIGRATION_NOTES.md`.
+
+## Phase 2: Scaffold & Dependencies
+- **Stack & Detected Versions (verified via `package.json`):**
+  - `next`: `16.4.3` (App Router, Turbopack CSS loader `@tailwindcss/turbopack`, `cacheComponents: true`, `partialPrefetching: true`)
+  - `react` / `react-dom`: `19.3.0`
+  - `tailwindcss`: `^4`
+  - `shadcn`: `^4.22.1` (default `base-nova` preset using `@base-ui/react` `^1.9.0`; added `button`, `table`, `badge`, `toggle-group` + `toggle`)
+  - `zod`: `^4.6.7` (Zod v4)
+  - `gray-matter`: `^4.0.3`
+  - `next-mdx-remote`: `^6.0.0` (RSC support via `next-mdx-remote/rsc`)
+  - `@tailwindcss/typography`: `^0.5.20`
+  - `animejs`: `^4.5.0` (anime.js v4 modular exports)
+  - `image-size`: `^2.0.4`
+  - `vitest`: `^5.0.5` (devDependency; upgraded `@types/node` from `^20` to `^22` to satisfy `vitest@5` peer dependency and match local Node `v22.16.0`)
+- Excluded `legacy/` in `tsconfig.json` and `eslint.config.mjs`.
+- Merged `AGENTS.md` (preserving Next.js 16 `<!-- BEGIN:nextjs-agent-rules -->` block alongside verbatim DESIGN RULES AND CODE RULES).
+- Created `.env.example` with `NEXT_PUBLIC_WEB3FORMS_KEY=` and configured `.gitignore` with `.env*` + `!.env.example`.
+- Verified `npm run build` succeeds.
