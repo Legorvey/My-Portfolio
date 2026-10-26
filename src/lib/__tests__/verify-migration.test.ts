@@ -4,10 +4,14 @@ import {
   compareHtmlAndMdxText,
   extractHtmlArticleVisibleText,
   extractMdxVisibleText,
+  getLegacyProjectSlugs,
+  verifyInternalLinks,
+  verifyLegacyUrlsAndRedirects,
   verifyMigratedPage,
+  verifyProjectImagesAndAltText,
 } from "@/lib/verify-migration"
 
-describe("migration text-comparison script", () => {
+describe("migration text-comparison and QA verification script", () => {
   it("extracts visible text from legacy HTML article-content", () => {
     const html = `
       <article class="article-container">
@@ -54,10 +58,22 @@ First paragraph with **bold** and \`code\`.
 
   it("detects differences when text does not match", () => {
     const html = `<article class="article-container"><div class="article-content"><h2>Title</h2><p>Original wording.</p></div></article>`
-    const mdx = `---\ntitle: "T"\nslug: "t"\ntype: "web"\n---\n## Title\n\nRewritten wording.`
+    const mdx = `---\ntitle: "T"\nslug: "t"\ntype: "software"\n---\n## Title\n\nRewritten wording.`
 
     const result = compareHtmlAndMdxText(html, mdx)
     expect(result.match).toBe(false)
+  })
+
+  it("discovers only the 7 legacy project pages in legacy/projects", () => {
+    expect(getLegacyProjectSlugs()).toEqual([
+      "aquafeeder",
+      "futura",
+      "gardapati",
+      "matcha-tasikmalaya",
+      "personal-web",
+      "pgs25",
+      "unex",
+    ])
   })
 
   it.each([
@@ -81,4 +97,16 @@ First paragraph with **bold** and \`code\`.
       expect(result.match).toBe(true)
     }
   )
+
+  it("verifies every referenced project image exists in public/ and has non-empty alt text", () => {
+    expect(verifyProjectImagesAndAltText()).toEqual([])
+  })
+
+  it("verifies every legacy URL and image path resolves to a v2 route or redirect target", () => {
+    expect(verifyLegacyUrlsAndRedirects()).toEqual([])
+  })
+
+  it("verifies every internal link in src/ and content/projects/ resolves", () => {
+    expect(verifyInternalLinks()).toEqual([])
+  })
 })

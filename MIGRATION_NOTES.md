@@ -356,5 +356,29 @@ Per HARD RULE ("Never invent facts, dates, metrics, or links... If something is 
 - Created `DrawPath` (`src/components/motion/draw-path.tsx`, `'use client'`) using `createScope` and `svg.createDrawable` (`480ms` `outQuad` stroke draw) with `scope.revert()` cleanup and `prefers-reduced-motion` guard. (Not applied to decorative fake SVGs since no real SVG schematic exists in content yet).
 - Applied `StaggerIn` only to the home hero (`#hero`) and the project lists (featured projects grid on `/` and project rows/entries on `/projects`).
 
+## Phase 8: QA & Verification
+- **Build, Lint, Type-Check & Tests:**
+  - `npm test` (`vitest run`): 24/24 tests passing across `src/lib/__tests__/content.test.ts` (10 tests) and `src/lib/__tests__/verify-migration.test.ts` (14 tests).
+  - `npm run lint` (`eslint`): 0 errors, 0 warnings.
+  - `npm run build` (`next build` with TypeScript check): 0 errors, 0 warnings; 20 static paths prerendered.
+- **Automated Link, Image, Alt Text & Legacy Redirect Verification (`src/lib/verify-migration.ts`):**
+  - `verifyInternalLinks()`: Verified all internal `href` attributes in `src/**/*.tsx` and Markdown links in `content/projects/*.mdx` resolve to valid Next.js routes or `public/` assets (`0` broken links).
+  - `verifyProjectImagesAndAltText()`: Verified all `thumbnail`, Markdown `![]()`, `<ComponentRow>`, and `<PressCard>` images exist in `public/` and have non-empty `alt` text (`0` errors).
+  - `verifyLegacyUrlsAndRedirects()`: Verified all 7 legacy project slugs, `Resume.pdf`, `images/favicon.png`, `images/web-thumbnail.png`, and all 34 legacy project images in `legacy/images/projects/*` resolve via routes or `next.config.ts` redirects (`0` missing targets).
+- **Accessibility, Focus Styles, Contrast & Responsive Widths (360 / 768 / 1280):**
+  - **Contrast (WCAG 2.1 AA):** All light and dark mode token pairs pass AA/AAA (minimum `5.27:1` for dark destructive, `6.12:1`–`16.9:1` for all body, muted, surface, and accent pairs).
+  - **Focus Styles:** Skip-to-content link (`#main-content`) in `src/app/layout.tsx`, `focus-visible:ring-2 focus-visible:ring-ring` on all interactive buttons, links, form inputs, table sort controls, and toggle items.
+  - **Responsive Widths (`360px` / `768px` / `1280px`):**
+    - `360px`: `SiteHeader` collapses into `MobileNav` (`Menu` / `Close` button with `aria-expanded` and `Escape` handler); `/projects` renders stacked `<article>` cards (`md:hidden`); MDX tables wrap in `overflow-x-auto`.
+    - `768px` (`md`): `/projects` switches to 6-column datasheet table (`hidden md:block`); home featured cards and contact grid switch to 2-column layouts.
+    - `1280px`: Centered `max-w-5xl` (`1024px`) container with `max-w-[72ch]` left-aligned prose.
+- **First-Load JS per Route (from `.next/server/app/*.html` client chunks):**
+  - Base runtime (`/_not-found`, 7 chunks): `568.0 kB` raw / `175.2 kB` gzipped
+  - `/projects/[slug]` (8 chunks): `609.3 kB` raw / `191.4 kB` gzipped (`+16.2 kB` route delta)
+  - `/dev/tokens` (9 chunks): `618.6 kB` raw / `195.3 kB` gzipped (`+20.1 kB` route delta)
+  - `/` (10 chunks): `658.4 kB` raw / `210.7 kB` gzipped (`+35.5 kB` route delta)
+  - `/projects` (10 chunks): `666.6 kB` raw / `212.9 kB` gzipped (`+37.7 kB` route delta)
+
+
 
 
