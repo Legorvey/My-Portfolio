@@ -10,7 +10,7 @@ Versions from `package.json`:
 - **Language:** TypeScript `^5` (strict mode)
 - **Styling:** Tailwind CSS `^4` (`@tailwindcss/turbopack` `^4`, `@tailwindcss/typography` `^0.5.20`)
 - **UI Primitives:** shadcn/ui `^4.22.1` (`@base-ui/react` `^1.9.0`, `class-variance-authority` `^0.7.1`)
-- **Content & Validation:** MDX (`next-mdx-remote` `^6.0.0`, `gray-matter` `^4.0.3`, `remark-gfm`), Zod `^4.6.7`, `image-size` `^2.0.4`
+- **Content & Validation:** MDX (`next-mdx-remote` `^6.0.0`, `gray-matter` `^4.0.3`, `remark-gfm` `^4.0.1`), Zod `^4.6.7`, `image-size` `^2.0.4`
 - **Motion:** anime.js `^4.5.0`
 - **Testing & Linting:** Vitest `^5.0.5`, ESLint `^9` (`eslint-config-next` `16.4.3`)
 

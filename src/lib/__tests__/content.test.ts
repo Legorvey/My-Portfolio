@@ -200,15 +200,29 @@ Body.`
     expect(() => getProjects(tempDir)).toThrow(/broken\.mdx/i)
   })
 
-  it("validates all production MDX files in content/projects", () => {
+  it("validates all production MDX files in content/projects andfeatured order", () => {
     const projects = getProjects()
-    expect(projects.length).toBeGreaterThanOrEqual(7)
-    // Entries without start must be at the end
-    const firstWithoutStartIdx = projects.findIndex((p) => !p.start)
-    if (firstWithoutStartIdx !== -1) {
-      for (let i = firstWithoutStartIdx; i < projects.length; i++) {
-        expect(projects[i].start).toBeUndefined()
-      }
-    }
+    expect(projects).toHaveLength(10)
+    expect(projects.map((p) => p.slug)).toEqual([
+      "pln-thermography-internship",
+      "pid-control-simulator",
+      "personal-web",
+      "motosense",
+      "aquafeeder",
+      "unex",
+      "futura",
+      "pgs25",
+      "gardapati",
+      "matcha-tasikmalaya",
+    ])
+
+    const featured = getFeatured()
+    expect(featured.map((p) => p.slug)).toEqual([
+      "pln-thermography-internship",
+      "pid-control-simulator",
+      "motosense",
+      "aquafeeder",
+      "gardapati",
+    ])
   })
 })

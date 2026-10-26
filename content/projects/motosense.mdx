@@ -1,0 +1,67 @@
+---
+title: "MOTOSENSE: Vibration Monitoring System"
+slug: "motosense"
+type: "hardware"
+summary: "Raspberry Pi vibration monitor for a motorcycle CVT, with local alerts and an optional cloud dashboard."
+start: "2026-02"
+end: "2026-06"
+tools: ["Raspberry Pi 3B", "ADXL345", "I2C", "InfluxDB"]
+tags: ["IoT", "Embedded Systems"]
+links:
+  - label: "Dashboard"
+    url: "https://kiiin.pythonanywhere.com/"
+featured: true
+---
+
+## Overview
+
+MOTOSENSE monitors vibration on the CVT (continuously variable transmission) of a motorcycle. A Raspberry Pi 3B reads an ADXL345 accelerometer over I2C and compares the readings with thresholds. An RGB LED and a buzzer show the result. When the Pi has internet access, it also sends the data to an InfluxDB database, and a web dashboard uses that data to show how vibration changes over time.
+
+## Operating modes
+
+**Local (offline).** The Raspberry Pi processes the vibration data itself. If vibration goes above the thresholds, the LED and buzzer react immediately. No internet connection is needed. The program runs as a background service (`motosense.service`).
+
+**Remote (online).** When the Pi is connected to the internet, it synchronizes the data to InfluxDB. The web dashboard reads from it, so mechanical degradation can be followed over a longer period.
+
+## Hardware
+
+| Component | Specification |
+| :--- | :--- |
+| Raspberry Pi 3B | Computing core |
+| GY-291 ADXL345 module | I2C vibration sensor |
+| HW-479 RGB LED module | Common cathode |
+| Active buzzer | Warning alarm |
+| Heatsink and mini fan | Cooling |
+| Power bank | Minimum output 5V/3A |
+| Hard box casing | ABS/PETG |
+
+The remaining parts (microSD card, GPIO ribbon cable, protoboard, wire, bolts, heat shrink tubing, cable ties) are listed in the project README.
+
+## Wiring
+
+| Part | Signal | Raspberry Pi connection |
+| :--- | :--- | :--- |
+| ADXL345 | VCC | 3.3V (pin 1) |
+| ADXL345 | GND | Ground (pin 9) |
+| ADXL345 | SDA | GPIO 2 (pin 3) |
+| ADXL345 | SCL | GPIO 3 (pin 5) |
+| RGB LED | Red (danger) | GPIO 17 (pin 11) |
+| RGB LED | Green (normal) | GPIO 27 (pin 13) |
+| RGB LED | Blue (warning/transition) | GPIO 22 (pin 15) |
+| RGB LED | Ground | Ground (pin 14) |
+| Buzzer | VCC | 5V (pin 2) |
+| Buzzer | I/O | GPIO 23 (pin 16) |
+| Fan | Red | 5V (pin 4) |
+| Fan | Black | Ground (pin 20) |
+
+## Installation and calibration
+
+- Check the service with `sudo systemctl status motosense.service`.
+- If readings are inaccurate, adjust the offset values in `calibration.json`.
+- Attach the casing to the CVT with cable ties. Mount the ADXL345 rigidly to the casing base so the data is accurate.
+
+## Documentation
+
+{/* TODO: add the block diagram, flowchart and schematic from the project's docs folder (Diagram Block.png, Flowchart.png, Schematic.pdf) and a photo of the installed unit. */}
+
+The system schematic, block diagram and flowchart are in the project's `docs` folder. The live dashboard is linked in the project details above.

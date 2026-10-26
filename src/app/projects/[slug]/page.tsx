@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { MDXRemote } from "next-mdx-remote/rsc"
+import remarkGfm from "remark-gfm"
 import { Container } from "@/components/layout/container"
 import {
   getPublicImageDimensions,
@@ -219,7 +220,15 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
       {/* MDX Case Study Body */}
       <article className="max-w-[72ch]">
-        <MDXRemote source={project.content} components={mdxComponents} />
+        <MDXRemote
+          source={project.content}
+          components={mdxComponents}
+          options={{
+            mdxOptions: {
+              remarkPlugins: [remarkGfm],
+            },
+          }}
+        />
       </article>
     </Container>
   )

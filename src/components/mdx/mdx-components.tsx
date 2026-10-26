@@ -3,6 +3,14 @@ import path from "node:path"
 import { imageSize } from "image-size"
 import Image from "next/image"
 import * as React from "react"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 export function getPublicImageDimensions(src: string): {
   width: number
@@ -173,12 +181,28 @@ export const mdxComponents = {
       {...props}
     />
   ),
+  pre: (props: React.ComponentProps<"pre">) => (
+    <pre
+      className="my-4 max-w-[72ch] overflow-x-auto rounded-sm border border-border bg-surface p-4 font-mono text-xs text-foreground [&_code]:border-0 [&_code]:bg-transparent [&_code]:p-0"
+      {...props}
+    />
+  ),
   code: (props: React.ComponentProps<"code">) => (
     <code
       className="rounded-sm border border-border bg-surface px-1 py-0 font-mono text-xs text-foreground"
       {...props}
     />
   ),
+  table: (props: React.ComponentProps<"table">) => (
+    <div className="my-6 max-w-[72ch]">
+      <Table {...props} />
+    </div>
+  ),
+  thead: (props: React.ComponentProps<"thead">) => <TableHeader {...props} />,
+  tbody: (props: React.ComponentProps<"tbody">) => <TableBody {...props} />,
+  tr: (props: React.ComponentProps<"tr">) => <TableRow {...props} />,
+  th: (props: React.ComponentProps<"th">) => <TableHead {...props} />,
+  td: (props: React.ComponentProps<"td">) => <TableCell {...props} />,
   a: (props: React.ComponentProps<"a">) => (
     <a
       target={props.href?.startsWith("http") ? "_blank" : undefined}

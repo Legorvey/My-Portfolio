@@ -321,3 +321,30 @@ Per HARD RULE ("Never invent facts, dates, metrics, or links... If something is 
   - Added `Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, and `Permissions-Policy`.
   - Added permanent redirects for `/index.html` → `/`, `/projects.html` → `/projects`, `/projects/:slug.html` → `/projects/:slug`, and legacy image directory paths (`/images/projects/...` → `/projects/...`).
 
+## Stop 2 Corrections (Sections A–G)
+- **Section A (Contact Form Route Handler):**
+  - Created `src/app/api/contact/route.ts` reading server-only `WEB3FORMS_ACCESS_KEY`, validating fields with Zod, checking the `botcheck` honeypot, and forwarding to `https://api.web3forms.com/submit`.
+  - Updated `src/components/contact/contact-form.tsx` to post to `/api/contact` and updated `.env.example` to `WEB3FORMS_ACCESS_KEY=`.
+  - Note for post-launch: `WEB3FORMS_ACCESS_KEY` already exists in Vercel; rotate the Web3Forms access key after launch because the legacy key was publicly visible in `legacy/projects.html`.
+- **Section B (Static Assets & Redirects):**
+  - Confirmed `public/Resume.pdf`, `public/images/favicon.png`, `src/app/icon.png`, and `public/images/web-thumbnail.png` are present and all legacy `/images/projects/*` redirects in `next.config.ts` match `public/projects/<slug>/` filenames.
+- **Section C (`GEMINI.md` & `readme.md`):**
+  - Replaced `GEMINI.md` with a pointer to `AGENTS.md` as the single source of truth.
+  - Rewrote `readme.md` with factual documentation of the v2 stack, scripts, `WEB3FORMS_ACCESS_KEY` env var, directory structure, frontmatter table, and Vercel deployment.
+- **Section D (Types, Filter, Period, Status):**
+  - Updated `type` enum to `hardware | software | research | event | business | work` (remapped `personal-web` → `software` and `matcha-tasikmalaya` → `business`).
+  - Added optional `tags: string[]` to `ProjectFrontmatterSchema`, populated exact card tags from `legacy/projects.html` on the 7 legacy pages, and displayed `tags` in `/projects/[slug]` infobox.
+  - Updated `formatPeriod()` (`"Jun 2025"`, `"Feb 2026 – Jun 2026"`, `"Jan 2026 – Present"`, `"[W.I.P]"` when `start` is missing) and `resolveProjectStatus()` (explicit `status` wins; `end = "present"` → `"Ongoing"`; past `end` → `"Completed"`; else `""`; set explicit `status: "Ongoing"` on `personal-web.mdx`).
+  - Updated `/projects` filter UI to show `"All"` plus toggles with counts only for types that have at least one page, synced with `?type=` inside a `<Suspense>` boundary.
+- **Sections E & F (New Content Files & Featured Frontmatter):**
+  - Added `remark-gfm` (`^4.0.1`) for MDX tables and created:
+    - `content/projects/motosense.mdx` (`type: hardware`, `featured: true`)
+    - `content/projects/pid-control-simulator.mdx` (`type: software`, `featured: true`)
+    - `content/projects/pln-thermography-internship.mdx` (`type: work`, `featured: true`)
+  - Set `featured: true` only on `pid-control-simulator`, `motosense`, `pln-thermography-internship`, `aquafeeder`, and `gardapati` (all other 5 pages `featured: false`).
+  - **Missing data / Action items for new pages in Section E:**
+    - `motosense.mdx`, `pid-control-simulator.mdx`, and `pln-thermography-internship.mdx` have **no images or `thumbnail` yet** (pages render cleanly without a thumbnail and fall back to `/images/web-thumbnail.png` for OG metadata).
+    - `pid-control-simulator.mdx` has **no live demo link** yet (only GitHub repo link is present).
+    - `Spatial Metal Field Display` and `Futura web platform` from the original prompt do not exist as MDX pages yet.
+
+
