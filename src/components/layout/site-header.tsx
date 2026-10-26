@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Container } from "@/components/layout/container"
+import { MobileNav } from "@/components/layout/mobile-nav"
 
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
@@ -8,8 +9,8 @@ const NAV_ITEMS = [
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-border bg-background">
-      <Container className="flex min-h-14 flex-wrap items-center justify-between gap-4 py-3">
+    <header className="relative border-b border-border bg-background">
+      <Container className="flex min-h-14 items-center justify-between gap-4 py-3">
         <div className="flex items-center gap-3">
           <Link
             href="/"
@@ -20,8 +21,12 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        <nav aria-label="Primary navigation" className="flex flex-wrap items-center gap-4 sm:gap-6">
-          <ul className="flex items-center gap-4 sm:gap-6">
+        {/* Desktop navigation (>= sm) */}
+        <nav
+          aria-label="Primary navigation"
+          className="hidden items-center gap-6 sm:flex"
+        >
+          <ul className="flex items-center gap-6">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
                 <Link
@@ -34,11 +39,11 @@ export function SiteHeader() {
             ))}
           </ul>
 
-          <span className="hidden h-4 w-px bg-border sm:inline-block" aria-hidden="true" />
+          <span className="h-4 w-px bg-border" aria-hidden="true" />
 
           <div className="flex items-center gap-3">
             <a
-              href="https://github.com/Legorvey/"
+              href="https://github.com/Legorvey"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub Profile"
@@ -65,6 +70,9 @@ export function SiteHeader() {
             </a>
           </div>
         </nav>
+
+        {/* Mobile navigation (< sm, including 360px) */}
+        <MobileNav items={NAV_ITEMS} />
       </Container>
     </header>
   )
