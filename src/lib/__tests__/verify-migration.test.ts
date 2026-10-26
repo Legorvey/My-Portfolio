@@ -60,14 +60,17 @@ First paragraph with **bold** and \`code\`.
     expect(result.match).toBe(false)
   })
 
-  it("verifies that migrated aquafeeder.mdx matches legacy aquafeeder.html", () => {
-    const rootDir = process.cwd()
-    const result = verifyMigratedPage(
-      path.join(rootDir, "legacy", "projects", "aquafeeder.html"),
-      path.join(rootDir, "content", "projects", "aquafeeder.mdx")
-    )
+  it.each(["aquafeeder", "gardapati", "personal-web", "matcha-tasikmalaya"])(
+    "verifies that migrated %s.mdx matches legacy %s.html",
+    (slug) => {
+      const rootDir = process.cwd()
+      const result = verifyMigratedPage(
+        path.join(rootDir, "legacy", "projects", `${slug}.html`),
+        path.join(rootDir, "content", "projects", `${slug}.mdx`)
+      )
 
-    expect(result.htmlText).toBe(result.mdxText)
-    expect(result.match).toBe(true)
-  })
+      expect(result.htmlText).toBe(result.mdxText)
+      expect(result.match).toBe(true)
+    }
+  )
 })
