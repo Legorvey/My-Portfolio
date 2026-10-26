@@ -17,38 +17,17 @@ export function ContactForm() {
     const form = event.currentTarget
     const formData = new FormData(form)
 
-    // Honeypot check: if botcheck checkbox is checked, silently ignore
-    if (formData.get("botcheck")) {
-      setState({
-        status: "success",
-        message: "Transmission Successful",
-      })
-      form.reset()
-      return
-    }
-
-    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY
-    if (!accessKey) {
-      setState({
-        status: "error",
-        message:
-          "Transmission Failed: NEXT_PUBLIC_WEB3FORMS_KEY is not configured.",
-      })
-      return
-    }
-
     setState({ status: "loading" })
 
     try {
       const payload = {
-        access_key: accessKey,
-        name: String(formData.get("name") ?? "").trim(),
-        email: String(formData.get("email") ?? "").trim(),
-        message: String(formData.get("message") ?? "").trim(),
+        name: String(formData.get("name") ?? ""),
+        email: String(formData.get("email") ?? ""),
+        message: String(formData.get("message") ?? ""),
         botcheck: Boolean(formData.get("botcheck")),
       }
 
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,6 +36,8 @@ export function ContactForm() {
         body: JSON.stringify(payload),
       })
 
+      const data: unknown = await response.json().catch(() => null)
+
       if (response.ok) {
         setState({
           status: "success",
@@ -64,9 +45,17 @@ export function ContactForm() {
         })
         form.reset()
       } else {
+        const errorMessage =
+          typeof data === "object" &&
+          data !== null &&
+          "error" in data &&
+          typeof (data as { error?: unknown }).error === "string"
+            ? (data as { error: string }).error
+            : "Transmission Failed"
+
         setState({
           status: "error",
-          message: "Transmission Failed",
+          message: errorMessage,
         })
       }
     } catch {

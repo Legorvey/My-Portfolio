@@ -163,10 +163,10 @@ Because `vercel.json` sets `"cleanUrls": true`, `.html` extensions are stripped 
     - `message` (`textarea`, rows=5, required, label: `Payload (Message)`, placeholder: `State your intent...`)
     - Submit button: `Execute Transmission ➔`
   - On `index.html`, `<form action="/api/contact" method="POST" class="saas-form">`.
-  - On `projects.html`, `<form action="https://api.web3forms.com/submit" method="POST" class="saas-form">` with `<input type="hidden" name="access_key" value="b3e46436-fd4c-45f9-b5da-32191c0baa47">`.
+  - On `projects.html`, `<form action="https://api.web3forms.com/submit" method="POST" class="saas-form">` with a hardcoded `<input type="hidden" name="access_key">` (publicly exposed in legacy HTML; rotate Web3Forms access key after v2 launch).
   - In `script.js`: intercepts `.saas-form` submit event, serializes `FormData` to JSON, and `fetch('/api/contact', { method: 'POST', ... })`.
   - In `api/contact.js`: Vercel serverless handler that attaches `payload.access_key = process.env.WEB3FORMS_ACCESS_KEY` and forwards POST JSON to `https://api.web3forms.com/submit`.
-  - *Migration note for v2:* Per Phase 2 & Phase 6 instructions, v2 will read the Web3Forms key from `NEXT_PUBLIC_WEB3FORMS_KEY` (stored in `.env.example` as placeholder, never hardcoded in source).
+  - *Migration note for v2:* v2 uses a Next.js Route Handler at `src/app/api/contact/route.ts` that reads the server-only `WEB3FORMS_ACCESS_KEY` environment variable (listed in `.env.example`, never exposed client-side).
 - **Adjacent Contact Info Panel:**
   - Direct Line: `aditchandrasa1@gmail.com` (`mailto:aditchandrasa1@gmail.com`)
   - WhatsApp Network: `+62 823 2100 7009` (`https://wa.me/6282321007009`)
@@ -209,7 +209,7 @@ Because `vercel.json` sets `"cleanUrls": true`, `.html` extensions are stripped 
   - `vitest`: `^5.0.5` (devDependency; upgraded `@types/node` from `^20` to `^22` to satisfy `vitest@5` peer dependency and match local Node `v22.16.0`)
 - Excluded `legacy/` in `tsconfig.json` and `eslint.config.mjs`.
 - Merged `AGENTS.md` (preserving Next.js 16 `<!-- BEGIN:nextjs-agent-rules -->` block alongside verbatim DESIGN RULES AND CODE RULES).
-- Created `.env.example` with `NEXT_PUBLIC_WEB3FORMS_KEY=` and configured `.gitignore` with `.env*` + `!.env.example`.
+- Created `.env.example` with `WEB3FORMS_ACCESS_KEY=` and configured `.gitignore` with `.env*` + `!.env.example`.
 - Verified `npm run build` succeeds.
 
 ## Phase 3: Design Tokens & Shell
@@ -314,9 +314,9 @@ Per HARD RULE ("Never invent facts, dates, metrics, or links... If something is 
   - `not-found.tsx` (`src/app/not-found.tsx`): Custom 404 page preserving legacy `404.html` copy (`System Node Unreachable`).
 - **Skipped Route (`/about`):**
   - No `about.html` page exists in `legacy/`. Per Phase 6 rules ("`/about`: migrate from legacy. If none exists, skip and log it"), `/about` was skipped and the `/about` link was removed from `SiteHeader` so all navigation links resolve cleanly.
-- **Contact Form (`src/components/contact/contact-form.tsx`):**
+- **Contact Form (`src/components/contact/contact-form.tsx` & `src/app/api/contact/route.ts`):**
   - Reimplemented the Web3Forms form (`ID / Name`, `Secure Route (Email)`, `Payload (Message)`, `Execute Transmission ➔`) and `botcheck` honeypot checkbox.
-  - Reads `process.env.NEXT_PUBLIC_WEB3FORMS_KEY` and displays accessible loading, success, and error states.
+  - Posts JSON to `/api/contact` (`src/app/api/contact/route.ts`), which validates input with Zod, reads server-only `process.env.WEB3FORMS_ACCESS_KEY`, and forwards to `https://api.web3forms.com/submit`.
 - **Security Headers & Redirects (`next.config.ts`):**
   - Added `Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, and `Permissions-Policy`.
   - Added permanent redirects for `/index.html` → `/`, `/projects.html` → `/projects`, `/projects/:slug.html` → `/projects/:slug`, and legacy image directory paths (`/images/projects/...` → `/projects/...`).
