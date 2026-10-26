@@ -240,3 +240,18 @@ Because `vercel.json` sets `"cleanUrls": true`, `.html` extensions are stripped 
   - Restyled `src/components/ui/{button,badge,table,toggle,toggle-group}.tsx` to use token classes, `2px` radius, `4px` spacing multiples, monospace labels, and `150ms` transitions.
   - Built `Container`, `SiteHeader` (Home, Projects, About + GitHub, LinkedIn, View Résumé), and `SiteFooter`.
   - Created `/dev/tokens` (`src/app/dev/tokens/page.tsx`) showcasing color swatches, type specimens, a sample datasheet table, buttons, badges, and toggle-group controls.
+
+## Phase 4: Content Model & Loader (`src/lib/content.ts`)
+- **Category Inventory & `type` Enum Mapping (`hardware | web | research | event | experience`):**
+  - `aquafeeder` (`legacy/projects/aquafeeder.html`, `data-category="engineering"`) → `hardware`
+  - `gardapati` (`legacy/projects/gardapati.html`, `data-category="engineering"`) → `hardware`
+  - `personal-web` (`legacy/projects/personal-web.html`, `data-category="engineering"`) → `web`
+  - `futura` (`legacy/projects/futura.html`, `data-category="leadership"`, `#experiences` `Event Management`) → `event`
+  - `pgs25` (`legacy/projects/pgs25.html`, `data-category="leadership"`, `#experiences` `Event Management`) → `event`
+  - `unex` (`legacy/projects/unex.html`, `data-category="leadership"`) → `event`
+  - `matcha-tasikmalaya` (`legacy/projects/matcha-tasikmalaya.html`, `data-category="business"`, `#experiences` `Business`) → `experience`
+  - All 7 legacy case study pages fit into the `hardware | web | research | event | experience` enum without requiring enum changes.
+- **Zod Schema & Loader:**
+  - Implemented `ProjectFrontmatterSchema` with required `title`, `slug`, `type` and optional `summary`, `role`, `start` (`YYYY-MM`), `end` (`YYYY-MM` or `"present"`), `status`, `tools` (`string[]`), `links` (`{ label, url }[]`), `thumbnail`, `featured` (`default(false)`).
+  - Implemented `getProjects()`, `getFeatured()`, and `getProject(slug)` in `src/lib/content.ts`, throwing on invalid frontmatter or filename/slug mismatch and sorting by `start` descending.
+  - Added TDD unit test suite in `src/lib/__tests__/content.test.ts` (`vitest`).
