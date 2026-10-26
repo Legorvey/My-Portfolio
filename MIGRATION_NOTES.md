@@ -189,3 +189,7 @@ Because `vercel.json` sets `"cleanUrls": true`, `.html` extensions are stripped 
   4. Dynamic footer loader fetching `footer.html` into `#footer-placeholder` on `DOMContentLoaded` (note: `footer.html` has placeholder links `github.com/adityacakti`, `linkedin.com/in/adityacakti`, `contact@adityacakti.com`, whereas `index.html` navbar & contact panel have the real links `github.com/Legorvey/`, `linkedin.com/in/adityachandrasa`, `aditchandrasa1@gmail.com`, and project pages have inline footers).
   5. Mobile hamburger menu toggle (`#mobile-menu-btn` toggling `.open` on `.nav-links`).
   6. Scroll-spy via `IntersectionObserver` (`threshold: 0.4`) highlighting `.nav-item` matching visible section IDs.
+
+## Phase 1: Move Legacy Site Aside
+- Created `legacy/` and moved all legacy site assets, pages, scripts, images, `Resume.pdf`, `package.json`, `package-lock.json`, and `vercel.json` into `legacy/` via `git mv`.
+- Preserved at repository root: `.git`, `.gitignore`, `readme.md`, `GEMINI.md`, and `MIGRATION_NOTES.md`.
