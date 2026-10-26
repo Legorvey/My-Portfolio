@@ -255,3 +255,50 @@ Because `vercel.json` sets `"cleanUrls": true`, `.html` extensions are stripped 
   - Implemented `ProjectFrontmatterSchema` with required `title`, `slug`, `type` and optional `summary`, `role`, `start` (`YYYY-MM`), `end` (`YYYY-MM` or `"present"`), `status`, `tools` (`string[]`), `links` (`{ label, url }[]`), `thumbnail`, `featured` (`default(false)`).
   - Implemented `getProjects()`, `getFeatured()`, and `getProject(slug)` in `src/lib/content.ts`, throwing on invalid frontmatter or filename/slug mismatch and sorting by `start` descending.
   - Added TDD unit test suite in `src/lib/__tests__/content.test.ts` (`vitest`).
+
+## Phase 5: Content Migration (`content/projects/*.mdx`)
+- **Migrated Pages (7 of 7 real case studies; `project-template.html` skipped as unpopulated template):**
+  1. `content/projects/aquafeeder.mdx` (`type: hardware`) — images in `public/projects/aquafeeder/`
+  2. `content/projects/gardapati.mdx` (`type: hardware`) — images in `public/projects/gardapati/`
+  3. `content/projects/personal-web.mdx` (`type: web`) — images in `public/projects/personal-web/`
+  4. `content/projects/matcha-tasikmalaya.mdx` (`type: experience`) — images in `public/projects/matcha-tasikmalaya/`
+  5. `content/projects/futura.mdx` (`type: event`) — images in `public/projects/futura/`
+  6. `content/projects/pgs25.mdx` (`type: event`) — images in `public/projects/pgs25/`
+  7. `content/projects/unex.mdx` (`type: event`) — images in `public/projects/unex/`
+- **Visible Text Comparison (`src/lib/verify-migration.ts` & `src/lib/__tests__/verify-migration.test.ts`):**
+  - All 7 migrated MDX files have 100% identical visible text compared to their legacy `.article-content` HTML bodies (**0 pages differ**).
+- **Featured Projects Check:**
+  - The prompt specified setting `featured: true` only for: `PID Control Simulator`, `MOTOSENSE`, `Spatial Metal Field Display`, `PLN thermography internship`, `Futura web platform`.
+  - **Missing featured pages in `legacy/`:**
+    - `PID Control Simulator`: Does not exist in legacy repo.
+    - `MOTOSENSE`: Does not exist in legacy repo.
+    - `Spatial Metal Field Display`: Does not exist in legacy repo.
+    - `PLN thermography internship`: Does not exist in legacy repo.
+    - `Futura web platform`: Does not exist in legacy repo (`legacy/projects/futura.html` is *Futura 2025: National Tech Event*, an event management case study as VPO 2, not a web platform).
+  - Consequently, all 7 migrated MDX files currently have `featured: false` per the prompt rule ("If one does not exist, log it. All others featured: false."). Note: On `legacy/index.html`, the 4 cards displayed in `#projects` were `gardapati`, `matcha-tasikmalaya`, `personal-web`, and `aquafeeder`.
+
+### Missing Data (`content/projects/*.mdx`)
+Per HARD RULE ("Never invent facts, dates, metrics, or links... If something is missing, leave it empty and log it"):
+- **`aquafeeder.mdx`**:
+  - Missing `status` (not stated in legacy HTML)
+  - Missing `links` (no external repo/demo URL in legacy HTML)
+  - Note on `start`/`end`: Legacy timeline states `"June 2025"`, mapped to `start: "2025-06"`, `end: "2025-06"`.
+- **`gardapati.mdx`**:
+  - Missing `start` and `end` (legacy metadata states `Competition: Pertama Eco-Innovation 2026` without a month `YYYY-MM`)
+  - Missing `status` (not explicitly labeled as a status field in legacy metadata)
+- **`personal-web.mdx`**:
+  - Missing `status` (not stated in legacy metadata)
+  - Missing `links` (no external link in legacy case study body)
+  - Note on `start`/`end`: Legacy timeline states `"March 2026"`, mapped to `start: "2026-03"`, `end: "2026-03"`.
+- **`matcha-tasikmalaya.mdx`**:
+  - Missing `start` and `end` (legacy metadata states `Timeline: Ramadan 2026 (10 Days)` and `index.html` states `2026` without a numeric month `YYYY-MM`)
+  - Missing `status` and `links`
+- **`futura.mdx`**:
+  - Missing `status` and `links` (legacy metadata third box is `Scale: 230+ Participants (National)`)
+- **`pgs25.mdx`**:
+  - Missing `status` (legacy metadata third box is `Scale: 25 Schools, 153 Participants`)
+  - Note on unused image: `legacy/images/projects/pgs/3-humasfmipa.png` exists in the folder (copied to `public/projects/pgs25/3-humasfmipa.png`) but was never referenced in `legacy/projects/pgs25.html`.
+- **`unex.mdx`**:
+  - Missing `status` and `links` (legacy metadata third box is `Impact: Exceeded KPI (150% Execution Rate)`)
+- **Standalone Experience Entry on `legacy/index.html` without a case study page:**
+  - `Head of Kominfo · HMTE Unpad` (`Jan 2026 — Present`, `Organization`) appears in the `#experiences` changelog on `legacy/index.html` but has no standalone HTML page in `legacy/projects/`. (Preserved on the home page timeline in Phase 6).

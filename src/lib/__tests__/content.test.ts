@@ -148,4 +148,18 @@ Body.`
 
     expect(() => getProjects(tempDir)).toThrow(/broken\.mdx/i)
   })
+
+  it("validates all production MDX files in content/projects", () => {
+    const projects = getProjects()
+    expect(projects).toHaveLength(7)
+    expect(projects.map((p) => p.slug)).toEqual([
+      "personal-web",
+      "aquafeeder",
+      "unex",
+      "futura",
+      "pgs25",
+      "gardapati",
+      "matcha-tasikmalaya",
+    ])
+  })
 })

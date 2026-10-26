@@ -60,7 +60,15 @@ First paragraph with **bold** and \`code\`.
     expect(result.match).toBe(false)
   })
 
-  it.each(["aquafeeder", "gardapati", "personal-web", "matcha-tasikmalaya"])(
+  it.each([
+    "aquafeeder",
+    "gardapati",
+    "personal-web",
+    "matcha-tasikmalaya",
+    "futura",
+    "pgs25",
+    "unex",
+  ])(
     "verifies that migrated %s.mdx matches legacy %s.html",
     (slug) => {
       const rootDir = process.cwd()
