@@ -189,7 +189,7 @@ export default function HomePage() {
             href="/Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline"
+            className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             Download Full Résumé <span aria-hidden="true">➔</span>
           </a>
@@ -279,7 +279,7 @@ export default function HomePage() {
         <div className="mt-6">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline"
+            className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             View Full Deployment Archive <span aria-hidden="true">➔</span>
           </Link>

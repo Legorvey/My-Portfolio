@@ -31,7 +31,7 @@ export function ContactSection() {
             </span>
             <a
               href="mailto:aditchandrasa1@gmail.com"
-              className="mt-1 inline-block font-mono text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline"
+              className="mt-1 inline-block font-mono text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               aditchandrasa1@gmail.com
             </a>
@@ -45,7 +45,7 @@ export function ContactSection() {
               href="https://wa.me/6282321007009"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-1 inline-block font-mono text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline"
+              className="mt-1 inline-block font-mono text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               +62 823 2100 7009
             </a>

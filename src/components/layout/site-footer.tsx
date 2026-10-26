@@ -22,19 +22,19 @@ export function SiteFooter() {
               </h2>
               <Link
                 href="/#experiences"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary"
+                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 Experiences
               </Link>
               <Link
                 href="/projects"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary"
+                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 Projects
               </Link>
               <Link
                 href="/#contact"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary"
+                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 Contact
               </Link>
@@ -42,7 +42,7 @@ export function SiteFooter() {
                 href="/Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary"
+                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 Resume
               </a>
@@ -56,7 +56,7 @@ export function SiteFooter() {
                 href="https://github.com/Legorvey"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary"
+                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 GitHub
               </a>
@@ -64,13 +64,13 @@ export function SiteFooter() {
                 href="https://linkedin.com/in/adityachandrasa"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary"
+                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 LinkedIn
               </a>
               <a
                 href="mailto:aditchandrasa1@gmail.com"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary"
+                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 Email
               </a>

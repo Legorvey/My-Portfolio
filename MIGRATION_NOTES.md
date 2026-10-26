@@ -372,12 +372,39 @@ Per HARD RULE ("Never invent facts, dates, metrics, or links... If something is 
     - `360px`: `SiteHeader` collapses into `MobileNav` (`Menu` / `Close` button with `aria-expanded` and `Escape` handler); `/projects` renders stacked `<article>` cards (`md:hidden`); MDX tables wrap in `overflow-x-auto`.
     - `768px` (`md`): `/projects` switches to 6-column datasheet table (`hidden md:block`); home featured cards and contact grid switch to 2-column layouts.
     - `1280px`: Centered `max-w-5xl` (`1024px`) container with `max-w-[72ch]` left-aligned prose.
-- **First-Load JS per Route (from `.next/server/app/*.html` client chunks):**
-  - Base runtime (`/_not-found`, 7 chunks): `568.0 kB` raw / `175.2 kB` gzipped
-  - `/projects/[slug]` (8 chunks): `609.3 kB` raw / `191.4 kB` gzipped (`+16.2 kB` route delta)
-  - `/dev/tokens` (9 chunks): `618.6 kB` raw / `195.3 kB` gzipped (`+20.1 kB` route delta)
-  - `/` (10 chunks): `658.4 kB` raw / `210.7 kB` gzipped (`+35.5 kB` route delta)
-  - `/projects` (10 chunks): `666.6 kB` raw / `212.9 kB` gzipped (`+37.7 kB` route delta)
+- **Client JS per Route (modern browsers, excluding `nomodule` polyfills, gzipped):**
+  - `/_not-found` (6 chunks): `458.0 kB` raw / `136.5 kB` gzipped (Next.js 16 + React 19 + layout `MobileNav` baseline)
+  - `/projects/[slug]` (7 chunks, all 10 project pages including `/projects/motosense`, `/projects/pid-control-simulator`, `/projects/pln-thermography-internship`): `499.3 kB` raw / `152.7 kB` gzipped (`+16.2 kB` route delta)
+  - `/dev/tokens` (8 chunks): `508.6 kB` raw / `156.6 kB` gzipped (`+20.1 kB` route delta)
+  - `/` (9 chunks): `548.4 kB` raw / `172.0 kB` gzipped (`+35.5 kB` route delta)
+  - `/projects` (9 chunks): `556.6 kB` raw / `174.2 kB` gzipped (`+37.7 kB` route delta)
+- **Top 5 Client Chunks on `/`:**
+  1. `20box33a0_n53.js` (`224.2 kB` raw / `70.2 kB` gzipped): `react-dom/client` (`19.3.0`) + Next.js `16.4.3` `appBootstrap`, hydration, and route announcer runtime.
+  2. `3l_qmp-61z4yc.js` (`164.8 kB` raw / `45.5 kB` gzipped): `react` (`19.3.0`) + Next.js App Router RSC Flight client, router reducer, and segment prefetching.
+  3. `3sn43rb_v7k4q.js` (`40.0 kB` raw / `15.5 kB` gzipped): `animejs` (`4.5.0`: `animate`, `createScope`, `stagger`) + `StaggerIn` + `ContactForm`.
+  4. `0qq2g_yul0u74.js` (`35.9 kB` raw / `14.4 kB` gzipped): `cn` (`clsx` + `tailwind-merge`), `@base-ui/react/button`, `class-variance-authority`, and shared `src/components/ui/{button,table}.tsx`.
+  5. `06bs-nf19b2js.js` (`28.8 kB` raw / `7.5 kB` gzipped): Next.js navigation (`usePathname`, `useRouter`, `useSearchParams`), `RedirectBoundary`, and `NotFoundBoundary`.
+
+## Manual tests for the owner
+1. **Responsive Viewports (`360px`, `768px`, `1280px`):**
+   - At `360px`: open `/` and `/projects`, click the `Menu` / `Close` button in the header to verify the mobile dropdown opens and closes (including via `Escape`), verify there is no horizontal overflow, and verify `/projects` renders stacked `<article>` cards (`md:hidden`).
+   - At `768px` and `1280px`: verify `/projects` switches to the 6-column table (`Title`, `Type`, `Role`, `Period`, `Status`, `Tools`) and `/` displays the 2-column featured project grid and 12-column contact layout.
+2. **URL-Synced Filter & Period Sort on `/projects`:**
+   - Click each filter toggle (`All (10)`, `Hardware (3)`, `Software (2)`, `Event (3)`, `Business (1)`, `Work (1)`) and verify the URL updates with `?type=<value>` and reloading the URL preserves the active filter.
+   - Visit `/projects?type=research` directly and verify the empty-state message (`No entries match the selected filter (Research).`) appears.
+   - Click the `Period` sort control (`Newest ↓` / `Oldest ↑`) and verify `[W.I.P]` entries (`gardapati`, `matcha-tasikmalaya`) always remain at the end of the list.
+3. **New & Legacy Project Pages (`/projects/[slug]`):**
+   - Open `/projects/motosense`, `/projects/pid-control-simulator`, and `/projects/pln-thermography-internship`: verify the infobox displays `Type`, `Role`, `Period`, `Status`, `Tools`, `Tags`, and `Links`, that the absence of a `thumbnail` leaves no broken image or empty gap, and that GFM tables (`motosense`) and code blocks (`pid-control-simulator`) render cleanly.
+   - Open `/projects/aquafeeder`, `/projects/gardapati`, `/projects/personal-web`, `/projects/matcha-tasikmalaya`, `/projects/futura`, `/projects/pgs25`, and `/projects/unex`: verify thumbnails, inline images, `ComponentRow` cards (`aquafeeder`), and `PressCard` (`pgs25`).
+4. **Contact Form (`/api/contact`):**
+   - With `WEB3FORMS_ACCESS_KEY` set in `.env.local`, submit a test message on `/` or `/projects` and confirm the button transitions through `Transmitting...` → `Transmission Successful`.
+5. **Legacy Redirects & Static Assets:**
+   - Visit `/index.html`, `/projects.html`, `/projects/aquafeeder.html`, and `/images/projects/aquafeederiot/1-hero.png` and confirm they redirect (`308`) to `/`, `/projects`, `/projects/aquafeeder`, and `/projects/aquafeeder/1-hero.png`.
+   - Confirm `/Resume.pdf`, `/robots.txt`, and `/sitemap.xml` load properly.
+6. **Keyboard Navigation, Dark Mode & Reduced Motion:**
+   - Press `Tab` from the top of `/` to verify the `Skip to main content` link appears and all interactive controls show a crisp focus ring.
+   - Toggle OS light/dark appearance and `prefers-reduced-motion: reduce` to verify system theme switching and reduced-motion compliance.
+
 
 
 

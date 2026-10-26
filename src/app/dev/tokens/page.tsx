@@ -12,6 +12,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { getProjects } from "@/lib/content"
+import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
 
 export const metadata: Metadata = {
   title: "Design Tokens & System Specimen | Aditya Chandrasa",
@@ -110,42 +112,9 @@ const TYPE_SPECIMENS = [
   },
 ] as const
 
-const SAMPLE_ROWS = [
-  {
-    title: "Gardapati: Integrated Electrical Safety",
-    type: "hardware",
-    role: "Project Manager",
-    period: "2026",
-    status: "Proposal",
-    tools: ["ESP32", "FSM Moore", "GSM"],
-  },
-  {
-    title: "AquaFeeder IoT: Full-Stack Ecosystem",
-    type: "hardware",
-    role: "Embedded Systems & Web Dev",
-    period: "2025-06",
-    status: "Completed",
-    tools: ["ESP32", "C++", "Python Flask", "JS"],
-  },
-  {
-    title: "Futura 2025: National Tech Event",
-    type: "event",
-    role: "Vice Project Officer (VPO 2)",
-    period: "2025-02 — 2025-11",
-    status: "Completed",
-    tools: ["Event Mgmt", "Project Mgmt"],
-  },
-  {
-    title: "Interactive Web Portfolio",
-    type: "web",
-    role: "Front-End Dev & UI Designer",
-    period: "2026-03",
-    status: "Live",
-    tools: ["HTML", "CSS", "Vanilla JS", "Vercel"],
-  },
-] as const
-
 export default function DesignTokensPage() {
+  const sampleRows = getProjects().slice(0, 4)
+
   return (
     <Container className="py-10">
       <header className="border-b border-border pb-6">
@@ -265,29 +234,45 @@ export default function DesignTokensPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {SAMPLE_ROWS.map((row) => (
-                <TableRow key={row.title}>
+              {sampleRows.map((row) => (
+                <TableRow key={row.slug}>
                   <TableCell className="font-medium text-foreground">
                     {row.title}
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline">{row.type}</Badge>
+                    <Badge variant="default">
+                      {formatProjectTypeLabel(row.type)}
+                    </Badge>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">{row.role}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {row.role ?? "—"}
+                  </TableCell>
                   <TableCell className="font-mono text-xs text-muted-foreground">
-                    {row.period}
+                    {formatPeriod(row.start, row.end)}
                   </TableCell>
                   <TableCell>
-                    <Badge variant="secondary">{row.status}</Badge>
+                    {row.status ? (
+                      <Badge variant="secondary">{row.status}</Badge>
+                    ) : (
+                      <span className="font-mono text-xs text-muted-foreground">
+                        —
+                      </span>
+                    )}
                   </TableCell>
                   <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {row.tools.map((tool) => (
-                        <Badge key={tool} variant="ghost">
-                          {tool}
-                        </Badge>
-                      ))}
-                    </div>
+                    {row.tools && row.tools.length > 0 ? (
+                      <div className="flex flex-wrap gap-1">
+                        {row.tools.map((tool) => (
+                          <Badge key={tool} variant="outline">
+                            {tool}
+                          </Badge>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="font-mono text-xs text-muted-foreground">
+                        —
+                      </span>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -363,7 +348,7 @@ export default function DesignTokensPage() {
               <ToggleGroup defaultValue={["all"]} variant="outline" size="sm">
                 <ToggleGroupItem value="all">All</ToggleGroupItem>
                 <ToggleGroupItem value="hardware">Hardware</ToggleGroupItem>
-                <ToggleGroupItem value="web">Web</ToggleGroupItem>
+                <ToggleGroupItem value="software">Software</ToggleGroupItem>
                 <ToggleGroupItem value="event">Event</ToggleGroupItem>
               </ToggleGroup>
             </div>

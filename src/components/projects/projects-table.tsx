@@ -243,7 +243,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                 <div className="flex items-start justify-between gap-2">
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="font-sans text-sm font-semibold text-foreground underline-offset-4 hover:text-primary hover:underline"
+                    className="font-sans text-sm font-semibold text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     {project.title}
                   </Link>

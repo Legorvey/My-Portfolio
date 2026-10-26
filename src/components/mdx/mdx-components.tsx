@@ -207,7 +207,7 @@ export const mdxComponents = {
     <a
       target={props.href?.startsWith("http") ? "_blank" : undefined}
       rel={props.href?.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80"
+      className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       {...props}
     />
   ),
