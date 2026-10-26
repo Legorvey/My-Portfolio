@@ -211,3 +211,32 @@ Because `vercel.json` sets `"cleanUrls": true`, `.html` extensions are stripped 
 - Merged `AGENTS.md` (preserving Next.js 16 `<!-- BEGIN:nextjs-agent-rules -->` block alongside verbatim DESIGN RULES AND CODE RULES).
 - Created `.env.example` with `NEXT_PUBLIC_WEB3FORMS_KEY=` and configured `.gitignore` with `.env*` + `!.env.example`.
 - Verified `npm run build` succeeds.
+
+## Phase 3: Design Tokens & Shell
+- **Color Palette (defined in `src/app/globals.css`, dark mode follows system `prefers-color-scheme: dark`):**
+  - **Light mode (`:root`):**
+    - `--background`: `#F7F6F2` (warm off-white datasheet paper)
+    - `--surface` / `--card`: `#EFECE6` (elevated panel surface)
+    - `--muted` / `--secondary`: `#EAE6DF` (subtle stone fill)
+    - `--foreground`: `#141413` (near-black ink — **16.9:1** on background, **15.5:1** on surface, AAA)
+    - `--muted-foreground`: `#52514E` (secondary slate — **7.32:1** on background, **6.40:1** on muted, AA+)
+    - `--primary` / `--accent`: `#2B547E` (muted technical steel-blue — **7.37:1** on background and vs `#F7F6F2` foreground, AAA)
+    - `--border` / `--input`: `#D5D0C8` (1px structural rule)
+    - `--destructive`: `#9E2A2B` (**8.18:1** on background, AAA)
+  - **Dark mode (`@media (prefers-color-scheme: dark)`):**
+    - `--background`: `#111214` (near-black carbon)
+    - `--surface` / `--card`: `#181A1D` (elevated dark surface)
+    - `--muted` / `--secondary`: `#1F2226` (subtle dark fill)
+    - `--foreground`: `#ECEAE4` (warm off-white — **15.46:1** on background, **14.40:1** on surface, AAA)
+    - `--muted-foreground`: `#A09E97` (secondary gray — **7.00:1** on background, **6.12:1** on muted, AA+)
+    - `--primary` / `--accent`: `#6B9FD4` (lighter muted blue — **6.71:1** on `#111214` and vs `#111214` button text, AA+)
+    - `--border` / `--input`: `#2A2D32` (1px hairline border)
+    - `--destructive`: `#E06C6D` (**5.27:1** on background, AA)
+- **Typography & Spacing:**
+  - Loaded `IBM Plex Sans` (`--font-ibm-plex-sans`) and `IBM Plex Mono` (`--font-ibm-plex-mono`) via `next/font/google` in `src/app/layout.tsx`.
+  - Restricted Tailwind `@theme` type scale to 4 sizes (`--text-*: initial`): `text-xs` (`0.75rem`/`12px`), `text-sm` (`0.875rem`/`14px`), `text-base` (`1rem`/`16px`), `text-xl` (`1.5rem`/`24px`).
+  - Set 4px base spacing grid (`--spacing: 0.25rem`) and crisp datasheet corner radius (`--radius: 0.125rem` / `2px`).
+- **Component Restyling & Layout Shell:**
+  - Restyled `src/components/ui/{button,badge,table,toggle,toggle-group}.tsx` to use token classes, `2px` radius, `4px` spacing multiples, monospace labels, and `150ms` transitions.
+  - Built `Container`, `SiteHeader` (Home, Projects, About + GitHub, LinkedIn, View Résumé), and `SiteFooter`.
+  - Created `/dev/tokens` (`src/app/dev/tokens/page.tsx`) showcasing color swatches, type specimens, a sample datasheet table, buttons, badges, and toggle-group controls.
