@@ -9,10 +9,14 @@ export function getPublicImageDimensions(src: string): {
   height: number
 } {
   const normalized = src.replace(/^\//, "")
-  const fullPath = path.join(process.cwd(), "public", normalized)
+  const fullPath = path.join(
+    /*turbopackIgnore: true*/ process.cwd(),
+    "public",
+    normalized
+  )
 
-  if (fs.existsSync(fullPath)) {
-    const buffer = fs.readFileSync(fullPath)
+  if (fs.existsSync(/*turbopackIgnore: true*/ fullPath)) {
+    const buffer = fs.readFileSync(/*turbopackIgnore: true*/ fullPath)
     const dimensions = imageSize(buffer)
     if (dimensions.width && dimensions.height) {
       return { width: dimensions.width, height: dimensions.height }
@@ -150,7 +154,7 @@ export const mdxComponents = {
   ),
   p: (props: React.ComponentProps<"p">) => (
     <p
-      className="my-3 max-w-[72ch] text-base text-foreground [&>em]:block [&>em]:font-mono [&>em]:text-xs [&>em]:not-italic [&>em]:text-muted-foreground"
+      className="my-3 max-w-[72ch] text-base text-foreground [&>em:only-child]:block [&>em:only-child]:font-mono [&>em:only-child]:text-xs [&>em:only-child]:not-italic [&>em:only-child]:text-muted-foreground"
       {...props}
     />
   ),

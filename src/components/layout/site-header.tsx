@@ -4,7 +4,6 @@ import { Container } from "@/components/layout/container"
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "Projects", href: "/projects" },
-  { label: "About", href: "/about" },
 ] as const
 
 export function SiteHeader() {

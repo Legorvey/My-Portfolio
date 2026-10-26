@@ -19,9 +19,33 @@ const ibmPlexMono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://adityac.dev"),
   title: "Aditya Chandrasa",
   description:
     "Portfolio of Aditya Chandrasa. Electrical Engineering Student at Unpad specializing in hardware logic, data analytics, and real-world business execution.",
+  authors: [{ name: "Aditya Chandrasa" }],
+  keywords: [
+    "Aditya Chandrasa",
+    "Aditya Cakti Chandrasa",
+    "Aditya Cakti",
+    "Portfolio",
+    "Electrical Engineering",
+  ],
+  openGraph: {
+    title: "Aditya Chandrasa | Engineering Portfolio",
+    description:
+      "Portfolio of Aditya Chandrasa. Bridging the gap between embedded hardware, data-driven logic, and business execution.",
+    url: "https://adityac.dev",
+    siteName: "Aditya Chandrasa",
+    images: [{ url: "/images/web-thumbnail.png" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  alternates: {
+    canonical: "https://adityac.dev",
+  },
 }
 
 export default function RootLayout({

@@ -302,3 +302,22 @@ Per HARD RULE ("Never invent facts, dates, metrics, or links... If something is 
   - Missing `status` and `links` (legacy metadata third box is `Impact: Exceeded KPI (150% Execution Rate)`)
 - **Standalone Experience Entry on `legacy/index.html` without a case study page:**
   - `Head of Kominfo · HMTE Unpad` (`Jan 2026 — Present`, `Organization`) appears in the `#experiences` changelog on `legacy/index.html` but has no standalone HTML page in `legacy/projects/`. (Preserved on the home page timeline in Phase 6).
+
+## Phase 6: Pages, Metadata, Security Headers & Redirects
+- **Routes Built:**
+  - `/` (`src/app/page.tsx`): Home page preserving exact legacy copy (Hero, 3 metrics, Experiences timeline with `Download Full Résumé ➔`, Featured Projects section with fallback to top 4 projects when `getFeatured()` returns empty, `View Full Deployment Archive ➔`, Contact section, and JSON-LD schema).
+  - `/projects` (`src/app/projects/page.tsx` + `src/components/projects/projects-table.tsx`): Server component loading project metadata via `getProjects()` and passing to client `ProjectsTable` component with columns `Title`, `Type`, `Role`, `Period`, `Status`, `Tools`, filterable by `type` and sortable by `Period`, rendering stacked entries below `md`.
+  - `/projects/[slug]` (`src/app/projects/[slug]/page.tsx`): Statically generated via `generateStaticParams()` and `generateMetadata()` for all 7 slugs (`/projects/aquafeeder`, `/projects/futura`, `/projects/gardapati`, `/projects/matcha-tasikmalaya`, `/projects/personal-web`, `/projects/pgs25`, `/projects/unex`), rendering an infobox datasheet header, `thumbnail` via `next/image` with intrinsic dimensions, and `MDXRemote` case study body.
+  - `/dev/tokens` (`src/app/dev/tokens/page.tsx`): Design token and component specimen page from Phase 3 (retained until Phase 9 cleanup).
+  - `/sitemap.xml` (`src/app/sitemap.ts`): Dynamic Next.js sitemap listing `/`, `/projects`, and all `/projects/[slug]`.
+  - `/robots.txt` (`src/app/robots.ts`): Robots rules allowing `/` and pointing to `https://adityac.dev/sitemap.xml`.
+  - `not-found.tsx` (`src/app/not-found.tsx`): Custom 404 page preserving legacy `404.html` copy (`System Node Unreachable`).
+- **Skipped Route (`/about`):**
+  - No `about.html` page exists in `legacy/`. Per Phase 6 rules ("`/about`: migrate from legacy. If none exists, skip and log it"), `/about` was skipped and the `/about` link was removed from `SiteHeader` so all navigation links resolve cleanly.
+- **Contact Form (`src/components/contact/contact-form.tsx`):**
+  - Reimplemented the Web3Forms form (`ID / Name`, `Secure Route (Email)`, `Payload (Message)`, `Execute Transmission ➔`) and `botcheck` honeypot checkbox.
+  - Reads `process.env.NEXT_PUBLIC_WEB3FORMS_KEY` and displays accessible loading, success, and error states.
+- **Security Headers & Redirects (`next.config.ts`):**
+  - Added `Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, and `Permissions-Policy`.
+  - Added permanent redirects for `/index.html` → `/`, `/projects.html` → `/projects`, `/projects/:slug.html` → `/projects/:slug`, and legacy image directory paths (`/images/projects/...` → `/projects/...`).
+

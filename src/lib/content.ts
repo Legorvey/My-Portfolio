@@ -51,17 +51,17 @@ export interface Project extends ProjectFrontmatter {
 const DEFAULT_CONTENT_DIR = path.join(process.cwd(), "content", "projects")
 
 export function getProjects(contentDir: string = DEFAULT_CONTENT_DIR): Project[] {
-  if (!fs.existsSync(contentDir)) {
+  if (!fs.existsSync(/*turbopackIgnore: true*/ contentDir)) {
     return []
   }
 
   const entries = fs
-    .readdirSync(contentDir)
+    .readdirSync(/*turbopackIgnore: true*/ contentDir)
     .filter((file) => file.endsWith(".mdx"))
 
   const projects = entries.map((filename) => {
-    const filePath = path.join(contentDir, filename)
-    const raw = fs.readFileSync(filePath, "utf8")
+    const filePath = path.join(/*turbopackIgnore: true*/ contentDir, filename)
+    const raw = fs.readFileSync(/*turbopackIgnore: true*/ filePath, "utf8")
     const { data, content } = matter(raw)
 
     const parsed = ProjectFrontmatterSchema.safeParse(data)
