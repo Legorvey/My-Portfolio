@@ -1,92 +1,111 @@
-<div align="center">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
-</div>
+# adityac.dev
 
-<h1 align="center">Aditya Chandrasa | Engineering Portfolio</h1>
+Personal engineering portfolio and project archive for Aditya Cakti Chandrasa.
 
-<p align="center">
-  <strong>The complete source code for my professional portfolio and engineering dashboard, accessible at <a href="https://adityac.dev">adityac.dev</a>.</strong>
-</p>
+## Stack
 
-<p align="center">
-  A high-performance static web architecture focusing on optimal load speeds, semantic elements, and clean code structure. Designed with a strict "Command Center" and SaaS aesthetic.
-</p>
+Versions from `package.json`:
 
-<hr />
-
-## Key Features
-
-- **UI/UX:** Custom "SaaS Dashboard" dark mode aesthetic with glassmorphism, depth-of-field navbars, and precise typography (Inter & JetBrains Mono).
-- **Tech Stack:** Pure Vanilla HTML5, CSS3, and JavaScript. No heavy frameworks.
-- **Performance:** Blazing fast load times with static architecture and WebP optimized assets.
-- **Micro-Animations:** Tactile, hardware-accelerated CSS transitions, hovers, and glows.
-- **Security:** Integrated Web3Forms with native honeypot anti-spam protection.
-
-## Tech Stack
-
-### Core
-- **Structure:** Vanilla HTML5
-- **Styling:** CSS3 (Custom Variables, Flexbox, Grid)
-- **Logic & Interactivity:** Vanilla JavaScript (Fetch API)
-
-### Typography & Aesthetics
-- **Fonts:** Inter (Sans-serif) & JetBrains Mono (Monospace)
-- **Icons:** Inline optimized SVGs
-
-### Tooling & Infrastructure
-- **Deployment & Hosting:** Vercel Edge Network
-- **Routing:** Clean URLs enabled via `vercel.json` (eliminating `.html` extensions)
-- **Development Server:** `live-server` for local HMR
+- **Framework:** Next.js `16.4.3` (App Router), React `19.3.0`
+- **Language:** TypeScript `^5` (strict mode)
+- **Styling:** Tailwind CSS `^4` (`@tailwindcss/turbopack` `^4`, `@tailwindcss/typography` `^0.5.20`)
+- **UI Primitives:** shadcn/ui `^4.22.1` (`@base-ui/react` `^1.9.0`, `class-variance-authority` `^0.7.1`)
+- **Content & Validation:** MDX (`next-mdx-remote` `^6.0.0`, `gray-matter` `^4.0.3`, `remark-gfm`), Zod `^4.6.7`, `image-size` `^2.0.4`
+- **Motion:** anime.js `^4.5.0`
+- **Testing & Linting:** Vitest `^5.0.5`, ESLint `^9` (`eslint-config-next` `16.4.3`)
 
 ## Getting Started
 
-To run the project locally, follow these steps:
+Install dependencies:
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/Legorvey/My-Portfolio.git
-cd My-Portfolio
-```
-
-### 2. Install dependencies
 ```bash
 npm install
 ```
 
-### 3. Start the Development Server
+Run the development server (`http://localhost:3000`):
+
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:8080](http://localhost:8080) (or the port provided by live-server) with your browser to see the result. The application will hot-reload as you make changes.
+Build for production:
 
-## Design Philosophy
+```bash
+npm run build
+```
 
-The web platform features:
-- A `#0a0a0a` deep dark base theme with `#f97316` (orange) neon accents.
-- "Command Center" aesthetics blending sharp typography with tactile CSS micro-animations.
-- High-fidelity glassmorphism for floating UI elements.
+Run tests and linter:
+
+```bash
+npm test
+npm run lint
+```
+
+## Environment Variables
+
+Copy `.env.example` to `.env.local` for local development:
+
+| Variable | Scope | Description |
+| :--- | :--- | :--- |
+| `WEB3FORMS_ACCESS_KEY` | Server-only | Access key used by the `POST /api/contact` Route Handler to forward contact form submissions to Web3Forms. |
 
 ## Project Structure
 
-```text
-My-Portfolio/
-├── projects/            # Full deployment case studies (HTML files)
-├── images/              # Visual assets (Optimized)
-├── index.html           # Main landing page & executive summary
-├── projects.html        # Comprehensive deployment archive with live filtering
-├── 404.html             # Custom "Node Unreachable" error page
-├── style.css            # Global CSS architecture & design tokens
-├── script.js            # Frontend interactions (forms, filters, progress bar)
-├── package.json         # Local dev environment configuration
-├── vercel.json          # Vercel routing configuration file
-└── Resume.pdf           # Executive resume file
+- `src/app/` — Next.js App Router pages (`/`, `/projects`, `/projects/[slug]`), metadata routes (`sitemap.ts`, `robots.ts`), 404 page (`not-found.tsx`), global styles (`globals.css`), and the contact API Route Handler (`api/contact/route.ts`).
+- `src/components/` — Layout shell (`layout/`), UI primitives (`ui/`), project table and filter controls (`projects/`), contact form (`contact/`), MDX custom components (`mdx/`), and motion wrappers (`motion/`).
+- `src/lib/` — Zod frontmatter schema and MDX loader (`content.ts`), formatting utilities (`utils.ts`), and unit tests (`__tests__/`).
+- `content/projects/` — Project and experience case studies written in `.mdx` with YAML frontmatter.
+- `public/` — Static assets including `Resume.pdf`, site images (`images/`), and per-project image folders (`projects/<slug>/`).
+
+## How to Add a Project
+
+1. Place any project images in `public/projects/<slug>/`.
+2. Create `content/projects/<slug>.mdx` (the filename without `.mdx` must match the frontmatter `slug`).
+3. Populate the frontmatter fields validated by `ProjectFrontmatterSchema` in `src/lib/content.ts`:
+
+| Field | Required | Type / Format | Description |
+| :--- | :--- | :--- | :--- |
+| `title` | Required | `string` | Project or role title. |
+| `slug` | Required | `string` (`^[a-z0-9-]+$`) | URL slug matching the `.mdx` filename. |
+| `type` | Required | `"hardware" \| "software" \| "research" \| "event" \| "business" \| "work"` | Primary category used for filtering. |
+| `summary` | Optional | `string` | Short description shown in tables, cards, and metadata. |
+| `role` | Optional | `string` | Role held on the project. |
+| `start` | Optional | `string` (`YYYY-MM`) | Start month used for descending chronological sorting. If omitted, period displays as `[W.I.P]`. |
+| `end` | Optional | `string` (`YYYY-MM` or `"present"`) | End month or `"present"`. |
+| `status` | Optional | `string` | Explicit status override. If omitted, derived from `end` (`"present"` -> `"Ongoing"`, past month -> `"Completed"`). |
+| `tools` | Optional | `string[]` | Technologies, instruments, or tools used. |
+| `tags` | Optional | `string[]` | Domain tags displayed in the project infobox. |
+| `links` | Optional | `{ label: string; url: string }[]` | External links (repositories, dashboards, documents). |
+| `thumbnail` | Optional | `string` | Public path to the cover image (e.g. `"/projects/my-slug/cover.png"`). |
+| `featured` | Optional | `boolean` (default `false`) | Whether to include the entry in `getFeatured()` on the home page. |
+
+### Example (`content/projects/example-project.mdx`)
+
+```mdx
+---
+title: "Example Hardware Controller"
+slug: "example-project"
+type: "hardware"
+summary: "Closed-loop sensor readout and actuator control board."
+role: "Hardware Engineer"
+start: "2026-03"
+end: "2026-05"
+tools: ["ESP32", "C++", "KiCad"]
+tags: ["Hardware", "Embedded Systems"]
+links:
+  - label: "GitHub"
+    url: "https://github.com/Legorvey/example-project"
+thumbnail: "/projects/example-project/1-hero.png"
+featured: false
+---
+
+## Overview
+
+Write the project documentation here using standard Markdown and MDX.
 ```
 
-<hr />
-<p align="center">
-  Built by <b>Aditya Cakti Chandrasa</b>.
-</p>
+## Deployment on Vercel
+
+1. Import the repository into Vercel and select the **Next.js** framework preset.
+2. Leave build and output settings at the Next.js defaults (`npm run build`).
+3. Ensure the `WEB3FORMS_ACCESS_KEY` environment variable is configured in the Vercel project settings.
