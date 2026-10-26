@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import * as React from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -14,28 +15,55 @@ import {
 } from "@/components/ui/table"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import type { ProjectFrontmatter, ProjectType } from "@/lib/content"
-import { formatPeriod } from "@/lib/utils"
+import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
+
+const ALL_PROJECT_TYPES: readonly ProjectType[] = [
+  "hardware",
+  "software",
+  "research",
+  "event",
+  "business",
+  "work",
+]
 
 type FilterType = "all" | ProjectType
 type SortDirection = "desc" | "asc"
 
-const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "hardware", label: "Hardware" },
-  { value: "web", label: "Web" },
-  { value: "research", label: "Research" },
-  { value: "event", label: "Event" },
-  { value: "experience", label: "Experience" },
-]
+function isValidProjectType(value: string | null): value is ProjectType {
+  if (!value) return false
+  return (ALL_PROJECT_TYPES as readonly string[]).includes(value)
+}
 
 interface ProjectsTableProps {
   projects: ProjectFrontmatter[]
 }
 
 export function ProjectsTable({ projects }: ProjectsTableProps) {
-  const [selectedType, setSelectedType] = React.useState<FilterType>("all")
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const queryType = searchParams.get("type")
+  const selectedType: FilterType = isValidProjectType(queryType)
+    ? queryType
+    : "all"
+
   const [sortDirection, setSortDirection] =
     React.useState<SortDirection>("desc")
+
+  const typeCounts = React.useMemo(() => {
+    const counts = new Map<ProjectType, number>()
+    for (const project of projects) {
+      counts.set(project.type, (counts.get(project.type) ?? 0) + 1)
+    }
+    return ALL_PROJECT_TYPES.filter((type) => (counts.get(type) ?? 0) > 0).map(
+      (type) => ({
+        value: type,
+        label: formatProjectTypeLabel(type),
+        count: counts.get(type) ?? 0,
+      })
+    )
+  }, [projects])
 
   const filteredAndSorted = React.useMemo(() => {
     const filtered =
@@ -59,8 +87,19 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
   }, [projects, selectedType, sortDirection])
 
   function handleFilterChange(groupValue: string[]) {
-    const next = groupValue[0] as FilterType | undefined
-    setSelectedType(next ?? "all")
+    const next = (groupValue[0] as FilterType | undefined) ?? "all"
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (next === "all") {
+      params.delete("type")
+    } else {
+      params.set("type", next)
+    }
+
+    const queryString = params.toString()
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    })
   }
 
   function toggleSortDirection() {
@@ -81,9 +120,12 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
             onValueChange={handleFilterChange}
             aria-label="Filter projects by type"
           >
-            {FILTER_OPTIONS.map((option) => (
+            <ToggleGroupItem value="all">
+              All ({projects.length})
+            </ToggleGroupItem>
+            {typeCounts.map((option) => (
               <ToggleGroupItem key={option.value} value={option.value}>
-                {option.label}
+                {option.label} ({option.count})
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
@@ -107,7 +149,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
 
       {filteredAndSorted.length === 0 ? (
         <div className="rounded-sm border border-border bg-surface p-6 font-mono text-xs text-muted-foreground">
-          No entries match the selected filter ({selectedType}).
+          No entries match the selected filter ({formatProjectTypeLabel(selectedType)}).
         </div>
       ) : (
         <>
@@ -153,7 +195,9 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                       )}
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
-                      <Badge variant="default">{project.type}</Badge>
+                      <Badge variant="default">
+                        {formatProjectTypeLabel(project.type)}
+                      </Badge>
                     </TableCell>
                     <TableCell className="font-sans text-xs text-muted-foreground">
                       {project.role ?? "—"}
@@ -202,7 +246,9 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                   >
                     {project.title}
                   </Link>
-                  <Badge variant="default">{project.type}</Badge>
+                  <Badge variant="default">
+                    {formatProjectTypeLabel(project.type)}
+                  </Badge>
                 </div>
 
                 {project.summary && (

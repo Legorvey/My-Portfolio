@@ -4,8 +4,8 @@ import { ContactSection } from "@/components/contact/contact-section"
 import { Container } from "@/components/layout/container"
 import { getPublicImageDimensions } from "@/components/mdx/mdx-components"
 import { Badge } from "@/components/ui/badge"
-import { getFeatured, getProjects } from "@/lib/content"
-import { formatPeriod } from "@/lib/utils"
+import { getFeatured } from "@/lib/content"
+import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
 
 const HERO_METRICS = [
   {
@@ -90,9 +90,7 @@ const JSON_LD = {
 }
 
 export default function HomePage() {
-  const featured = getFeatured()
-  const displayedProjects =
-    featured.length > 0 ? featured : getProjects().slice(0, 4)
+  const featuredProjects = getFeatured()
 
   return (
     <Container className="space-y-16 py-10">
@@ -214,7 +212,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {displayedProjects.map((project) => {
+          {featuredProjects.map((project) => {
             const dims = project.thumbnail
               ? getPublicImageDimensions(project.thumbnail)
               : null
@@ -239,7 +237,9 @@ export default function HomePage() {
                 <div className="flex flex-1 flex-col justify-between p-4">
                   <div className="space-y-2">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <Badge variant="default">{project.type}</Badge>
+                      <Badge variant="default">
+                        {formatProjectTypeLabel(project.type)}
+                      </Badge>
                       <span className="font-mono text-xs text-muted-foreground">
                         {formatPeriod(project.start, project.end)}
                       </span>
@@ -254,15 +254,19 @@ export default function HomePage() {
                     )}
                   </div>
 
-                  {project.tools && project.tools.length > 0 && (
+                  {(project.tools && project.tools.length > 0) ||
+                  (project.tags && project.tags.length > 0) ? (
                     <div className="mt-4 flex flex-wrap gap-1.5 border-t border-border pt-3">
-                      {project.tools.map((tool) => (
-                        <Badge key={tool} variant="outline">
-                          {tool}
+                      {(project.tools && project.tools.length > 0
+                        ? project.tools
+                        : project.tags ?? []
+                      ).map((label) => (
+                        <Badge key={label} variant="outline">
+                          {label}
                         </Badge>
                       ))}
                     </div>
-                  )}
+                  ) : null}
                 </div>
               </Link>
             )

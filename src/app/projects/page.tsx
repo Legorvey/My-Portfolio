@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { ContactSection } from "@/components/contact/contact-section"
 import { Container } from "@/components/layout/container"
 import { ProjectsTable } from "@/components/projects/projects-table"
@@ -34,6 +35,7 @@ export default function ProjectsPage() {
     end: project.end,
     status: project.status,
     tools: project.tools,
+    tags: project.tags,
     links: project.links,
     thumbnail: project.thumbnail,
     featured: project.featured,
@@ -54,7 +56,15 @@ export default function ProjectsPage() {
       </header>
 
       <section aria-label="Projects index">
-        <ProjectsTable projects={projects} />
+        <Suspense
+          fallback={
+            <div className="rounded-sm border border-border bg-surface p-6 font-mono text-xs text-muted-foreground">
+              Loading deployment archive...
+            </div>
+          }
+        >
+          <ProjectsTable projects={projects} />
+        </Suspense>
       </section>
 
       <ContactSection />

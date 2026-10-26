@@ -2,13 +2,15 @@ import fs from "node:fs"
 import path from "node:path"
 import matter from "gray-matter"
 import { z } from "zod"
+import { resolveProjectStatus } from "@/lib/utils"
 
 export const PROJECT_TYPES = [
   "hardware",
-  "web",
+  "software",
   "research",
   "event",
-  "experience",
+  "business",
+  "work",
 ] as const
 
 export const ProjectTypeSchema = z.enum(PROJECT_TYPES)
@@ -37,6 +39,7 @@ export const ProjectFrontmatterSchema = z.object({
   end: EndDateSchema.optional(),
   status: z.string().optional(),
   tools: z.array(z.string().min(1)).optional(),
+  tags: z.array(z.string().min(1)).optional(),
   links: z.array(ProjectLinkSchema).optional(),
   thumbnail: z.string().min(1).optional(),
   featured: z.boolean().default(false),
@@ -50,7 +53,25 @@ export interface Project extends ProjectFrontmatter {
 
 const DEFAULT_CONTENT_DIR = path.join(process.cwd(), "content", "projects")
 
-export function getProjects(contentDir: string = DEFAULT_CONTENT_DIR): Project[] {
+export function sortProjectsByStartDesc<
+  T extends { start?: string; slug: string },
+>(items: readonly T[]): T[] {
+  return [...items].sort((a, b) => {
+    if (a.start && b.start) {
+      const cmp = b.start.localeCompare(a.start)
+      if (cmp !== 0) return cmp
+    } else if (a.start && !b.start) {
+      return -1
+    } else if (!a.start && b.start) {
+      return 1
+    }
+    return a.slug.localeCompare(b.slug)
+  })
+}
+
+export function getProjects(
+  contentDir: string = DEFAULT_CONTENT_DIR
+): Project[] {
   if (!fs.existsSync(/*turbopackIgnore: true*/ contentDir)) {
     return []
   }
@@ -78,27 +99,24 @@ export function getProjects(contentDir: string = DEFAULT_CONTENT_DIR): Project[]
       )
     }
 
+    const resolvedStatus = resolveProjectStatus(parsed.data)
+
     return {
       ...parsed.data,
+      status: resolvedStatus,
       content,
     }
   })
 
-  return projects.sort((a, b) => {
-    if (a.start && b.start) {
-      const cmp = b.start.localeCompare(a.start)
-      if (cmp !== 0) return cmp
-    } else if (a.start && !b.start) {
-      return -1
-    } else if (!a.start && b.start) {
-      return 1
-    }
-    return a.slug.localeCompare(b.slug)
-  })
+  return sortProjectsByStartDesc(projects)
 }
 
-export function getFeatured(contentDir: string = DEFAULT_CONTENT_DIR): Project[] {
-  return getProjects(contentDir).filter((project) => project.featured)
+export function getFeatured(
+  contentDir: string = DEFAULT_CONTENT_DIR
+): Project[] {
+  return sortProjectsByStartDesc(
+    getProjects(contentDir).filter((project) => project.featured)
+  )
 }
 
 export function getProject(

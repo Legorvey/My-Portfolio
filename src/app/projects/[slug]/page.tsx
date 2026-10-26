@@ -10,7 +10,7 @@ import {
 } from "@/components/mdx/mdx-components"
 import { Badge } from "@/components/ui/badge"
 import { getProject, getProjects } from "@/lib/content"
-import { formatPeriod } from "@/lib/utils"
+import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>
@@ -85,7 +85,9 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       <header className="rounded-sm border border-border bg-surface p-6">
         <div className="space-y-2 border-b border-border pb-5">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="default">{project.type}</Badge>
+            <Badge variant="default">
+              {formatProjectTypeLabel(project.type)}
+            </Badge>
             {project.status && (
               <Badge variant="secondary">{project.status}</Badge>
             )}
@@ -105,8 +107,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Type
             </dt>
-            <dd className="mt-1 font-mono text-xs uppercase text-foreground">
-              {project.type}
+            <dd className="mt-1 font-mono text-xs text-foreground">
+              {formatProjectTypeLabel(project.type)}
             </dd>
           </div>
 
@@ -133,11 +135,11 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               Status
             </dt>
             <dd className="mt-1 font-mono text-xs text-foreground">
-              {project.status ?? "—"}
+              {project.status || "—"}
             </dd>
           </div>
 
-          <div className="sm:col-span-2 md:col-span-4">
+          <div className="sm:col-span-2">
             <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Tools
             </dt>
@@ -147,6 +149,27 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                   {project.tools.map((tool) => (
                     <Badge key={tool} variant="outline">
                       {tool}
+                    </Badge>
+                  ))}
+                </div>
+              ) : (
+                <span className="font-mono text-xs text-muted-foreground">
+                  —
+                </span>
+              )}
+            </dd>
+          </div>
+
+          <div className="sm:col-span-2">
+            <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Tags
+            </dt>
+            <dd className="mt-1.5">
+              {project.tags && project.tags.length > 0 ? (
+                <div className="flex flex-wrap gap-1.5">
+                  {project.tags.map((tag) => (
+                    <Badge key={tag} variant="secondary">
+                      {tag}
                     </Badge>
                   ))}
                 </div>
