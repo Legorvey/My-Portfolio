@@ -1,12 +1,11 @@
-import Image from "next/image"
 import Link from "next/link"
 import { ContactSection } from "@/components/contact/contact-section"
 import { Container } from "@/components/layout/container"
 import { StaggerIn } from "@/components/motion/stagger-in"
+import { FeaturedBento } from "@/components/projects/featured-bento"
 import { Badge } from "@/components/ui/badge"
 import { getFeatured } from "@/lib/content"
 import { getPublicImageDimensions } from "@/lib/image-dimensions"
-import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
 
 const HERO_METRICS = [
   {
@@ -101,43 +100,76 @@ export default async function HomePage() {
   )
 
   return (
-    <Container className="space-y-16 py-10">
+    <Container className="space-y-24 py-12 lg:py-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
       />
 
       {/* Hero Section */}
-      <section id="hero" aria-labelledby="hero-heading">
-        <StaggerIn className="space-y-8">
-          <div className="space-y-3">
-            <div className="h-0.5 w-10 bg-primary" aria-hidden="true" />
-            <h1
-              id="hero-heading"
-              className="font-sans text-xl font-semibold tracking-tight text-foreground"
-            >
-              Aditya Chandrasa
-            </h1>
-            <p className="font-mono text-sm font-medium text-foreground">
-              Building Logic <span className="text-primary">from</span> Schematic{" "}
-              <span className="text-primary">to</span> Hardware
-            </p>
-            <p className="max-w-[72ch] text-base text-muted-foreground">
-              Electrical Engineering student focused on practical logic behind physical systems. I build prototypes that work in the lab and stay reliable in the field.
-            </p>
+      <section id="hero" aria-labelledby="hero-heading" className="pt-4 sm:pt-8">
+        <StaggerIn className="space-y-10">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 font-mono text-xs text-muted-foreground">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+              <span className="font-semibold text-foreground">ELECTRICAL ENGINEERING</span>
+              <span className="text-muted-foreground">·</span>
+              <span>HARDWARE LOGIC &amp; SYSTEMS</span>
+            </div>
+
+            <div className="space-y-4">
+              <h1
+                id="hero-heading"
+                className="font-sans text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-6xl max-w-4xl"
+              >
+                Building Logic <span className="text-primary font-normal">from</span> Schematic{" "}
+                <span className="text-primary font-normal">to</span> Hardware<span className="text-primary">.</span>
+              </h1>
+              <p className="max-w-[72ch] text-base leading-relaxed text-muted-foreground sm:text-lg">
+                Electrical Engineering student at Universitas Padjadjaran focused on practical logic behind physical systems. I design circuits that survive outside the laboratory and build scalable technical operations.
+              </p>
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <a
+                href="#projects"
+                className="inline-flex items-center gap-2 rounded-sm bg-primary px-5 py-2.5 font-mono text-xs font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span>VIEW FEATURED WORK</span>
+                <span aria-hidden="true">↓</span>
+              </a>
+              <Link
+                href="/projects"
+                className="inline-flex items-center gap-2 rounded-sm border border-border bg-surface px-5 py-2.5 font-mono text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span>EXPLORE ARCHIVE</span>
+                <span aria-hidden="true">→</span>
+              </Link>
+              <a
+                href="/Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2.5 font-mono text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span>RÉSUMÉ</span>
+                <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+              </a>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {/* Key Impact Metrics */}
+          <div className="grid grid-cols-1 gap-4 border-t border-border pt-8 sm:grid-cols-3">
             {HERO_METRICS.map((metric) => (
               <div
                 key={metric.label}
-                className="rounded-sm border border-border bg-surface p-4"
+                className="rounded-sm border border-border bg-surface p-5 transition-colors hover:border-primary/50"
               >
-                <div className="font-mono text-xl font-semibold text-foreground">
+                <div className="font-mono text-2xl font-bold text-foreground">
                   {metric.value}
-                  <span className="text-sm text-primary">{metric.suffix}</span>
+                  <span className="text-base text-primary">{metric.suffix}</span>
                 </div>
-                <div className="mt-1 font-sans text-sm font-medium text-foreground">
+                <div className="mt-1 font-sans text-sm font-semibold text-foreground">
                   {metric.label}
                 </div>
                 <div className="mt-0.5 font-mono text-xs text-muted-foreground">
@@ -149,32 +181,84 @@ export default async function HomePage() {
         </StaggerIn>
       </section>
 
+      {/* Featured Projects Bento Section */}
+      <section
+        id="projects"
+        aria-labelledby="projects-heading"
+        className="space-y-8 border-t border-border pt-16"
+      >
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div className="space-y-2">
+            <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
+              SELECTED WORK · 5 HIGHLIGHTED DEPLOYMENTS
+            </p>
+            <h2
+              id="projects-heading"
+              className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
+            >
+              Featured Hardware &amp; Systems
+            </h2>
+            <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
+              A curated bento collection of physical prototypes, embedded firmware, and operational case studies.
+            </p>
+          </div>
+
+          <Link
+            href="/projects"
+            className="group flex w-fit items-center gap-1.5 font-mono text-xs font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span>VIEW FULL ARCHIVE (10+)</span>
+            <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
+              →
+            </span>
+          </Link>
+        </div>
+
+        {/* Cohesive Bento Box */}
+        <FeaturedBento projects={featuredProjects} />
+      </section>
+
       {/* Experiences Section */}
       <section
         id="experiences"
         aria-labelledby="experiences-heading"
-        className="border-t border-border pt-12"
+        className="space-y-8 border-t border-border pt-16"
       >
-        <div className="mb-6">
-          <h2
-            id="experiences-heading"
-            className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div className="space-y-2">
+            <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
+              OPERATIONAL TIMELINE
+            </p>
+            <h2
+              id="experiences-heading"
+              className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
+            >
+              Experiences &amp; Leadership
+            </h2>
+            <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
+              Leadership milestones, technical management, and business expansion deployments.
+            </p>
+          </div>
+
+          <a
+            href="/Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex w-fit items-center gap-1.5 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            EXPERIENCES
-          </h2>
-          <p className="mt-1 max-w-[72ch] text-base text-foreground">
-            Operational timeline and leadership milestones.
-          </p>
+            <span>DOWNLOAD FULL RÉSUMÉ</span>
+            <span aria-hidden="true">➔</span>
+          </a>
         </div>
 
         <div className="divide-y divide-border rounded-sm border border-border bg-background">
           {EXPERIENCES_TIMELINE.map((item) => (
             <div
               key={item.title}
-              className="grid grid-cols-1 gap-3 p-4 md:grid-cols-12 md:gap-6"
+              className="grid grid-cols-1 gap-3 p-5 md:grid-cols-12 md:gap-6 transition-colors hover:bg-surface/50"
             >
               <div className="flex flex-wrap items-start justify-between gap-2 md:col-span-4 md:flex-col md:justify-start">
-                <span className="font-mono text-xs text-muted-foreground">
+                <span className="font-mono text-xs font-medium text-muted-foreground">
                   {item.date}
                 </span>
                 <Badge variant="outline">{item.badge}</Badge>
@@ -183,111 +267,12 @@ export default async function HomePage() {
                 <h3 className="font-sans text-base font-semibold text-foreground">
                   {item.title}
                 </h3>
-                <p className="max-w-[72ch] text-sm text-muted-foreground">
+                <p className="max-w-[72ch] text-sm leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-4">
-          <a
-            href="/Resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            Download Full Résumé <span aria-hidden="true">➔</span>
-          </a>
-        </div>
-      </section>
-
-      {/* Featured Projects Section */}
-      <section
-        id="projects"
-        aria-labelledby="projects-heading"
-        className="border-t border-border pt-12"
-      >
-        <div className="mb-6">
-          <h2
-            id="projects-heading"
-            className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-          >
-            PROJECTS
-          </h2>
-          <p className="mt-1 max-w-[72ch] text-base text-foreground">
-            Hardware architecture, systems, and execution case studies.
-          </p>
-        </div>
-
-        <StaggerIn className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {featuredProjects.map((project) => {
-            const { dims } = project
-
-            return (
-              <Link
-                key={project.slug}
-                href={`/projects/${project.slug}`}
-                className="group flex flex-col overflow-hidden rounded-sm border border-border bg-surface transition-colors duration-150 hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {project.thumbnail && dims && (
-                  <div className="border-b border-border bg-background">
-                    <Image
-                      src={project.thumbnail}
-                      alt={project.title}
-                      width={dims.width}
-                      height={dims.height}
-                      className="h-44 w-full object-cover"
-                    />
-                  </div>
-                )}
-                <div className="flex flex-1 flex-col justify-between p-4">
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <Badge variant="default">
-                        {formatProjectTypeLabel(project.type)}
-                      </Badge>
-                      <span className="font-mono text-xs text-muted-foreground">
-                        {formatPeriod(project.start, project.end)}
-                      </span>
-                    </div>
-                    <h3 className="font-sans text-base font-semibold text-foreground group-hover:text-primary">
-                      {project.title}
-                    </h3>
-                    {project.summary && (
-                      <p className="text-sm text-muted-foreground">
-                        {project.summary}
-                      </p>
-                    )}
-                  </div>
-
-                  {(project.tools && project.tools.length > 0) ||
-                  (project.tags && project.tags.length > 0) ? (
-                    <div className="mt-4 flex flex-wrap gap-1.5 border-t border-border pt-3">
-                      {(project.tools && project.tools.length > 0
-                        ? project.tools
-                        : project.tags ?? []
-                      ).map((label) => (
-                        <Badge key={label} variant="outline">
-                          {label}
-                        </Badge>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              </Link>
-            )
-          })}
-        </StaggerIn>
-
-        <div className="mt-6">
-          <Link
-            href="/projects"
-            className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            View Full Deployment Archive <span aria-hidden="true">➔</span>
-          </Link>
         </div>
       </section>
 

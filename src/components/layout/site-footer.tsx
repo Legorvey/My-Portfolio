@@ -1,85 +1,148 @@
 import Link from "next/link"
 import { Container } from "@/components/layout/container"
+import { BackToTop } from "@/components/ui/back-to-top"
+import { VisitorBadge } from "@/components/ui/visitor-badge"
 
 export function SiteFooter() {
   return (
-    <footer className="mt-16 border-t border-border bg-background py-10">
-      <Container>
-        <div className="grid grid-cols-1 gap-8 pb-8 sm:grid-cols-3">
-          <div className="sm:col-span-1">
-            <span className="font-mono text-sm font-semibold text-foreground">
-              Aditya<span className="text-primary">.</span>
-            </span>
-            <p className="mt-2 max-w-[44ch] text-sm text-muted-foreground">
-              Electrical Engineering student bridging the gap between embedded hardware, data-driven logic, and business execution.
+    <footer className="mt-24 border-t border-border bg-background py-12">
+      <Container className="space-y-12">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
+          {/* Brand & Bio column */}
+          <div className="space-y-4 md:col-span-5">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 font-mono text-base font-semibold tracking-tight text-foreground transition-colors hover:text-primary"
+            >
+              <span className="text-primary font-bold">&lt;A&gt;</span>
+              <span className="font-sans">Aditya Chandrasa</span>
+            </Link>
+            <p className="max-w-[48ch] text-sm leading-relaxed text-muted-foreground">
+              Electrical Engineering student at Universitas Padjadjaran. Architecting hardware logic, embedded sensor ecosystems, and high-impact operations.
             </p>
+            <div className="flex flex-wrap items-center gap-2 pt-2">
+              <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-surface px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+                <span>SYSTEM ONLINE</span>
+              </span>
+              <span className="rounded-sm border border-border bg-surface px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground">
+                REV 2.4.0
+              </span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-6 sm:col-span-2 sm:justify-items-end">
-            <div className="flex flex-col gap-2">
+          {/* Navigation & Links */}
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 md:col-span-7 md:justify-items-end">
+            <div className="space-y-3">
               <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-foreground">
-                Navigation
+                Index
               </h2>
-              <Link
-                href="/#experiences"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                Experiences
-              </Link>
-              <Link
-                href="/projects"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                Projects
-              </Link>
-              <Link
-                href="/#contact"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                Contact
-              </Link>
-              <a
-                href="/Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                Resume
-              </a>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <Link
+                    href="/"
+                    className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/#projects"
+                    className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Featured Work
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/projects"
+                    className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Deployment Archive
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/#experiences"
+                    className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Experiences Timeline
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="/Resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <span>Full Résumé</span>
+                    <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              </ul>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="space-y-3">
               <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-foreground">
                 Connect
               </h2>
-              <a
-                href="https://github.com/Legorvey"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                GitHub
-              </a>
-              <a
-                href="https://linkedin.com/in/adityachandrasa"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                LinkedIn
-              </a>
-              <a
-                href="mailto:aditchandrasa1@gmail.com"
-                className="text-sm text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                Email
-              </a>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a
+                    href="https://github.com/Legorvey"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <span>GitHub</span>
+                    <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://linkedin.com/in/adityachandrasa"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <span>LinkedIn</span>
+                    <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="mailto:aditchandrasa1@gmail.com"
+                    className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <span>Email Inquiries</span>
+                    <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+                <li>
+                  <Link
+                    href="/#contact"
+                    className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    Contact Terminal
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-border pt-6 font-mono text-xs text-muted-foreground">
-          <p>© 2026 Aditya Cakti Chandrasa. All rights reserved.</p>
+        {/* Diegovz-inspired bottom bar with visitor counter & back to top */}
+        <div className="flex flex-col items-start justify-between gap-4 border-t border-border pt-8 sm:flex-row sm:items-center">
+          <p className="font-mono text-xs text-muted-foreground">
+            © 2026 Aditya Cakti Chandrasa. Engineered with Next.js &amp; Tailwind CSS.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <VisitorBadge />
+            <BackToTop />
+          </div>
         </div>
       </Container>
     </footer>

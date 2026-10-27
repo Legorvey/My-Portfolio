@@ -5,41 +5,44 @@ export function ContactSection() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="border-t border-border pt-12"
+      className="space-y-8 border-t border-border pt-16"
     >
-      <div className="mb-6">
+      <div className="space-y-2">
+        <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
+          DIRECT TRANSMISSION · INQUIRIES
+        </p>
         <h2
           id="contact-heading"
-          className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+          className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
         >
-          CONTACT
+          Let&apos;s Build Reliable Systems.
         </h2>
-        <p className="mt-1 max-w-[72ch] text-base text-foreground">
-          System ready for transmission. Open for collaborations and engineering roles.
+        <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
+          Open for embedded hardware engineering, IoT deployments, and operational leadership roles. Send a message through the transmission terminal below.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
-        <div className="rounded-sm border border-border bg-surface p-6 md:col-span-7">
+        <div className="rounded-sm border border-border bg-surface p-6 sm:p-8 md:col-span-7">
           <ContactForm />
         </div>
 
         <div className="flex flex-col gap-4 md:col-span-5">
-          <div className="rounded-sm border border-border bg-surface p-4">
+          <div className="rounded-sm border border-border bg-surface p-5 transition-colors hover:border-primary/50">
             <span className="block font-mono text-xs uppercase tracking-wider text-muted-foreground">
-              Direct Line
+              Direct Transmission Line
             </span>
             <a
               href="mailto:aditchandrasa1@gmail.com"
               className="mt-1 inline-block font-mono text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              aditchandrasa1@gmail.com
+              aditchandrasa1@gmail.com ↗
             </a>
           </div>
 
-          <div className="rounded-sm border border-border bg-surface p-4">
+          <div className="rounded-sm border border-border bg-surface p-5 transition-colors hover:border-primary/50">
             <span className="block font-mono text-xs uppercase tracking-wider text-muted-foreground">
-              WhatsApp Network
+              Direct Communication (WhatsApp)
             </span>
             <a
               href="https://wa.me/6282321007009"
@@ -47,16 +50,16 @@ export function ContactSection() {
               rel="noopener noreferrer"
               className="mt-1 inline-block font-mono text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              +62 823 2100 7009
+              +62 823 2100 7009 ↗
             </a>
           </div>
 
-          <div className="rounded-sm border border-border bg-surface p-4">
+          <div className="rounded-sm border border-border bg-surface p-5 transition-colors hover:border-primary/50">
             <span className="block font-mono text-xs uppercase tracking-wider text-muted-foreground">
-              Current Node (Location)
+              Current Node (Station)
             </span>
             <span className="mt-1 block font-mono text-sm font-medium text-foreground">
-              Tasikmalaya / Bandung, ID
+              Tasikmalaya / Bandung, West Java, ID
             </span>
           </div>
         </div>

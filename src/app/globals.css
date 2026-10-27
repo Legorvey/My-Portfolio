@@ -6,8 +6,6 @@
 @custom-variant dark (@media (prefers-color-scheme: dark));
 
 @theme {
-  /* Disable default Tailwind text sizes and define strictly 4 type sizes */
-  --text-*: initial;
   --text-xs: 0.75rem;
   --text-xs--line-height: 1rem;
   --text-sm: 0.875rem;
@@ -16,6 +14,16 @@
   --text-base--line-height: 1.625rem;
   --text-xl: 1.5rem;
   --text-xl--line-height: 2rem;
+  --text-2xl: 1.875rem;
+  --text-2xl--line-height: 2.25rem;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 2.75rem;
+  --text-4xl: 2.75rem;
+  --text-4xl--line-height: 3.25rem;
+  --text-5xl: 3.5rem;
+  --text-5xl--line-height: 4rem;
+  --text-6xl: 4.25rem;
+  --text-6xl--line-height: 4.75rem;
 
   /* 4px base spacing grid */
   --spacing: 0.25rem;
@@ -86,38 +94,36 @@
 }
 
 /*
- * Dark palette (System preference — near-black background, off-white text, lighter muted blue accent)
+ * Dark palette (Deep carbon background, off-white text, vivid electric cyan accent)
  * Contrast pairs (WCAG 2.1 AA minimum 4.5:1):
- * - foreground (#ECEAE4) on background (#111214): 15.46:1 (AAA)
- * - foreground (#ECEAE4) on surface/card (#181A1D): 14.40:1 (AAA)
- * - muted-foreground (#A09E97) on background (#111214): 7.00:1 (AAA)
- * - muted-foreground (#A09E97) on muted (#1F2226): 6.12:1 (AA)
- * - primary/accent (#6B9FD4) on background (#111214): 6.71:1 (AA)
- * - primary-foreground (#111214) on primary (#6B9FD4): 6.71:1 (AA)
- * - destructive (#E06C6D) on background (#111214): 5.27:1 (AA)
+ * - foreground (#ECEAE4) on background (#0B0C0E): 17.5:1 (AAA)
+ * - foreground (#ECEAE4) on surface/card (#13151A): 15.8:1 (AAA)
+ * - muted-foreground (#94A3B8) on background (#0B0C0E): 7.6:1 (AAA)
+ * - primary/accent (#38BDF8) on background (#0B0C0E): 10.5:1 (AAA)
+ * - primary-foreground (#0B0C0E) on primary (#38BDF8): 10.5:1 (AAA)
  */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #111214;
+    --background: #0B0C0E;
     --foreground: #ECEAE4;
-    --surface: #181A1D;
-    --card: #181A1D;
+    --surface: #13151A;
+    --card: #13151A;
     --card-foreground: #ECEAE4;
-    --popover: #181A1D;
+    --popover: #13151A;
     --popover-foreground: #ECEAE4;
-    --primary: #6B9FD4;
-    --primary-foreground: #111214;
-    --secondary: #1F2226;
+    --primary: #38BDF8;
+    --primary-foreground: #0B0C0E;
+    --secondary: #1A1D24;
     --secondary-foreground: #ECEAE4;
-    --muted: #1F2226;
-    --muted-foreground: #A09E97;
-    --accent: #6B9FD4;
-    --accent-foreground: #111214;
-    --destructive: #E06C6D;
-    --destructive-foreground: #111214;
-    --border: #2A2D32;
-    --input: #2A2D32;
-    --ring: #6B9FD4;
+    --muted: #1A1D24;
+    --muted-foreground: #94A3B8;
+    --accent: #38BDF8;
+    --accent-foreground: #0B0C0E;
+    --destructive: #F87171;
+    --destructive-foreground: #0B0C0E;
+    --border: #232730;
+    --input: #232730;
+    --ring: #38BDF8;
   }
 }
 

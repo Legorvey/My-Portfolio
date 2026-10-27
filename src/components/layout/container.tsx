@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "cn"
 
 interface ContainerProps extends React.ComponentProps<"div"> {
-  size?: "default" | "prose"
+  size?: "wide" | "default" | "narrow" | "prose"
 }
 
 export function Container({
@@ -10,11 +10,18 @@ export function Container({
   size = "default",
   ...props
 }: ContainerProps) {
+  const sizeClasses = {
+    wide: "max-w-7xl px-4 sm:px-8 lg:px-12",
+    default: "max-w-7xl px-4 sm:px-8 lg:px-12",
+    narrow: "max-w-5xl px-4 sm:px-6 lg:px-8",
+    prose: "max-w-[72ch] px-4 sm:px-6",
+  }
+
   return (
     <div
       className={cn(
-        "mx-auto w-full px-4 sm:px-6 lg:px-8",
-        size === "default" ? "max-w-5xl" : "max-w-[72ch]",
+        "mx-auto w-full",
+        sizeClasses[size] ?? sizeClasses.default,
         className
       )}
       {...props}
