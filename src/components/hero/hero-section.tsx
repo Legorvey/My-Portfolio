@@ -40,7 +40,7 @@ export function HeroSection() {
             {/* Line 1: Sized larger to match the horizontal width of Line 2, with metallic drop shading */}
             <span
               aria-hidden="true"
-              className="block text-[13.6vw] sm:text-[11vw] lg:text-[8.5rem] xl:text-[9.7rem] font-extrabold bg-gradient-to-b from-neutral-950 via-neutral-800 via-40% to-neutral-500 dark:from-white dark:via-neutral-200 dark:via-40% dark:to-neutral-500 bg-clip-text text-transparent"
+              className="block text-[14.0vw] sm:text-[11.47vw] lg:text-[8.77rem] xl:text-[10.067rem] font-extrabold bg-gradient-to-b from-neutral-950 via-neutral-800 via-40% to-neutral-500 dark:from-white dark:via-neutral-200 dark:via-40% dark:to-neutral-500 bg-clip-text text-transparent"
             >
               Hi there
             </span>
