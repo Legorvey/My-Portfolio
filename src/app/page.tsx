@@ -106,10 +106,8 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
       />
 
-      {/* Diego-inspired Hero Section */}
-      <Container size="default">
-        <HeroSection />
-      </Container>
+      {/* Fullscreen Hero Section */}
+      <HeroSection />
 
       {/* Main Content below Hero */}
       <Container className="space-y-24 py-12 lg:py-16">

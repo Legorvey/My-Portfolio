@@ -12,7 +12,7 @@ export function CursorBadge({
   return (
     <div
       className={cn(
-        "relative inline-flex items-center select-none transition-transform duration-300 hover:scale-105",
+        "relative inline-flex items-center select-none animate-cursor-float",
         className
       )}
       aria-label={`Cursor indicator: ${label}`}
