@@ -43,6 +43,7 @@ export const ProjectFrontmatterSchema = z.object({
   links: z.array(ProjectLinkSchema).optional(),
   thumbnail: z.string().min(1).optional(),
   featured: z.boolean().default(false),
+  order: z.number().optional(),
 })
 
 export type ProjectFrontmatter = z.infer<typeof ProjectFrontmatterSchema>

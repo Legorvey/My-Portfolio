@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       botcheck !== "false")
   ) {
     return NextResponse.json(
-      { success: true, message: "Transmission Successful" },
+      { success: true, message: "Message sent successfully." },
       { status: 200 }
     )
   }
@@ -83,7 +83,7 @@ export async function POST(request: Request) {
       "message" in result &&
       typeof (result as { message?: unknown }).message === "string"
         ? (result as { message: string }).message
-        : "Transmission Failed"
+        : "Failed to send message."
 
     return NextResponse.json(
       { error: upstreamError },

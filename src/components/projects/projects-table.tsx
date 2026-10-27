@@ -263,7 +263,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                     <dt className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
                       Role
                     </dt>
-                    <dd className="mt-0.5 text-foreground">
+                    <dd className="mt-0.5 text-foreground break-words">
                       {project.role ?? "—"}
                     </dd>
                   </div>

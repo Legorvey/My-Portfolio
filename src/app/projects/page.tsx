@@ -6,13 +6,13 @@ import { ProjectsTable } from "@/components/projects/projects-table"
 import { getProjects, type ProjectFrontmatter } from "@/lib/content"
 
 export const metadata: Metadata = {
-  title: "Aditya Chandrasa | Deployment Archive",
+  title: "Projects | Aditya Chandrasa",
   description:
-    "Portfolio of Aditya Cakti Chandrasa. Electrical Engineering Student at Unpad specializing in hardware logic, data analytics, and real-world business execution.",
+    "Portfolio of Aditya Cakti Chandrasa. Electrical Engineering Student at Unpad specializing in hardware logic, embedded systems, and technical leadership.",
   openGraph: {
-    title: "Aditya Chandrasa | Deployment Archive",
+    title: "Projects | Aditya Chandrasa",
     description:
-      "A complete log of hardware architecture, team leadership, and business scaling deployments by Aditya Chandrasa.",
+      "A complete archive of hardware systems, technical projects, and organizational leadership by Aditya Chandrasa.",
     url: "https://adityac.dev/projects",
     images: ["https://adityac.dev/images/web-thumbnail.png"],
   },
@@ -45,13 +45,13 @@ export default function ProjectsPage() {
     <Container className="space-y-12 py-10">
       <header className="space-y-2 border-b border-border pb-8">
         <p className="font-mono text-xs font-semibold uppercase tracking-wider text-primary">
-          Complete Log of Systems &amp; Executions
+          Complete Index of Technical Projects
         </p>
         <h1 className="font-sans text-xl font-semibold tracking-tight text-foreground">
-          Deployment Archive
+          Project Archive
         </h1>
         <p className="max-w-[72ch] text-base text-muted-foreground">
-          A deep dive into the hardware I&apos;ve architected, the teams I&apos;ve led, and the businesses I&apos;ve scaled. Use the filters to explore specific domains.
+          A comprehensive record of hardware systems, embedded firmware, research, and organizational initiatives. Filter by domain or sort chronologically.
         </p>
       </header>
 
@@ -59,7 +59,7 @@ export default function ProjectsPage() {
         <Suspense
           fallback={
             <div className="rounded-sm border border-border bg-surface p-6 font-mono text-xs text-muted-foreground">
-              Loading deployment archive...
+              Loading project archive...
             </div>
           }
         >

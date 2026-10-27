@@ -41,7 +41,7 @@ export function ContactForm() {
       if (response.ok) {
         setState({
           status: "success",
-          message: "Transmission Successful",
+          message: "Message sent successfully.",
         })
         form.reset()
       } else {
@@ -51,7 +51,7 @@ export function ContactForm() {
           "error" in data &&
           typeof (data as { error?: unknown }).error === "string"
             ? (data as { error: string }).error
-            : "Transmission Failed"
+            : "Failed to send message."
 
         setState({
           status: "error",
@@ -61,7 +61,7 @@ export function ContactForm() {
     } catch {
       setState({
         status: "error",
-        message: "System Error",
+        message: "An unexpected error occurred.",
       })
     }
   }
@@ -82,7 +82,7 @@ export function ContactForm() {
           htmlFor="name"
           className="block font-mono text-xs font-medium uppercase tracking-wider text-muted-foreground"
         >
-          ID / Name
+          Name
         </label>
         <input
           type="text"
@@ -100,7 +100,7 @@ export function ContactForm() {
           htmlFor="email"
           className="block font-mono text-xs font-medium uppercase tracking-wider text-muted-foreground"
         >
-          Secure Route (Email)
+          Email Address
         </label>
         <input
           type="email"
@@ -118,14 +118,14 @@ export function ContactForm() {
           htmlFor="message"
           className="block font-mono text-xs font-medium uppercase tracking-wider text-muted-foreground"
         >
-          Payload (Message)
+          Message
         </label>
         <textarea
           id="message"
           name="message"
           rows={5}
           required
-          placeholder="State your intent..."
+          placeholder="Brief description of your project, timeline, or role..."
           disabled={state.status === "loading"}
           className="w-full rounded-sm border border-input bg-background px-3 py-2 font-sans text-sm text-foreground placeholder:text-muted-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
         />
@@ -138,8 +138,8 @@ export function ContactForm() {
           disabled={state.status === "loading"}
         >
           {state.status === "loading"
-            ? "Transmitting..."
-            : "Execute Transmission ➔"}
+            ? "Sending..."
+            : "Send Message"}
         </Button>
 
         {state.status === "success" && (

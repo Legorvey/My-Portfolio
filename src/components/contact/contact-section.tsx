@@ -9,7 +9,7 @@ export function ContactSection() {
     >
       <div className="space-y-2">
         <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
-          DIRECT TRANSMISSION · INQUIRIES
+          INQUIRIES &amp; CONTACT
         </p>
         <h2
           id="contact-heading"
@@ -18,7 +18,7 @@ export function ContactSection() {
           Let&apos;s Build Reliable Systems.
         </h2>
         <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
-          Open for embedded hardware engineering, IoT deployments, and operational leadership roles. Send a message through the transmission terminal below.
+          Open for embedded hardware engineering, IoT systems, and operational leadership roles. Send a message using the form below or reach out directly.
         </p>
       </div>
 
@@ -30,7 +30,7 @@ export function ContactSection() {
         <div className="flex flex-col gap-4 md:col-span-5">
           <div className="rounded-sm border border-border bg-surface p-5 transition-colors hover:border-primary/50">
             <span className="block font-mono text-xs uppercase tracking-wider text-muted-foreground">
-              Direct Transmission Line
+              Direct Email
             </span>
             <a
               href="mailto:aditchandrasa1@gmail.com"
@@ -42,7 +42,7 @@ export function ContactSection() {
 
           <div className="rounded-sm border border-border bg-surface p-5 transition-colors hover:border-primary/50">
             <span className="block font-mono text-xs uppercase tracking-wider text-muted-foreground">
-              Direct Communication (WhatsApp)
+              WhatsApp / Mobile
             </span>
             <a
               href="https://wa.me/6282321007009"
@@ -56,7 +56,7 @@ export function ContactSection() {
 
           <div className="rounded-sm border border-border bg-surface p-5 transition-colors hover:border-primary/50">
             <span className="block font-mono text-xs uppercase tracking-wider text-muted-foreground">
-              Current Node (Station)
+              Current Location
             </span>
             <span className="mt-1 block font-mono text-sm font-medium text-foreground">
               Tasikmalaya / Bandung, West Java, ID

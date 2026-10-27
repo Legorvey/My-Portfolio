@@ -40,7 +40,7 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`${positionClass} z-50 border-b border-border bg-background/85 backdrop-blur-md transition-all duration-300 ${
+      className={`${positionClass} z-50 border-b border-border bg-background transition-transform duration-300 ${
         isVisible
           ? "translate-y-0 opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
@@ -53,13 +53,12 @@ export function SiteHeader() {
             aria-label="Home"
             className="group flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <span className="text-primary font-bold">&lt;A&gt;</span>
             <span className="font-sans font-semibold tracking-tight">Aditya Chandrasa</span>
           </Link>
 
-          <div className="hidden items-center gap-2 rounded-full border border-border bg-surface/80 px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground sm:inline-flex">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-            <span>Available for HW/SW</span>
+          <div className="hidden items-center gap-2 rounded-sm border border-border bg-surface px-2 py-0.5 font-mono text-xs text-muted-foreground sm:inline-flex">
+            <span className="h-1.5 w-1.5 rounded-sm bg-primary" aria-hidden="true" />
+            <span>Open to Engineering Roles</span>
           </div>
         </div>
 

@@ -13,22 +13,20 @@ interface FeaturedBentoProps {
   projects: FeaturedBentoProject[]
 }
 
+const BENTO_SLOT_PRIORITY: readonly string[] = [
+  "gardapati",
+  "motosense",
+  "aquafeeder",
+  "pid-control-simulator",
+  "pln-thermography-internship",
+]
+
 export function FeaturedBento({ projects }: FeaturedBentoProps) {
   if (!projects || projects.length === 0) return null
 
-  // Ensure projects are sorted or assigned predictable positions
-  // Priority order: gardapati (01), motosense (02), aquafeeder (03), pid-control-simulator (04), pln-thermography-internship (05)
-  const order = [
-    "gardapati",
-    "motosense",
-    "aquafeeder",
-    "pid-control-simulator",
-    "pln-thermography-internship",
-  ]
-
   const sortedProjects = [...projects].sort((a, b) => {
-    const idxA = order.indexOf(a.slug)
-    const idxB = order.indexOf(b.slug)
+    const idxA = BENTO_SLOT_PRIORITY.indexOf(a.slug)
+    const idxB = BENTO_SLOT_PRIORITY.indexOf(b.slug)
     if (idxA !== -1 && idxB !== -1) return idxA - idxB
     if (idxA !== -1) return -1
     if (idxB !== -1) return 1
@@ -38,7 +36,7 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
   const [heroCard, spotlightCard, ...bottomCards] = sortedProjects
 
   return (
-    <div className="overflow-hidden rounded-md border border-border bg-border">
+    <div className="overflow-hidden rounded-sm border border-border bg-border">
       {/* 12-column Bento Grid with 1px border gap */}
       <div className="grid grid-cols-1 gap-px md:grid-cols-12">
         {/* Card 01: Hero Rectangle (Spans 8 columns on large screens) */}
@@ -46,7 +44,7 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
           <article className="group relative flex flex-col justify-between bg-surface p-6 sm:p-8 md:col-span-12 lg:col-span-8 transition-colors duration-200 hover:bg-surface/80">
             <Link
               href={`/projects/${heroCard.slug}`}
-              className="absolute inset-0 z-20"
+              className="absolute inset-0 z-20 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label={`View ${heroCard.title}`}
             />
 
@@ -94,7 +92,7 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
                   alt={heroCard.title}
                   width={heroCard.dims?.width || 800}
                   height={heroCard.dims?.height || 450}
-                  className="max-h-56 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  className="max-h-56 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
                 />
               </div>
             )}
@@ -110,7 +108,7 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
                   .map((t) => (
                     <span
                       key={t}
-                      className="rounded-sm border border-border bg-background/60 px-2 py-0.5 font-mono text-[11px] text-muted-foreground transition-colors group-hover:border-primary/40 group-hover:text-foreground"
+                      className="rounded-sm border border-border bg-background/60 px-2 py-0.5 font-mono text-xs text-muted-foreground transition-colors group-hover:border-primary/40 group-hover:text-foreground"
                     >
                       {t}
                     </span>
@@ -128,7 +126,7 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
           <article className="group relative flex flex-col justify-between bg-surface p-6 sm:p-8 md:col-span-12 lg:col-span-4 transition-colors duration-200 hover:bg-surface/80">
             <Link
               href={`/projects/${spotlightCard.slug}`}
-              className="absolute inset-0 z-20"
+              className="absolute inset-0 z-20 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-label={`View ${spotlightCard.title}`}
             />
 
@@ -166,7 +164,7 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
                   alt={spotlightCard.title}
                   width={spotlightCard.dims?.width || 600}
                   height={spotlightCard.dims?.height || 400}
-                  className="max-h-44 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                  className="max-h-44 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
                 />
               </div>
             )}
@@ -181,7 +179,7 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
                   .map((t) => (
                     <span
                       key={t}
-                      className="rounded-sm border border-border bg-background/60 px-2 py-0.5 font-mono text-[11px] text-muted-foreground transition-colors group-hover:border-primary/40 group-hover:text-foreground"
+                      className="rounded-sm border border-border bg-background/60 px-2 py-0.5 font-mono text-xs text-muted-foreground transition-colors group-hover:border-primary/40 group-hover:text-foreground"
                     >
                       {t}
                     </span>
@@ -204,7 +202,7 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
             >
               <Link
                 href={`/projects/${project.slug}`}
-                className="absolute inset-0 z-20"
+                className="absolute inset-0 z-20 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 aria-label={`View ${project.title}`}
               />
 
@@ -242,7 +240,7 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
                     alt={project.title}
                     width={project.dims?.width || 500}
                     height={project.dims?.height || 300}
-                    className="h-32 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                    className="h-32 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
                   />
                 </div>
               )}
@@ -257,13 +255,13 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
                     .map((t) => (
                       <span
                         key={t}
-                        className="rounded-sm border border-border bg-background/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
+                        className="rounded-sm border border-border bg-background/60 px-2 py-0.5 font-mono text-xs text-muted-foreground"
                       >
                         {t}
                       </span>
                     ))}
                 </div>
-                <span className="font-mono text-[11px] text-muted-foreground">
+                <span className="font-mono text-xs text-muted-foreground">
                   {formatPeriod(project.start, project.end)}
                 </span>
               </div>

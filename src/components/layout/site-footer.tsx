@@ -14,19 +14,17 @@ export function SiteFooter() {
               href="/"
               className="inline-flex items-center gap-1.5 font-mono text-base font-semibold tracking-tight text-foreground transition-colors hover:text-primary"
             >
-              <span className="text-primary font-bold">&lt;A&gt;</span>
-              <span className="font-sans">Aditya Chandrasa</span>
+              <span className="font-sans font-semibold">Aditya Chandrasa</span>
             </Link>
             <p className="max-w-[48ch] text-sm leading-relaxed text-muted-foreground">
-              Electrical Engineering student at Universitas Padjadjaran. Architecting hardware logic, embedded sensor ecosystems, and high-impact operations.
+              Electrical Engineering student at Universitas Padjadjaran. Focused on hardware logic, embedded sensor ecosystems, and technical operations.
             </p>
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="inline-flex items-center gap-1.5 rounded-sm border border-border bg-surface px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
-                <span>SYSTEM ONLINE</span>
+              <span className="rounded-sm border border-border bg-surface px-2 py-0.5 font-mono text-xs text-muted-foreground">
+                Bandung / Tasikmalaya, ID
               </span>
-              <span className="rounded-sm border border-border bg-surface px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground">
-                REV 2.4.0
+              <span className="rounded-sm border border-border bg-surface px-2 py-0.5 font-mono text-xs text-muted-foreground">
+                UTC+7
               </span>
             </div>
           </div>
@@ -59,7 +57,7 @@ export function SiteFooter() {
                     href="/projects"
                     className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    Deployment Archive
+                    Project Archive
                   </Link>
                 </li>
                 <li>
@@ -67,7 +65,7 @@ export function SiteFooter() {
                     href="/#experiences"
                     className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    Experiences Timeline
+                    Experience
                   </Link>
                 </li>
                 <li>
@@ -78,7 +76,7 @@ export function SiteFooter() {
                     className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span>Full Résumé</span>
-                    <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+                    <span className="text-xs text-primary" aria-hidden="true">↗</span>
                   </a>
                 </li>
               </ul>
@@ -97,7 +95,7 @@ export function SiteFooter() {
                     className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span>GitHub</span>
-                    <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+                    <span className="text-xs text-primary" aria-hidden="true">↗</span>
                   </a>
                 </li>
                 <li>
@@ -108,7 +106,7 @@ export function SiteFooter() {
                     className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span>LinkedIn</span>
-                    <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+                    <span className="text-xs text-primary" aria-hidden="true">↗</span>
                   </a>
                 </li>
                 <li>
@@ -117,7 +115,7 @@ export function SiteFooter() {
                     className="inline-flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     <span>Email Inquiries</span>
-                    <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+                    <span className="text-xs text-primary" aria-hidden="true">↗</span>
                   </a>
                 </li>
                 <li>
@@ -125,7 +123,7 @@ export function SiteFooter() {
                     href="/#contact"
                     className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    Contact Terminal
+                    Contact Form
                   </Link>
                 </li>
               </ul>

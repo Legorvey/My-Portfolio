@@ -34,7 +34,7 @@ export function MobileNav({ items }: MobileNavProps) {
         aria-controls="mobile-navigation-panel"
         aria-label="Toggle navigation menu"
         onClick={() => setOpen((prev) => !prev)}
-        className="inline-flex h-8 items-center justify-center rounded-sm border border-border bg-surface px-2.5 py-1 font-mono text-xs font-medium uppercase tracking-wider text-foreground transition-colors duration-150 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="inline-flex h-9 items-center justify-center rounded-sm border border-border bg-surface px-3 py-1 font-mono text-xs font-medium uppercase tracking-wider text-foreground transition-colors duration-150 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         {open ? "Close" : "Menu"}
       </button>
@@ -83,9 +83,9 @@ export function MobileNav({ items }: MobileNavProps) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setOpen(false)}
-              className="inline-flex h-7 items-center rounded-sm border border-border bg-surface px-2 py-1 font-mono text-xs font-medium text-foreground transition-colors duration-150 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex h-9 items-center rounded-sm border border-border bg-surface px-3 py-1 font-mono text-xs font-medium text-foreground transition-colors duration-150 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              View Résumé
+              View Résumé ↗
             </a>
           </div>
         </nav>

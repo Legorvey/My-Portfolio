@@ -36,8 +36,8 @@ export function VisitorBadge() {
   const formatted = isNaN(num) ? "42,892" : num.toLocaleString()
 
   return (
-    <div className="inline-flex items-center gap-2 rounded-sm border border-border bg-surface/60 px-2.5 py-1 font-mono text-xs text-muted-foreground">
-      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Visitor</span>
+    <div className="inline-flex items-center gap-2 rounded-sm border border-border bg-surface px-2.5 py-1 font-mono text-xs text-muted-foreground">
+      <span className="text-xs uppercase tracking-wider text-muted-foreground">Visitor</span>
       <span className="font-semibold text-primary">#{formatted}</span>
     </div>
   )

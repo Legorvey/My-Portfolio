@@ -7,27 +7,6 @@ import { Badge } from "@/components/ui/badge"
 import { getFeatured } from "@/lib/content"
 import { getPublicImageDimensions } from "@/lib/image-dimensions"
 
-const HERO_METRICS = [
-  {
-    value: "4",
-    suffix: "th",
-    label: "Semester EE Student",
-    context: "Padjadjaran University (Unpad)",
-  },
-  {
-    value: "70",
-    suffix: "%",
-    label: "ROI Achieved",
-    context: "Matcha Craft Expansion",
-  },
-  {
-    value: "230",
-    suffix: "+",
-    label: "National Participants",
-    context: "Futura Robotics & Seminar",
-  },
-] as const
-
 const EXPERIENCES_TIMELINE = [
   {
     date: "Jan 2026 — Present",
@@ -110,99 +89,76 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* Main Content below Hero */}
-      <Container className="space-y-24 py-12 lg:py-16">
-        {/* Key Impact Metrics */}
-        <section aria-label="Key Impact Metrics" className="border-t border-border pt-8">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {HERO_METRICS.map((metric) => (
-              <div
-                key={metric.label}
-                className="rounded-sm border border-border bg-surface p-5 transition-colors hover:border-primary/50"
+      <Container className="space-y-20 py-10 lg:py-14">
+        {/* Featured Projects Bento Section */}
+        <section
+          id="projects"
+          aria-labelledby="projects-heading"
+          className="space-y-8 border-t border-border pt-12 lg:pt-16"
+        >
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div className="space-y-2">
+              <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
+                SELECTED WORK · 5 FEATURED PROJECTS
+              </p>
+              <h2
+                id="projects-heading"
+                className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
               >
-                <div className="font-mono text-2xl font-bold text-foreground">
-                  {metric.value}
-                  <span className="text-base text-primary">{metric.suffix}</span>
-                </div>
-                <div className="mt-1 font-sans text-sm font-semibold text-foreground">
-                  {metric.label}
-                </div>
-                <div className="mt-0.5 font-mono text-xs text-muted-foreground">
-                  {metric.context}
-                </div>
-              </div>
-            ))}
+                Featured Hardware &amp; Systems
+              </h2>
+              <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
+                Physical prototypes, embedded firmware, and engineering case studies.
+              </p>
+            </div>
+
+            <Link
+              href="/projects"
+              className="group flex w-fit items-center gap-1.5 font-mono text-xs font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span>VIEW ALL PROJECTS (10+)</span>
+              <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
+                →
+              </span>
+            </Link>
           </div>
+
+          {/* Cohesive Bento Box */}
+          <FeaturedBento projects={featuredProjects} />
         </section>
 
-      {/* Featured Projects Bento Section */}
-      <section
-        id="projects"
-        aria-labelledby="projects-heading"
-        className="space-y-8 border-t border-border pt-16"
-      >
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div className="space-y-2">
-            <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
-              SELECTED WORK · 5 HIGHLIGHTED DEPLOYMENTS
-            </p>
-            <h2
-              id="projects-heading"
-              className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
+        {/* Experiences Section */}
+        <section
+          id="experiences"
+          aria-labelledby="experiences-heading"
+          className="space-y-8 border-t border-border pt-16"
+        >
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+            <div className="space-y-2">
+              <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
+                EXPERIENCE &amp; LEADERSHIP
+              </p>
+              <h2
+                id="experiences-heading"
+                className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
+              >
+                Experience &amp; Leadership
+              </h2>
+              <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
+                Leadership roles, technical management, and business operations.
+              </p>
+            </div>
+
+            <a
+              href="/Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex w-fit items-center gap-1.5 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              Featured Hardware &amp; Systems
-            </h2>
-            <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
-              A curated bento collection of physical prototypes, embedded firmware, and operational case studies.
-            </p>
+              <span>VIEW FULL RÉSUMÉ</span>
+              <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+            </a>
           </div>
-
-          <Link
-            href="/projects"
-            className="group flex w-fit items-center gap-1.5 font-mono text-xs font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <span>VIEW FULL ARCHIVE (10+)</span>
-            <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
-              →
-            </span>
-          </Link>
-        </div>
-
-        {/* Cohesive Bento Box */}
-        <FeaturedBento projects={featuredProjects} />
-      </section>
-
-      {/* Experiences Section */}
-      <section
-        id="experiences"
-        aria-labelledby="experiences-heading"
-        className="space-y-8 border-t border-border pt-16"
-      >
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div className="space-y-2">
-            <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
-              OPERATIONAL TIMELINE
-            </p>
-            <h2
-              id="experiences-heading"
-              className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
-            >
-              Experiences &amp; Leadership
-            </h2>
-            <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
-              Leadership milestones, technical management, and business expansion deployments.
-            </p>
-          </div>
-
-          <a
-            href="/Resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex w-fit items-center gap-1.5 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <span>DOWNLOAD FULL RÉSUMÉ</span>
-            <span aria-hidden="true">➔</span>
-          </a>
-        </div>
 
         <div className="divide-y divide-border rounded-sm border border-border bg-background">
           {EXPERIENCES_TIMELINE.map((item) => (

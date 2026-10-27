@@ -30,7 +30,7 @@ export async function generateMetadata({
 
   if (!project) {
     return {
-      title: "404 | Node Unreachable",
+      title: "404 | Project Not Found",
     }
   }
 
@@ -93,7 +93,7 @@ async function ProjectDetail({ params }: ProjectPageProps) {
           href="/projects"
           className="inline-flex items-center gap-1 font-mono text-xs font-medium text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          ← Back to Deployment Archive
+          ← Back to Projects
         </Link>
       </div>
 
