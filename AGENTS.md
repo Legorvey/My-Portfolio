@@ -22,5 +22,4 @@ Code: server components by default; 'use client' only for small interaction or
 animation wrappers. All colors/spacing come from tokens in globals.css, no
 hardcoded hex values in components. Project data lives in
 content/projects/*.mdx with Zod-validated frontmatter; never hardcode project
-data in components. /legacy is a content reference only: never copy its markup
-or CSS. Explain the plan before large edits.
+data in components. Explain the plan before large edits.
