@@ -7,7 +7,7 @@ export function HeroSection() {
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="relative flex h-screen min-h-[100dvh] w-full flex-col justify-between p-6 sm:p-8 lg:p-10 select-none overflow-hidden"
+      className="relative flex h-screen min-h-[100dvh] w-full flex-col justify-between pt-3 sm:pt-4 px-6 sm:px-8 lg:px-12 pb-6 sm:pb-8 select-none overflow-hidden"
     >
       {/* Top Bar: Brand Mark (Corner Left) & Location / Clock (Corner Right) */}
       <header className="flex w-full items-start justify-between">

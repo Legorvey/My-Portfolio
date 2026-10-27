@@ -36,10 +36,11 @@ export function SiteHeader() {
   )
 
   const isVisible = !isHome || isScrolled
+  const positionClass = isHome ? "fixed top-0 left-0 right-0" : "sticky top-0"
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md transition-all duration-300 ${
+      className={`${positionClass} z-50 border-b border-border bg-background/85 backdrop-blur-md transition-all duration-300 ${
         isVisible
           ? "translate-y-0 opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
