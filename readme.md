@@ -41,18 +41,10 @@ npm test
 npm run lint
 ```
 
-## Environment Variables
-
-Copy `.env.example` to `.env.local` for local development:
-
-| Variable | Scope | Description |
-| :--- | :--- | :--- |
-| `WEB3FORMS_ACCESS_KEY` | Server-only | Access key used by the `POST /api/contact` Route Handler to forward contact form submissions to Web3Forms. |
-
 ## Project Structure
 
-- `src/app/` — Next.js App Router pages (`/`, `/projects`, `/projects/[slug]`), metadata routes (`sitemap.ts`, `robots.ts`), 404 page (`not-found.tsx`), global styles (`globals.css`), and the contact API Route Handler (`api/contact/route.ts`).
-- `src/components/` — Layout shell (`layout/`), UI primitives (`ui/`), project table and filter controls (`projects/`), contact form (`contact/`), MDX custom components (`mdx/`), and motion wrappers (`motion/`).
+- `src/app/` — Next.js App Router pages (`/`, `/projects`, `/projects/[slug]`), metadata routes (`sitemap.ts`, `robots.ts`), 404 page (`not-found.tsx`), and global styles (`globals.css`).
+- `src/components/` — Layout shell (`layout/`), UI primitives (`ui/`), project table and filter controls (`projects/`), MDX custom components (`mdx/`), and motion wrappers (`motion/`).
 - `src/lib/` — Zod frontmatter schema and MDX loader (`content.ts`), formatting utilities (`utils.ts`), and unit tests (`__tests__/`).
 - `content/projects/` — Project and experience case studies written in `.mdx` with YAML frontmatter.
 - `public/` — Static assets including `Resume.pdf`, site images (`images/`), and per-project image folders (`projects/<slug>/`).

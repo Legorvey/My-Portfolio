@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
-import { ContactSection } from "@/components/contact/contact-section"
 import { Container } from "@/components/layout/container"
 import { ProjectsTable } from "@/components/projects/projects-table"
 import { getProjects, type ProjectFrontmatter } from "@/lib/content"
@@ -66,8 +65,6 @@ export default function ProjectsPage() {
           <ProjectsTable projects={projects} />
         </Suspense>
       </section>
-
-      <ContactSection />
     </Container>
   )
 }

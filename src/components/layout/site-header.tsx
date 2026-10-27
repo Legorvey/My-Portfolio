@@ -10,7 +10,6 @@ const NAV_ITEMS = [
   { label: "Home", href: "/" },
   { label: "Projects", href: "/projects" },
   { label: "Experiences", href: "/#experiences" },
-  { label: "Contact", href: "/#contact" },
 ] as const
 
 function subscribeScroll(callback: () => void): () => void {

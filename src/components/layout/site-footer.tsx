@@ -118,14 +118,6 @@ export function SiteFooter() {
                     <span className="text-xs text-primary" aria-hidden="true">↗</span>
                   </a>
                 </li>
-                <li>
-                  <Link
-                    href="/#contact"
-                    className="text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                  >
-                    Contact Form
-                  </Link>
-                </li>
               </ul>
             </div>
           </div>

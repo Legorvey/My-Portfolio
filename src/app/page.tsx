@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { ContactSection } from "@/components/contact/contact-section"
 import { HeroSection } from "@/components/hero/hero-section"
 import { Container } from "@/components/layout/container"
 import { FeaturedBento } from "@/components/projects/featured-bento"
@@ -175,9 +174,6 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      {/* Contact Section */}
-      <ContactSection />
     </Container>
     </>
   )
