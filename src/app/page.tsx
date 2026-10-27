@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ContactSection } from "@/components/contact/contact-section"
+import { HeroSection } from "@/components/hero/hero-section"
 import { Container } from "@/components/layout/container"
-import { StaggerIn } from "@/components/motion/stagger-in"
 import { FeaturedBento } from "@/components/projects/featured-bento"
 import { Badge } from "@/components/ui/badge"
 import { getFeatured } from "@/lib/content"
@@ -100,66 +100,22 @@ export default async function HomePage() {
   )
 
   return (
-    <Container className="space-y-24 py-12 lg:py-16">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
       />
 
-      {/* Hero Section */}
-      <section id="hero" aria-labelledby="hero-heading" className="pt-4 sm:pt-8">
-        <StaggerIn className="space-y-10">
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 font-mono text-xs text-muted-foreground">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-              <span className="font-semibold text-foreground">ELECTRICAL ENGINEERING</span>
-              <span className="text-muted-foreground">·</span>
-              <span>HARDWARE LOGIC &amp; SYSTEMS</span>
-            </div>
+      {/* Diego-inspired Hero Section */}
+      <Container size="default">
+        <HeroSection />
+      </Container>
 
-            <div className="space-y-4">
-              <h1
-                id="hero-heading"
-                className="font-sans text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-6xl max-w-4xl"
-              >
-                Building Logic <span className="text-primary font-normal">from</span> Schematic{" "}
-                <span className="text-primary font-normal">to</span> Hardware<span className="text-primary">.</span>
-              </h1>
-              <p className="max-w-[72ch] text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Electrical Engineering student at Universitas Padjadjaran focused on practical logic behind physical systems. I design circuits that survive outside the laboratory and build scalable technical operations.
-              </p>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <a
-                href="#projects"
-                className="inline-flex items-center gap-2 rounded-sm bg-primary px-5 py-2.5 font-mono text-xs font-semibold text-primary-foreground shadow-sm transition-all hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <span>VIEW FEATURED WORK</span>
-                <span aria-hidden="true">↓</span>
-              </a>
-              <Link
-                href="/projects"
-                className="inline-flex items-center gap-2 rounded-sm border border-border bg-surface px-5 py-2.5 font-mono text-xs font-medium text-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <span>EXPLORE ARCHIVE</span>
-                <span aria-hidden="true">→</span>
-              </Link>
-              <a
-                href="/Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-2.5 font-mono text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <span>RÉSUMÉ</span>
-                <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Key Impact Metrics */}
-          <div className="grid grid-cols-1 gap-4 border-t border-border pt-8 sm:grid-cols-3">
+      {/* Main Content below Hero */}
+      <Container className="space-y-24 py-12 lg:py-16">
+        {/* Key Impact Metrics */}
+        <section aria-label="Key Impact Metrics" className="border-t border-border pt-8">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {HERO_METRICS.map((metric) => (
               <div
                 key={metric.label}
@@ -178,8 +134,7 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
-        </StaggerIn>
-      </section>
+        </section>
 
       {/* Featured Projects Bento Section */}
       <section
@@ -279,5 +234,6 @@ export default async function HomePage() {
       {/* Contact Section */}
       <ContactSection />
     </Container>
+    </>
   )
 }

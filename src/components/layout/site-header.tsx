@@ -1,4 +1,8 @@
+"use client"
+
 import Link from "next/link"
+import { usePathname } from "next/navigation"
+import * as React from "react"
 import { Container } from "@/components/layout/container"
 import { MobileNav } from "@/components/layout/mobile-nav"
 
@@ -9,9 +13,38 @@ const NAV_ITEMS = [
   { label: "Contact", href: "/#contact" },
 ] as const
 
+function subscribeScroll(callback: () => void): () => void {
+  window.addEventListener("scroll", callback, { passive: true })
+  return () => window.removeEventListener("scroll", callback)
+}
+
+function getScrollSnapshot(): boolean {
+  return window.scrollY > 80
+}
+
+function getScrollServerSnapshot(): boolean {
+  return false
+}
+
 export function SiteHeader() {
+  const pathname = usePathname()
+  const isHome = pathname === "/"
+  const isScrolled = React.useSyncExternalStore(
+    subscribeScroll,
+    getScrollSnapshot,
+    getScrollServerSnapshot
+  )
+
+  const isVisible = !isHome || isScrolled
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md transition-colors">
+    <header
+      className={`sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md transition-all duration-300 ${
+        isVisible
+          ? "translate-y-0 opacity-100"
+          : "-translate-y-full opacity-0 pointer-events-none"
+      }`}
+    >
       <Container className="flex min-h-16 items-center justify-between gap-4 py-3">
         <div className="flex items-center gap-4">
           <Link
