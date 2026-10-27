@@ -90,40 +90,34 @@ export default async function HomePage() {
 
       {/* Main Content below Hero */}
       <Container className="space-y-20 py-10 lg:py-14">
-        {/* Featured Projects Bento Section */}
+        {/* Featured Projects Section */}
         <section
           id="projects"
           aria-labelledby="projects-heading"
           className="space-y-8 border-t border-border pt-12 lg:pt-16"
         >
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div className="space-y-2">
-              <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
-                SELECTED WORK · 5 FEATURED PROJECTS
-              </p>
-              <h2
-                id="projects-heading"
-                className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
-              >
-                Featured Hardware &amp; Systems
-              </h2>
-              <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
-                Physical prototypes, embedded firmware, and engineering case studies.
-              </p>
-            </div>
+          <div className="flex items-baseline justify-between">
+            <h2
+              id="projects-heading"
+              className="font-sans text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+            >
+              Some projects<span className="text-primary">.</span>
+            </h2>
 
             <Link
               href="/projects"
-              className="group flex w-fit items-center gap-1.5 font-mono text-xs font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="group flex w-fit items-center gap-1 font-mono text-xs font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <span>VIEW ALL PROJECTS (10+)</span>
-              <span className="transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
-                →
+              <span>All projects</span>
+              <span
+                className="text-primary transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                aria-hidden="true"
+              >
+                ↗
               </span>
             </Link>
           </div>
 
-          {/* Cohesive Bento Box */}
           <FeaturedBento projects={featuredProjects} />
         </section>
 
@@ -133,30 +127,27 @@ export default async function HomePage() {
           aria-labelledby="experiences-heading"
           className="space-y-8 border-t border-border pt-16"
         >
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div className="space-y-2">
-              <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
-                EXPERIENCE &amp; LEADERSHIP
-              </p>
-              <h2
-                id="experiences-heading"
-                className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
-              >
-                Experience &amp; Leadership
-              </h2>
-              <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
-                Leadership roles, technical management, and business operations.
-              </p>
-            </div>
+          <div className="flex items-baseline justify-between">
+            <h2
+              id="experiences-heading"
+              className="font-sans text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+            >
+              Experience<span className="text-primary">.</span>
+            </h2>
 
             <a
               href="/Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex w-fit items-center gap-1.5 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="group flex w-fit items-center gap-1 font-mono text-xs font-semibold text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <span>VIEW FULL RÉSUMÉ</span>
-              <span className="text-[10px] text-primary" aria-hidden="true">↗</span>
+              <span>Full résumé</span>
+              <span
+                className="text-primary transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                aria-hidden="true"
+              >
+                ↗
+              </span>
             </a>
           </div>
 

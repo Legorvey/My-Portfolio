@@ -7,19 +7,13 @@ export function ContactSection() {
       aria-labelledby="contact-heading"
       className="space-y-8 border-t border-border pt-16"
     >
-      <div className="space-y-2">
-        <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
-          INQUIRIES &amp; CONTACT
-        </p>
+      <div className="flex items-baseline justify-between">
         <h2
           id="contact-heading"
-          className="font-sans text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
+          className="font-sans text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
         >
-          Let&apos;s Build Reliable Systems.
+          Contact<span className="text-primary">.</span>
         </h2>
-        <p className="max-w-[72ch] text-sm text-muted-foreground sm:text-base">
-          Open for embedded hardware engineering, IoT systems, and operational leadership roles. Send a message using the form below or reach out directly.
-        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
