@@ -26,7 +26,7 @@ export function HeroSection() {
       <div className="my-auto flex w-full flex-col items-center justify-center">
         <div className="relative inline-flex flex-col items-start max-w-full">
           {/* Floating Cursor Tag with smooth looping lane motion */}
-          <div className="absolute -top-12 sm:-top-16 lg:-top-20 right-2 sm:right-6 md:right-10 z-10 pointer-events-none">
+          <div className="absolute -top-12 sm:-top-16 lg:-top-20 right-2 sm:right-6 md:right-8 lg:right-10 z-10 pointer-events-none">
             <CursorBadge label="Scroll Down!" />
           </div>
 
@@ -40,7 +40,7 @@ export function HeroSection() {
             {/* Line 1: Sized larger to match the horizontal width of Line 2, with metallic drop shading */}
             <span
               aria-hidden="true"
-              className="block text-[14.0vw] sm:text-[11.47vw] lg:text-[8.77rem] xl:text-[10.067rem] font-extrabold bg-gradient-to-b from-neutral-950 via-neutral-800 via-40% to-neutral-500 dark:from-white dark:via-neutral-200 dark:via-40% dark:to-neutral-500 bg-clip-text text-transparent"
+              className="block text-[14.0vw] sm:text-[12.65vw] lg:text-[10.067rem] xl:text-[11.865rem] 2xl:text-[12.584rem] font-extrabold bg-gradient-to-b from-neutral-950 via-neutral-800 via-40% to-neutral-500 dark:from-white dark:via-neutral-200 dark:via-40% dark:to-neutral-500 bg-clip-text text-transparent"
             >
               Hi there
             </span>
@@ -48,9 +48,9 @@ export function HeroSection() {
             {/* Line 2: Balanced width, subtle specular metallic gradient + square accent period */}
             <span
               aria-hidden="true"
-              className="inline-flex items-baseline text-[9.8vw] sm:text-[8vw] lg:text-[6.1rem] xl:text-[7.0rem] font-extrabold"
+              className="inline-flex items-baseline text-[9.8vw] sm:text-[8.8vw] lg:text-[7.0rem] xl:text-[8.25rem] 2xl:text-[8.75rem] font-extrabold"
             >
-              <span className="bg-gradient-to-b from-neutral-950 via-neutral-800 via-60% to-neutral-600 dark:from-white dark:via-neutral-100 dark:via-60% dark:to-neutral-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-b from-neutral-950 via-neutral-800 via-60% to-neutral-600 dark:from-white dark:via-neutral-100 dark:via-60% dark:to-neutral-400 bg-clip-text text-transparent pb-[0.25em] -mb-[0.25em]">
                 I am Aditya
               </span>
               <span
