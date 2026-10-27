@@ -33,11 +33,30 @@ export function HeroSection() {
           {/* Headline */}
           <h1
             id="hero-heading"
-            className="font-sans text-5xl font-bold tracking-tight text-foreground sm:text-7xl md:text-8xl lg:text-9xl leading-[0.95] sm:leading-[0.92]"
+            className="font-sans font-extrabold tracking-[-0.04em] leading-[0.88] sm:leading-[0.86]"
           >
-            <span className="block">Hi there</span>
-            <span className="block">
-              I am Aditya<span className="text-primary font-bold">.</span>
+            <span className="sr-only">Hi there I am Aditya.</span>
+
+            {/* Line 1: Sized larger to match the horizontal width of Line 2, with metallic drop shading */}
+            <span
+              aria-hidden="true"
+              className="block text-[13.6vw] sm:text-[11vw] lg:text-[8.5rem] xl:text-[9.7rem] font-extrabold bg-gradient-to-b from-neutral-950 via-neutral-800 via-40% to-neutral-500 dark:from-white dark:via-neutral-200 dark:via-40% dark:to-neutral-500 bg-clip-text text-transparent"
+            >
+              Hi there
+            </span>
+
+            {/* Line 2: Balanced width, subtle specular metallic gradient + square accent period */}
+            <span
+              aria-hidden="true"
+              className="inline-flex items-baseline text-[9.8vw] sm:text-[8vw] lg:text-[6.1rem] xl:text-[7.0rem] font-extrabold"
+            >
+              <span className="bg-gradient-to-b from-neutral-950 via-neutral-800 via-60% to-neutral-600 dark:from-white dark:via-neutral-100 dark:via-60% dark:to-neutral-400 bg-clip-text text-transparent">
+                I am Aditya
+              </span>
+              <span
+                className="inline-block aspect-square w-[0.16em] bg-primary ml-[0.08em] rounded-none select-none"
+                aria-hidden="true"
+              />
             </span>
           </h1>
 
