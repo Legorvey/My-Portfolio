@@ -26,8 +26,8 @@ export function HeroSection() {
       <div className="my-auto flex w-full flex-col items-center justify-center">
         <div className="relative inline-flex flex-col items-start max-w-full">
           {/* Floating Cursor Tag with smooth looping lane motion */}
-          <div className="absolute -top-7 sm:-top-9 right-1 sm:right-4 md:right-8 z-10">
-            <CursorBadge label="Aditya" />
+          <div className="absolute -top-12 sm:-top-16 lg:-top-20 right-2 sm:right-6 md:right-10 z-10 pointer-events-none">
+            <CursorBadge label="Scroll Down!" />
           </div>
 
           {/* Headline */}
