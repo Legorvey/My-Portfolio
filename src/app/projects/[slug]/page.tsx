@@ -3,14 +3,13 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { MDXRemote } from "next-mdx-remote/rsc"
+import { Suspense } from "react"
 import remarkGfm from "remark-gfm"
 import { Container } from "@/components/layout/container"
-import {
-  getPublicImageDimensions,
-  mdxComponents,
-} from "@/components/mdx/mdx-components"
+import { mdxComponents } from "@/components/mdx/mdx-components"
 import { Badge } from "@/components/ui/badge"
 import { getProject, getProjects } from "@/lib/content"
+import { getPublicImageDimensions } from "@/lib/image-dimensions"
 import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
 
 interface ProjectPageProps {
@@ -59,7 +58,23 @@ export async function generateMetadata({
   }
 }
 
-export default async function ProjectDetailPage({ params }: ProjectPageProps) {
+export default function ProjectDetailPage({ params }: ProjectPageProps) {
+  return (
+    <Suspense
+      fallback={
+        <Container className="py-10">
+          <p className="font-mono text-xs text-muted-foreground">
+            Loading project...
+          </p>
+        </Container>
+      }
+    >
+      <ProjectDetail params={params} />
+    </Suspense>
+  )
+}
+
+async function ProjectDetail({ params }: ProjectPageProps) {
   const { slug } = await params
   const project = getProject(slug)
 
@@ -68,7 +83,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   }
 
   const thumbnailDims = project.thumbnail
-    ? getPublicImageDimensions(project.thumbnail)
+    ? await getPublicImageDimensions(project.thumbnail)
     : null
 
   return (

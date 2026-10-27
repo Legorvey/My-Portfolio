@@ -2,10 +2,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { ContactSection } from "@/components/contact/contact-section"
 import { Container } from "@/components/layout/container"
-import { getPublicImageDimensions } from "@/components/mdx/mdx-components"
 import { StaggerIn } from "@/components/motion/stagger-in"
 import { Badge } from "@/components/ui/badge"
 import { getFeatured } from "@/lib/content"
+import { getPublicImageDimensions } from "@/lib/image-dimensions"
 import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
 
 const HERO_METRICS = [
@@ -90,8 +90,15 @@ const JSON_LD = {
   ],
 }
 
-export default function HomePage() {
-  const featuredProjects = getFeatured()
+export default async function HomePage() {
+  const featuredProjects = await Promise.all(
+    getFeatured().map(async (project) => ({
+      ...project,
+      dims: project.thumbnail
+        ? await getPublicImageDimensions(project.thumbnail)
+        : null,
+    }))
+  )
 
   return (
     <Container className="space-y-16 py-10">
@@ -216,9 +223,7 @@ export default function HomePage() {
 
         <StaggerIn className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {featuredProjects.map((project) => {
-            const dims = project.thumbnail
-              ? getPublicImageDimensions(project.thumbnail)
-              : null
+            const { dims } = project
 
             return (
               <Link

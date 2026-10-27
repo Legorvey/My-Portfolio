@@ -1,6 +1,3 @@
-import fs from "node:fs"
-import path from "node:path"
-import { imageSize } from "image-size"
 import Image from "next/image"
 import * as React from "react"
 import {
@@ -11,37 +8,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-export function getPublicImageDimensions(src: string): {
-  width: number
-  height: number
-} {
-  const normalized = src.replace(/^\//, "")
-  const fullPath = path.join(
-    /*turbopackIgnore: true*/ process.cwd(),
-    "public",
-    normalized
-  )
-
-  if (fs.existsSync(/*turbopackIgnore: true*/ fullPath)) {
-    const buffer = fs.readFileSync(/*turbopackIgnore: true*/ fullPath)
-    const dimensions = imageSize(buffer)
-    if (dimensions.width && dimensions.height) {
-      return { width: dimensions.width, height: dimensions.height }
-    }
-  }
-
-  return { width: 1200, height: 675 }
-}
+import { getPublicImageDimensions } from "@/lib/image-dimensions"
 
 interface MdxImageProps {
   src?: string
   alt?: string
 }
 
-export function MdxImage({ src, alt }: MdxImageProps) {
+export async function MdxImage({ src, alt }: MdxImageProps) {
   if (!src) return null
-  const { width, height } = getPublicImageDimensions(src)
+  const { width, height } = await getPublicImageDimensions(src)
 
   return (
     <span className="my-6 block overflow-hidden rounded-sm border border-border bg-surface">
@@ -63,8 +39,13 @@ interface ComponentRowProps {
   children: React.ReactNode
 }
 
-export function ComponentRow({ src, alt, title, children }: ComponentRowProps) {
-  const { width, height } = getPublicImageDimensions(src)
+export async function ComponentRow({
+  src,
+  alt,
+  title,
+  children,
+}: ComponentRowProps) {
+  const { width, height } = await getPublicImageDimensions(src)
 
   return (
     <div className="my-4 flex flex-col gap-4 rounded-sm border border-border bg-surface p-4 sm:flex-row sm:items-start">
@@ -99,7 +80,7 @@ interface PressCardProps {
   children: React.ReactNode
 }
 
-export function PressCard({
+export async function PressCard({
   src,
   alt,
   category,
@@ -108,7 +89,7 @@ export function PressCard({
   ctaLabel,
   children,
 }: PressCardProps) {
-  const { width, height } = getPublicImageDimensions(src)
+  const { width, height } = await getPublicImageDimensions(src)
 
   return (
     <div className="my-6 max-w-lg overflow-hidden rounded-sm border border-border bg-surface">
