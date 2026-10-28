@@ -75,14 +75,13 @@ const itemVariants: Variants = {
 };
 
 export default function FooterWithMinimalOutline({
-  brandName = 'Aditya Chandrasa',
-  outlineText,
+  brandName = 'Design, coding and planning by me.',
+  outlineText = 'ADITYA CAKTI CHANDRASA',
   columns = defaultColumns,
   copyright = '© 2026 Aditya Cakti Chandrasa',
   className,
 }: FooterWithMinimalOutlineProps) {
-  const displayOutline =
-    outlineText ?? (brandName === 'Aditya Chandrasa' ? 'Aditya' : brandName);
+  const displayOutline = outlineText ?? 'ADITYA CAKTI CHANDRASA';
 
   return (
     <footer
