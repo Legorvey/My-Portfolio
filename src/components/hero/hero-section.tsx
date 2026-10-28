@@ -67,7 +67,8 @@ export function HeroSection() {
               <span className="font-semibold text-foreground">2024</span>
             </p>
             <p>
-              Electrical Engineering Student at{" "}
+              <span className="font-medium text-foreground">Electrical Engineering</span>{" "}
+              Student at{" "}
               <a
                 href="https://www.unpad.ac.id"
                 target="_blank"
