@@ -4,6 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { motion, type Variants } from 'motion/react';
 import { cn } from '@/lib/utils';
+import { TextSpotlight } from '@/components/ui/text-spotlight';
 
 export interface FooterColumn {
   heading: string;
@@ -165,20 +166,32 @@ export default function FooterWithMinimalOutline({
         </div>
       </motion.div>
 
-      <motion.p
+      <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
         viewport={{ once: true, amount: 0.1 }}
-        aria-hidden='true'
-        className='pointer-events-none inset-x-0 mt-10 select-none text-center font-bold tracking-tight text-transparent leading-none sm:mt-14 lg:mt-16 dark:[--stroke:#d4d4d4] [--stroke:#525252]'
-        style={{
-          fontSize: 'clamp(3rem, 14vw, 11rem)',
-          WebkitTextStroke: '1.5px var(--stroke, #525252)',
-        }}
+        className='mt-10 flex w-full justify-center sm:mt-14 lg:mt-16'
       >
-        {displayOutline}
-      </motion.p>
+        <TextSpotlight
+          text={displayOutline}
+          className='w-full text-center'
+          textClassName='font-bold tracking-tight leading-none text-center select-none'
+          baseClassName='text-transparent dark:[--stroke:#d4d4d4] [--stroke:#525252]'
+          baseStyle={{
+            fontSize: 'clamp(3rem, 14vw, 11rem)',
+            WebkitTextStroke: '1.5px var(--stroke, #525252)',
+          }}
+          spotlightClassName='text-foreground dark:text-neutral-100'
+          spotlightStyle={{
+            fontSize: 'clamp(3rem, 14vw, 11rem)',
+            WebkitTextStroke: '0px transparent',
+          }}
+          spotlightSize={240}
+          spotlightArea={65}
+          animateOnPhone={true}
+        />
+      </motion.div>
     </footer>
   );
 }
