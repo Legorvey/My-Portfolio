@@ -88,12 +88,12 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* Main Content below Hero */}
-      <Container className="space-y-20 py-10 lg:py-14">
+      <Container className="space-y-28 py-16 sm:space-y-32 sm:py-20 lg:space-y-36 lg:py-24">
         {/* Featured Projects Section */}
         <section
           id="projects"
           aria-labelledby="projects-heading"
-          className="space-y-8 border-t border-border pt-12 lg:pt-16"
+          className="space-y-8"
         >
           <div className="flex items-baseline justify-between">
             <h2
@@ -124,7 +124,7 @@ export default async function HomePage() {
         <section
           id="experiences"
           aria-labelledby="experiences-heading"
-          className="space-y-8 border-t border-border pt-16"
+          className="space-y-8"
         >
           <div className="flex items-baseline justify-between">
             <h2

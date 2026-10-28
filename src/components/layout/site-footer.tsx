@@ -5,7 +5,7 @@ import { VisitorBadge } from "@/components/ui/visitor-badge"
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-border bg-background py-12">
+    <footer className="mt-16 sm:mt-20 lg:mt-24 bg-background py-12">
       <Container className="space-y-12">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-12">
           {/* Brand & Bio column */}
