@@ -3,7 +3,7 @@ import { ExperienceTimeline } from "@/components/experience/experience-timeline"
 import { HeroSection } from "@/components/hero/hero-section"
 import { Container } from "@/components/layout/container"
 import { TextSpotlight } from "@/components/ui/text-spotlight"
-import { FeaturedBento } from "@/components/projects/featured-bento"
+import { Featured3DGrid } from "@/components/projects/featured-3d-grid"
 import { getFeatured } from "@/lib/content"
 import { getPublicImageDimensions } from "@/lib/image-dimensions"
 
@@ -94,7 +94,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <FeaturedBento projects={featuredProjects} />
+          <Featured3DGrid projects={featuredProjects} />
         </section>
 
         {/* Experiences Section */}
