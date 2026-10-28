@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ExperienceTimeline } from "@/components/experience/experience-timeline"
 import { HeroSection } from "@/components/hero/hero-section"
 import { Container } from "@/components/layout/container"
+import { TextSpotlight } from "@/components/ui/text-spotlight"
 import { FeaturedBento } from "@/components/projects/featured-bento"
 import { getFeatured } from "@/lib/content"
 import { getPublicImageDimensions } from "@/lib/image-dimensions"
@@ -65,11 +66,18 @@ export default async function HomePage() {
           className="space-y-8"
         >
           <div className="flex items-baseline justify-between">
-            <h2
-              id="projects-heading"
-              className="font-sans text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
-            >
-              Some projects<span className="text-primary">.</span>
+            <h2 id="projects-heading" className="inline-flex">
+              <TextSpotlight
+                textClassName="font-sans text-3xl font-bold tracking-tight sm:text-4xl"
+                baseClassName="text-muted-foreground/45"
+                spotlightClassName="text-foreground"
+                spotlightSize={120}
+                spotlightArea={65}
+                animateOnPhone={true}
+              >
+                <span>Some projects</span>
+                <span className="text-primary">.</span>
+              </TextSpotlight>
             </h2>
 
             <Link

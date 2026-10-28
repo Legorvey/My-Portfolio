@@ -28,6 +28,22 @@ export interface TextSpotlightProps extends React.HTMLAttributes<HTMLDivElement>
   animateOnPhone?: boolean;
 }
 
+function subscribeCoarsePointer(callback: () => void) {
+  if (typeof window === 'undefined') return () => {};
+  const media = window.matchMedia('(pointer: coarse)');
+  media.addEventListener('change', callback);
+  return () => media.removeEventListener('change', callback);
+}
+
+function getCoarseSnapshot() {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(pointer: coarse)').matches;
+}
+
+function getCoarseServerSnapshot() {
+  return false;
+}
+
 export function TextSpotlight({
   text,
   children,
@@ -46,18 +62,12 @@ export function TextSpotlight({
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [position, setPosition] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = React.useState(false);
-  const [isCoarsePointer, setIsCoarsePointer] = React.useState(false);
 
-  // Check pointer capability (coarse = touch device, fine = mouse)
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const media = window.matchMedia('(pointer: coarse)');
-    setIsCoarsePointer(media.matches);
-
-    const handler = (e: MediaQueryListEvent) => setIsCoarsePointer(e.matches);
-    media.addEventListener('change', handler);
-    return () => media.removeEventListener('change', handler);
-  }, []);
+  const isCoarsePointer = React.useSyncExternalStore(
+    subscribeCoarsePointer,
+    getCoarseSnapshot,
+    getCoarseServerSnapshot
+  );
 
   // Autonomous sweep for mobile/touch screens when animateOnPhone is enabled
   React.useEffect(() => {
