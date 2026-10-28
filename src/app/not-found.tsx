@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Container } from "@/components/layout/container"
+import { TextSpotlight } from "@/components/ui/text-spotlight"
 
 export const metadata: Metadata = {
   title: "404 | Page Not Found",
@@ -11,8 +12,18 @@ export default function NotFound() {
     <Container className="flex min-h-[60vh] flex-col items-start justify-center py-16">
       <div className="max-w-md space-y-4 rounded-sm border border-border bg-surface p-6">
         <p className="font-mono text-xl font-semibold text-primary">404</p>
-        <h1 className="font-sans text-base font-semibold text-foreground">
-          Page Not Found
+        <h1 className="inline-flex">
+          <TextSpotlight
+            textClassName="font-sans text-base font-semibold"
+            baseClassName="text-muted-foreground/45"
+            spotlightClassName="text-foreground"
+            spotlightSize={100}
+            spotlightArea={65}
+            animateOnPhone={true}
+          >
+            <span>Page Not Found</span>
+            <span className="text-primary">.</span>
+          </TextSpotlight>
         </h1>
         <p className="text-sm text-muted-foreground">
           The requested page or project does not exist. It may have been moved or archived.

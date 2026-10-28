@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm"
 import { Container } from "@/components/layout/container"
 import { mdxComponents } from "@/components/mdx/mdx-components"
 import { Badge } from "@/components/ui/badge"
+import { TextSpotlight } from "@/components/ui/text-spotlight"
 import { getProject, getProjects } from "@/lib/content"
 import { getPublicImageDimensions } from "@/lib/image-dimensions"
 import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
@@ -108,8 +109,17 @@ async function ProjectDetail({ params }: ProjectPageProps) {
               <Badge variant="secondary">{project.status}</Badge>
             )}
           </div>
-          <h1 className="font-sans text-xl font-semibold tracking-tight text-foreground">
-            {project.title}
+          <h1 className="inline-flex">
+            <TextSpotlight
+              textClassName="font-sans text-xl font-semibold tracking-tight sm:text-2xl"
+              baseClassName="text-muted-foreground/45"
+              spotlightClassName="text-foreground"
+              spotlightSize={130}
+              spotlightArea={65}
+              animateOnPhone={true}
+            >
+              <span>{project.title}</span>
+            </TextSpotlight>
           </h1>
           {project.summary && (
             <p className="max-w-[72ch] text-base text-muted-foreground">

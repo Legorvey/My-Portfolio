@@ -104,11 +104,18 @@ export default async function HomePage() {
           className="space-y-8"
         >
           <div className="flex items-baseline justify-between">
-            <h2
-              id="experiences-heading"
-              className="font-sans text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
-            >
-              Experience<span className="text-primary">.</span>
+            <h2 id="experiences-heading" className="inline-flex">
+              <TextSpotlight
+                textClassName="font-sans text-3xl font-bold tracking-tight sm:text-4xl"
+                baseClassName="text-muted-foreground/45"
+                spotlightClassName="text-foreground"
+                spotlightSize={120}
+                spotlightArea={65}
+                animateOnPhone={true}
+              >
+                <span>Experience</span>
+                <span className="text-primary">.</span>
+              </TextSpotlight>
             </h2>
 
             <a

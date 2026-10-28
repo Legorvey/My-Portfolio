@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Suspense } from "react"
 import { Container } from "@/components/layout/container"
 import { ProjectsTable } from "@/components/projects/projects-table"
+import { TextSpotlight } from "@/components/ui/text-spotlight"
 import { getProjects, type ProjectFrontmatter } from "@/lib/content"
 
 export const metadata: Metadata = {
@@ -46,8 +47,18 @@ export default function ProjectsPage() {
         <p className="font-mono text-xs font-semibold uppercase tracking-wider text-primary">
           Complete Index of Technical Projects
         </p>
-        <h1 className="font-sans text-xl font-semibold tracking-tight text-foreground">
-          Project Archive
+        <h1 className="inline-flex">
+          <TextSpotlight
+            textClassName="font-sans text-xl font-semibold tracking-tight sm:text-2xl"
+            baseClassName="text-muted-foreground/45"
+            spotlightClassName="text-foreground"
+            spotlightSize={120}
+            spotlightArea={65}
+            animateOnPhone={true}
+          >
+            <span>Project Archive</span>
+            <span className="text-primary">.</span>
+          </TextSpotlight>
         </h1>
         <p className="max-w-[72ch] text-base text-muted-foreground">
           A comprehensive record of hardware systems, embedded firmware, research, and organizational initiatives. Filter by domain or sort chronologically.
