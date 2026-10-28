@@ -48,14 +48,6 @@ const BENTO_CONFIG: readonly {
   },
 ]
 
-const PROJECT_TECH_TAGS: Record<string, string> = {
-  gardapati: "ESP32 · TIDAL MITIGATION",
-  motosense: "ADXL345 · I2C",
-  aquafeeder: "ESP32 · FULL-STACK IOT",
-  "pid-control-simulator": "SITL · STEP RESPONSE",
-  "pln-thermography-internship": "150kV · THERMOGRAPHY",
-}
-
 export function FeaturedBento({ projects }: FeaturedBentoProps) {
   if (!projects || projects.length === 0) return null
 
@@ -76,10 +68,6 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
           minHeight: "min-h-[220px] md:min-h-[260px]",
         }
         const watermarkNumber = String(idx + 1).padStart(2, "0")
-        const techTag =
-          PROJECT_TECH_TAGS[project.slug] ??
-          project.tools?.slice(0, 2).join(" · ") ??
-          project.tags?.[0]
 
         return (
           <article
@@ -108,17 +96,8 @@ export function FeaturedBento({ projects }: FeaturedBentoProps) {
             {/* Main Content Vertical Stack */}
             <div className="relative z-10 flex h-full flex-col justify-between pb-8">
               <div>
-                {/* Tech Chip Tag */}
-                {techTag && (
-                  <div className="mb-4 flex items-center gap-2">
-                    <span className="rounded-sm border border-border bg-muted/40 px-2 py-0.5 font-mono text-xs font-medium text-muted-foreground">
-                      {techTag}
-                    </span>
-                  </div>
-                )}
-
                 {/* Title */}
-                <h3 className="font-heading text-xl font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary md:text-2xl">
+                <h3 className="pr-8 font-heading text-xl font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary md:pr-10 md:text-2xl">
                   {project.title}
                 </h3>
 
