@@ -1,5 +1,5 @@
 import * as React from "react"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 interface ContainerProps extends React.ComponentProps<"div"> {
   size?: "wide" | "default" | "narrow" | "prose"

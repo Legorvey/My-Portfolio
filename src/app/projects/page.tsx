@@ -25,21 +25,12 @@ export const metadata: Metadata = {
 }
 
 export default function ProjectsPage() {
-  const projects: ProjectFrontmatter[] = getProjects().map((project) => ({
-    title: project.title,
-    slug: project.slug,
-    type: project.type,
-    summary: project.summary,
-    role: project.role,
-    start: project.start,
-    end: project.end,
-    status: project.status,
-    tools: project.tools,
-    tags: project.tags,
-    links: project.links,
-    thumbnail: project.thumbnail,
-    featured: project.featured,
-  }))
+  const projects: ProjectFrontmatter[] = getProjects().map(
+    ({ content: _content, ...rest }) => {
+      void _content
+      return rest
+    }
+  )
 
   return (
     <Container className="space-y-12 py-10">

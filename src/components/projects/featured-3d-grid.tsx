@@ -3,9 +3,13 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { motion, useReducedMotion } from "framer-motion"
-import type { FeaturedBentoProject } from "@/components/projects/featured-bento"
+import { motion, useReducedMotion } from "motion/react"
+import type { ProjectFrontmatter } from "@/lib/content"
 import { cn } from "@/lib/utils"
+
+export interface FeaturedBentoProject extends ProjectFrontmatter {
+  dims?: { width: number; height: number } | null
+}
 
 export interface Featured3DGridProps {
   projects: FeaturedBentoProject[]

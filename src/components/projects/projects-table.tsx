@@ -18,6 +18,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import type { ProjectFrontmatter, ProjectType } from "@/lib/content"
 import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
 
+// Note: Defined locally so this client component does not pull server-only node:fs from content.ts
 const ALL_PROJECT_TYPES: readonly ProjectType[] = [
   "hardware",
   "software",
@@ -88,7 +89,8 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
   }, [projects, selectedType, sortDirection])
 
   function handleFilterChange(groupValue: string[]) {
-    const next = (groupValue[0] as FilterType | undefined) ?? "all"
+    const val = groupValue[0]
+    const next: FilterType = isValidProjectType(val) ? val : "all"
     const params = new URLSearchParams(searchParams.toString())
 
     if (next === "all") {

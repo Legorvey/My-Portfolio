@@ -5,7 +5,6 @@ import { Container } from "@/components/layout/container"
 import { TextSpotlight } from "@/components/ui/text-spotlight"
 import { Featured3DGrid } from "@/components/projects/featured-3d-grid"
 import { getFeatured } from "@/lib/content"
-import { getPublicImageDimensions } from "@/lib/image-dimensions"
 
 const JSON_LD = {
   "@context": "https://schema.org",
@@ -37,15 +36,11 @@ const JSON_LD = {
   ],
 }
 
-export default async function HomePage() {
-  const featuredProjects = await Promise.all(
-    getFeatured().map(async (project) => ({
-      ...project,
-      dims: project.thumbnail
-        ? await getPublicImageDimensions(project.thumbnail)
-        : null,
-    }))
-  )
+export default function HomePage() {
+  const featuredProjects = getFeatured().map(({ content: _content, ...rest }) => {
+    void _content
+    return rest
+  })
 
   return (
     <>
