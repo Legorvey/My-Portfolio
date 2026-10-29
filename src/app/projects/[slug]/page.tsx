@@ -63,7 +63,7 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
   return (
     <Suspense
       fallback={
-        <Container className="py-10">
+        <Container className="pt-20 sm:pt-24 pb-12 sm:pb-16">
           <p className="font-mono text-xs text-muted-foreground">
             Loading project...
           </p>
@@ -88,7 +88,7 @@ async function ProjectDetail({ params }: ProjectPageProps) {
     : null
 
   return (
-    <Container className="space-y-10 py-10">
+    <Container className="space-y-10 pt-20 sm:pt-24 pb-12 sm:pb-16">
       <div>
         <Link
           href="/projects"

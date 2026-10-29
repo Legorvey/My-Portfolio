@@ -1,26 +1,14 @@
-import Link from "next/link"
 import { CursorBadge } from "@/components/hero/cursor-badge"
-import { LocationTime } from "@/components/hero/location-time"
 
 export function HeroSection() {
   return (
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="relative flex h-screen min-h-[100dvh] w-full flex-col justify-between pt-3 sm:pt-4 px-6 sm:px-8 lg:px-12 pb-6 sm:pb-8 select-none overflow-hidden"
+      className="relative flex h-screen min-h-[100dvh] w-full flex-col justify-between pt-3 sm:pt-4 px-6 sm:px-8 lg:px-12 pb-6 sm:pb-8 overflow-hidden"
     >
-      {/* Top Bar: Brand Mark (Corner Left) & Location / Clock (Corner Right) */}
-      <header className="flex w-full items-start justify-between">
-        <Link
-          href="/"
-          aria-label="Home"
-          className="group inline-flex items-center font-mono text-xl sm:text-2xl font-bold tracking-tight text-primary transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <span>&lt;A&gt;</span>
-        </Link>
-
-        <LocationTime />
-      </header>
+      {/* Top Spacer matching the height of the fixed SiteHeader navbar */}
+      <div className="h-10 sm:h-12 w-full shrink-0" aria-hidden="true" />
 
       {/* Center Stage: Display Headline + Close Metadata Group */}
       <div className="my-auto flex w-full flex-col items-center justify-center">

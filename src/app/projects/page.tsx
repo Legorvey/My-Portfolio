@@ -33,7 +33,7 @@ export default function ProjectsPage() {
   )
 
   return (
-    <Container className="space-y-12 py-10">
+    <Container className="space-y-12 pt-20 sm:pt-24 pb-12 sm:pb-16">
       <header className="space-y-2 border-b border-border pb-8">
         <p className="font-mono text-xs font-semibold uppercase tracking-wider text-primary">
           Complete Index of Technical Projects

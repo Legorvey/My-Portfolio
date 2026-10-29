@@ -14,7 +14,8 @@ shadcn/ui (restyled), MDX content, anime.js v4 for motion. No other UI or
 animation libraries.
 Design: technical/editorial direction, like documentation or a datasheet. Calm,
 dense, readable. One accent color max. NO gradients, glassmorphism, glow, blur
-effects, or "modern SaaS" styling. Sans for body, mono for labels and metadata.
+effects, or "modern SaaS" styling (exception: subtle scroll-reactive navbar blur
+inspired by diegovz.com, and metallic headline treatment). Sans for body, mono for labels and metadata.
 Max 4 type sizes. 4px spacing grid. Left-aligned text, prose max width ~72ch.
 Motion is subtle, under 600ms, never blocks content, respects
 prefers-reduced-motion.
