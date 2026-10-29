@@ -83,8 +83,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       "Managing institutional public relations and university-level partnerships to enhance digital reach.",
     ],
     links: [
-      { label: "Instagram ↗", href: "https://instagram.com/hmte_unpad", isExternal: true },
-      { label: "Department Docs ↗", href: "#", isExternal: true },
+      { label: "Instagram ↗", href: "https://www.instagram.com/p/DW4Q1S-GH0x/", isExternal: true },
     ],
     logo: {
       text: "HMTE",
