@@ -30,7 +30,7 @@ export interface WorkflowBuilderCardProps {
   title: string;
   description: string;
   tags?: readonly string[] | string[];
-  users: readonly User[] | User[];
+  users?: readonly User[] | User[];
   actions: readonly Action[] | Action[];
   bullets?: readonly string[];
   links?: readonly {
@@ -79,189 +79,193 @@ export const WorkflowBuilderCard = ({
       aria-label={`${title} card`}
       className={cn("w-full max-w-sm cursor-pointer select-none", className)}
     >
-        <Card className="overflow-hidden rounded-xl border border-border bg-card shadow-md transition-shadow duration-300 hover:shadow-xl">
-          {/* Card Image */}
-            <div className="relative h-36 w-full overflow-hidden bg-muted">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={imageUrl}
-                alt={title}
-                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-            </div>
+      <Card className="overflow-hidden rounded-xl border border-border bg-card shadow-md transition-shadow duration-300 hover:shadow-xl">
+        {/* Card Image */}
+        <div className="relative h-36 w-full overflow-hidden bg-muted">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageUrl}
+            alt={title}
+            className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+        </div>
 
-            <div className="p-4">
-              {/* Always-visible header content */}
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex flex-col">
-                      <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-                        <span>{lastUpdated}</span>
-                          <span>•</span>
-                          <div className="flex items-center gap-1.5 font-sans">
-                            <span
-                              className={cn(
-                                "h-2 w-2 rounded-full",
+        <div className="p-4">
+          {/* Always-visible header content */}
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+                <span>{lastUpdated}</span>
+                <span>•</span>
+                <div className="flex items-center gap-1.5 font-sans">
+                  <span
+                    className={cn(
+                      "h-2 w-2 rounded-full",
                       status === "Active"
-                                  ? "bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]"
-                                  : "bg-red-500"
-                              )}
-                              aria-label={status}
-                            />
-                            <span>{status}</span>
-                          </div>
-                        </div>
-                          <h3 className="mt-1 text-lg font-semibold tracking-tight text-card-foreground">
-                            {title}
-                          </h3>
-                      </div>
-                      <button
-                        type="button"
-                        aria-label="Toggle details"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setIsHovered((prev) => !prev);
-                        }}
-                        className="text-muted-foreground transition-colors hover:text-foreground p-0.5 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                      >
-                        <MoreHorizontal size={20} />
-                      </button>
-                    </div>
+                        ? "bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]"
+                        : "bg-red-500"
+                    )}
+                    aria-label={status}
+                  />
+                  <span>{status}</span>
+                </div>
+              </div>
+              <h3 className="mt-1 text-lg font-semibold tracking-tight text-card-foreground">
+                {title}
+              </h3>
+            </div>
+            <button
+              type="button"
+              aria-label="Toggle details"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsHovered((prev) => !prev);
+              }}
+              className="text-muted-foreground transition-colors hover:text-foreground p-0.5 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            >
+              <MoreHorizontal size={20} />
+            </button>
+          </div>
 
-                    {/* Animated description and tags section */}
-                    <AnimatePresence>
-                      {isHovered && (
-                        <motion.div
-                          key="details"
-                          initial="hidden"
-                          animate="visible"
-                          exit="hidden"
-                          variants={detailVariants}
-                          className="overflow-hidden"
-                        >
-                          {description && (
-                            <p className="text-sm text-muted-foreground leading-relaxed">
-                              {description}
-                            </p>
-                          )}
+          {/* Animated description and tags section */}
+          <AnimatePresence>
+            {isHovered && (
+              <motion.div
+                key="details"
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={detailVariants}
+                className="overflow-hidden"
+              >
+                {description && (
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {description}
+                  </p>
+                )}
 
-                          {bullets && bullets.length > 0 && (
-                            <ul className="mt-3 space-y-1.5 text-xs text-muted-foreground">
-                              {bullets.map((bullet, i) => (
-                                <li key={i} className="flex items-start gap-2">
-                                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary" />
-                                  <span className="text-foreground/85 leading-relaxed">
-                                    {bullet}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
+                {bullets && bullets.length > 0 && (
+                  <ul className="mt-3 space-y-1.5 text-xs text-muted-foreground">
+                    {bullets.map((bullet, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary" />
+                        <span className="text-foreground/85 leading-relaxed">
+                          {bullet}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
 
-                          {tags && tags.length > 0 && (
-                            <div className="mt-3 flex flex-wrap gap-2">
-                              {tags.map((tag) => (
-                                <Badge key={tag} variant="secondary">
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
-                          )}
-
-                          {links && links.length > 0 && (
-                            <div
-                              className="mt-3 flex flex-wrap items-center gap-3 border-t border-border/50 pt-2.5"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {links.map((link) =>
-                                link.isExternal ? (
-                                  <a
-                                    key={link.label}
-                                    href={link.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group/link inline-flex items-center gap-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                                  >
-                                    <span>{link.label.replace(/ ↗$/, "")}</span>
-                                    <span
-                                      className="text-primary transition-transform duration-150 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-                                      aria-hidden="true"
-                                    >
-                                      ↗
-                                    </span>
-                                  </a>
-                                ) : (
-                                  <Link
-                                    key={link.label}
-                                    href={link.href}
-                                    className="group/link inline-flex items-center gap-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                                  >
-                                    <span>{link.label.replace(/ ↗$/, "")}</span>
-                                    <span
-                                      className="text-primary transition-transform duration-150 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-                                      aria-hidden="true"
-                                    >
-                                      ↗
-                                    </span>
-                                  </Link>
-                                )
-                              )}
-                            </div>
-                          )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                {tags && tags.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                      <Badge key={tag} variant="secondary">
+                        {tag}
+                      </Badge>
+                    ))}
                   </div>
+                )}
 
-                  {/* Card Footer */}
-                  <div className="flex items-center justify-between border-t border-border p-4">
-                    <div className="flex -space-x-2">
-                      {users.map((user, index) => (
-                        <Avatar
-                          key={index}
-                          className="h-7 w-7 border-2 border-card"
-                          aria-label={user.fallback}
+                {links && links.length > 0 && (
+                  <div
+                    className="mt-3 flex flex-wrap items-center gap-3 border-t border-border/50 pt-2.5"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {links.map((link) =>
+                      link.isExternal ? (
+                        <a
+                          key={link.label}
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group/link inline-flex items-center gap-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                         >
-                          <AvatarImage src={user.src} />
-                          <AvatarFallback className="text-[10px]">
-                            {user.fallback}
-                          </AvatarFallback>
-                        </Avatar>
-                      ))}
-                    </div>
-                    <div className="flex items-center -space-x-2">
-                      {actions.map(({ Icon, bgColor, href, label }, index) => {
-                        const iconElement = (
-                          <div
-                            key={index}
-                            title={label}
-                            className={cn(
-                              "flex h-7 w-7 items-center justify-center rounded-full border-2 border-card text-white shadow-xs transition-transform hover:scale-110",
-                              bgColor
-                            )}
+                          <span>{link.label.replace(/ ↗$/, "")}</span>
+                          <span
+                            className="text-primary transition-transform duration-150 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                            aria-hidden="true"
                           >
-                            <Icon size={14} />
-                          </div>
-                        );
-                        if (href) {
-                          return (
-                            <a
-                              key={index}
-                              href={href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                            >
-                              {iconElement}
-                            </a>
-                          );
-                        }
-                        return iconElement;
-                      })}
-                    </div>
+                            ↗
+                          </span>
+                        </a>
+                      ) : (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className="group/link inline-flex items-center gap-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                        >
+                          <span>{link.label.replace(/ ↗$/, "")}</span>
+                          <span
+                            className="text-primary transition-transform duration-150 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                            aria-hidden="true"
+                          >
+                            ↗
+                          </span>
+                        </Link>
+                      )
+                    )}
                   </div>
-                </Card>
+                )}
               </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Card Footer */}
+        <div className="flex items-center justify-between border-t border-border p-4">
+          {users && users.length > 0 ? (
+            <div className="flex -space-x-2">
+              {users.map((user, index) => (
+                <Avatar
+                  key={index}
+                  className="h-7 w-7 border-2 border-card"
+                  aria-label={user.fallback}
+                >
+                  <AvatarImage src={user.src} />
+                  <AvatarFallback className="text-[10px]">
+                    {user.fallback}
+                  </AvatarFallback>
+                </Avatar>
+              ))}
+            </div>
+          ) : (
+            <div />
+          )}
+          <div className="flex items-center -space-x-2">
+            {actions.map(({ Icon, bgColor, href, label }, index) => {
+              const iconElement = (
+                <div
+                  key={index}
+                  title={label}
+                  className={cn(
+                    "flex h-7 w-7 items-center justify-center rounded-full border-2 border-card text-white shadow-xs transition-transform hover:scale-110",
+                    bgColor
+                  )}
+                >
+                  <Icon size={14} />
+                </div>
               );
+              if (href) {
+                return (
+                  <a
+                    key={index}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="rounded-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  >
+                    {iconElement}
+                  </a>
+                );
+              }
+              return iconElement;
+            })}
+          </div>
+        </div>
+      </Card>
+    </motion.div>
+  );
 };

@@ -36,7 +36,7 @@ export interface ExperienceItem {
   imageUrl: string
   status: "Active" | "Inactive"
   lastUpdated?: string
-  users: readonly User[]
+  users?: readonly User[]
   actions: readonly Action[]
 }
 
@@ -284,147 +284,147 @@ export function ExperienceTimeline({
   }, [items.length])
 
   return (
-      <div ref={containerRef} className="relative w-full py-6">
-        {lineCoords && (
-          <>
-            {/* Central Timeline Spine (Continuous grey base line starting at first badge) */}
+    <div ref={containerRef} className="relative w-full py-6">
+      {lineCoords && (
+        <>
+          {/* Central Timeline Spine (Continuous grey base line starting at first badge) */}
+          <div
+            className="absolute left-6 w-0.5 -translate-x-1/2 bg-border md:left-1/2 pointer-events-none"
+            style={{
+              top: `${lineCoords.top}px`,
+              height: `${lineCoords.height}px`,
+            }}
+            aria-hidden="true"
+          />
+
+          {/* Scroll Progression Line (Active white/foreground line, anchored at first badge) */}
+          <div
+            className="absolute left-6 w-0.5 -translate-x-1/2 bg-foreground md:left-1/2 transition-[height] duration-75 ease-out will-change-[height] pointer-events-none"
+            style={{
+              top: `${lineCoords.top}px`,
+              height: `${progressHeight}px`,
+            }}
+            aria-hidden="true"
+          />
+        </>
+      )}
+
+      <div className="space-y-28 md:space-y-40">
+        {items.map((item, index) => {
+          const isOdd = index % 2 === 0 // 0, 2 (1st and 3rd): Card on left, Company on right
+          const isActive = activeIndices.includes(index)
+          const isFirst = index === 0
+          const isLast = index === items.length - 1
+
+          return (
             <div
-              className="absolute left-6 w-0.5 -translate-x-1/2 bg-border md:left-1/2 pointer-events-none"
-              style={{
-                top: `${lineCoords.top}px`,
-                height: `${lineCoords.height}px`,
+              key={item.id}
+              ref={(el) => {
+                itemRefs.current[index] = el
               }}
-              aria-hidden="true"
-            />
-
-            {/* Scroll Progression Line (Active white/foreground line, anchored at first badge) */}
-            <div
-              className="absolute left-6 w-0.5 -translate-x-1/2 bg-foreground md:left-1/2 transition-[height] duration-75 ease-out will-change-[height] pointer-events-none"
-              style={{
-                top: `${lineCoords.top}px`,
-                height: `${progressHeight}px`,
-              }}
-              aria-hidden="true"
-            />
-          </>
-        )}
-
-          <div className="space-y-28 md:space-y-40">
-            {items.map((item, index) => {
-              const isOdd = index % 2 === 0 // 0, 2 (1st and 3rd): Card on left, Company on right
-              const isActive = activeIndices.includes(index)
-              const isFirst = index === 0
-              const isLast = index === items.length - 1
-
-              return (
-                <div
-                  key={item.id}
-                  ref={(el) => {
-                    itemRefs.current[index] = el
-                  }}
-                  className="relative grid grid-cols-1 items-start md:grid-cols-2 md:gap-16"
-                >
-                  {/* Timeline Center Badge - Anchored to banner level (72px) so it never shifts on card hover */}
-                  <div
-                    ref={(el) => {
-                      if (isFirst) firstBadgeRef.current = el
-                      if (isLast) lastBadgeRef.current = el
-                    }}
+              className="relative grid grid-cols-1 items-start md:grid-cols-2 md:gap-16"
+            >
+              {/* Timeline Center Badge - Anchored to banner level (72px) so it never shifts on card hover */}
+              <div
+                ref={(el) => {
+                  if (isFirst) firstBadgeRef.current = el
+                  if (isLast) lastBadgeRef.current = el
+                }}
+                className={cn(
+                  "absolute left-6 -translate-x-1/2 top-6 md:top-[72px] md:-translate-y-1/2 md:left-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-sm border bg-card shadow-xs transition-all duration-300",
+                  isActive
+                    ? "border-foreground bg-surface text-foreground ring-1 ring-foreground/20"
+                    : "border-border text-muted-foreground hover:border-foreground/40"
+                )}
+                aria-hidden="true"
+              >
+                {item.logo.src ? (
+                  <Image
+                    src={item.logo.src}
+                    alt={item.company}
+                    width={28}
+                    height={28}
                     className={cn(
-                      "absolute left-6 -translate-x-1/2 top-6 md:top-[72px] md:-translate-y-1/2 md:left-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-sm border bg-card shadow-xs transition-all duration-300",
-                      isActive
-                        ? "border-foreground bg-surface text-foreground ring-1 ring-foreground/20"
-                        : "border-border text-muted-foreground hover:border-foreground/40"
+                      "h-7 w-7 object-contain transition-opacity",
+                      isActive ? "opacity-100" : "opacity-80"
                     )}
-                    aria-hidden="true"
-                  >
-                    {item.logo.src ? (
-                      <Image
-                        src={item.logo.src}
-                        alt={item.company}
-                        width={28}
-                        height={28}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center leading-none select-none">
+                    <span
+                      className={cn(
+                        "font-mono text-xs font-bold tracking-tight transition-colors",
+                        isActive ? "text-foreground" : "text-muted-foreground"
+                      )}
+                    >
+                      {item.logo.text}
+                    </span>
+                    {item.logo.subtext && (
+                      <span
                         className={cn(
-                          "h-7 w-7 object-contain transition-opacity",
-                          isActive ? "opacity-100" : "opacity-80"
-                        )}
-                      />
-                    ) : (
-                      <div className="flex flex-col items-center justify-center leading-none select-none">
-                        <span
-                          className={cn(
-                            "font-mono text-xs font-bold tracking-tight transition-colors",
-                            isActive ? "text-foreground" : "text-muted-foreground"
-                          )}
-                        >
-                          {item.logo.text}
-                        </span>
-                        {item.logo.subtext && (
-                          <span
-                            className={cn(
-                              "font-mono text-[9px] font-semibold uppercase transition-colors",
-                              isActive ? "text-primary" : "text-muted-foreground/80"
-                            )}
-                          >
-                            {item.logo.subtext}
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Desktop Left Slot */}
-                  <div
-                    className={cn(
-                      "hidden md:block",
-                      isOdd ? "order-1" : "order-1 text-right"
-                    )}
-                  >
-                    {isOdd ? (
-                      /* Left Content Card */
-                      <ExperienceCard item={item} align="left" isActive={isActive} />
-                    ) : (
-                      /* Left Company Summary */
-                      <CompanySummary item={item} align="right" isActive={isActive} />
-                    )}
-                  </div>
-
-                  {/* Desktop Right Slot */}
-                  <div
-                    className={cn(
-                      "hidden md:block",
-                      isOdd ? "order-2 text-left" : "order-2"
-                    )}
-                  >
-                    {isOdd ? (
-                      /* Right Company Summary */
-                      <CompanySummary item={item} align="left" isActive={isActive} />
-                    ) : (
-                      /* Right Content Card */
-                      <ExperienceCard item={item} align="right" isActive={isActive} />
-                    )}
-                  </div>
-
-                  {/* Mobile View (< md) */}
-                  <div className="pl-14 md:hidden space-y-3">
-                    <div className="flex flex-col justify-center min-h-[44px]">
-                      <h3
-                        className={cn(
-                          "font-sans text-base font-bold transition-colors",
-                          isActive ? "text-foreground" : "text-foreground/90"
+                          "font-mono text-[9px] font-semibold uppercase transition-colors",
+                          isActive ? "text-primary" : "text-muted-foreground/80"
                         )}
                       >
-                        {item.company}
-                      </h3>
-                      {item.specification && (
-                        <div className="font-sans text-xs text-muted-foreground/80">
-                          {item.specification}
-                        </div>
-                      )}
-                    </div>
-
-                    <ExperienceCard item={item} align="mobile" isActive={isActive} />
+                        {item.logo.subtext}
+                      </span>
+                    )}
                   </div>
+                )}
+              </div>
+
+              {/* Desktop Left Slot */}
+              <div
+                className={cn(
+                  "hidden md:block",
+                  isOdd ? "order-1" : "order-1 text-right"
+                )}
+              >
+                {isOdd ? (
+                  /* Left Content Card */
+                  <ExperienceCard item={item} align="left" isActive={isActive} />
+                ) : (
+                  /* Left Company Summary */
+                  <CompanySummary item={item} align="right" isActive={isActive} />
+                )}
+              </div>
+
+              {/* Desktop Right Slot */}
+              <div
+                className={cn(
+                  "hidden md:block",
+                  isOdd ? "order-2 text-left" : "order-2"
+                )}
+              >
+                {isOdd ? (
+                  /* Right Company Summary */
+                  <CompanySummary item={item} align="left" isActive={isActive} />
+                ) : (
+                  /* Right Content Card */
+                  <ExperienceCard item={item} align="right" isActive={isActive} />
+                )}
+              </div>
+
+              {/* Mobile View (< md) */}
+              <div className="pl-14 md:hidden space-y-3">
+                <div className="flex flex-col justify-center min-h-[44px]">
+                  <h3
+                    className={cn(
+                      "font-sans text-base font-bold transition-colors",
+                      isActive ? "text-foreground" : "text-foreground/90"
+                    )}
+                  >
+                    {item.company}
+                  </h3>
+                  {item.specification && (
+                    <div className="font-sans text-xs text-muted-foreground/80">
+                      {item.specification}
+                    </div>
+                  )}
+                </div>
+
+                <ExperienceCard item={item} align="mobile" isActive={isActive} />
+              </div>
             </div>
           )
         })}
@@ -470,11 +470,11 @@ function CompanySummary({ item, align, isActive }: CompanySummaryProps) {
   )
 }
 
-  interface ExperienceCardProps {
-    item: ExperienceItem
-    align: "left" | "right" | "mobile"
-    isActive: boolean
-  }
+interface ExperienceCardProps {
+  item: ExperienceItem
+  align: "left" | "right" | "mobile"
+  isActive: boolean
+}
 
 function ExperienceCard({ item, align }: ExperienceCardProps) {
   return (
@@ -494,7 +494,6 @@ function ExperienceCard({ item, align }: ExperienceCardProps) {
         lastUpdated={item.lastUpdated ?? item.period}
         title={item.role}
         description={item.description ?? ""}
-        users={item.users}
         actions={item.actions}
         bullets={item.bullets}
         links={item.links}
