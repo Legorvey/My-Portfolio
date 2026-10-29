@@ -347,7 +347,6 @@ export function ExperienceTimeline({
               {/* Mobile View (< md) */}
               <div className="pl-14 md:hidden space-y-3">
                 <div className="flex flex-col justify-center min-h-[44px]">
-                  <div className="flex items-center justify-between gap-2">
                     <h3
                       className={cn(
                         "font-sans text-base font-bold transition-colors",
@@ -356,81 +355,46 @@ export function ExperienceTimeline({
                     >
                       {item.company}
                     </h3>
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        "text-[10px] transition-colors",
-                        isActive ? "border-foreground/40 text-foreground" : ""
-                      )}
-                    >
-                      {item.category}
-                    </Badge>
+                    <div className="font-mono text-xs text-muted-foreground">
+                      <span>{item.period}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-                    <span>{item.period}</span>
-                    {item.location && (
-                      <>
-                        <span>·</span>
-                        <span>{item.location}</span>
-                      </>
-                    )}
-                  </div>
+
+                  <ExperienceCard item={item} align="mobile" isActive={isActive} />
                 </div>
-
-                <ExperienceCard item={item} align="mobile" isActive={isActive} />
               </div>
-            </div>
-          )
+              )
         })}
-      </div>
+            </div>
     </div>
-  )
+      )
 }
 
-interface CompanySummaryProps {
-  item: ExperienceItem
-  align: "left" | "right"
-  isActive: boolean
+      interface CompanySummaryProps {
+        item: ExperienceItem
+      align: "left" | "right"
+      isActive: boolean
 }
 
-function CompanySummary({ item, align, isActive }: CompanySummaryProps) {
+      function CompanySummary({item, align, isActive}: CompanySummaryProps) {
   return (
-    <div
-      className={cn(
-        "space-y-1.5 pt-1",
-        align === "right" ? "pr-4 items-end text-right" : "pl-4 items-start text-left"
-      )}
-    >
       <div
         className={cn(
-          "flex items-center gap-2",
-          align === "right" ? "justify-end" : "justify-start"
+        "space-y-1 pt-1",
+          align === "right" ? "pr-4 text-right" : "pl-4 text-left"
         )}
       >
-        <span
-          className={cn(
-            "font-sans text-lg font-bold tracking-tight transition-colors",
+          <h3
+        className={cn(
+          "font-sans text-lg font-bold tracking-tight transition-colors",
             isActive ? "text-foreground" : "text-foreground/90"
           )}
         >
-          {item.company}
-        </span>
-        <Badge
-          variant="outline"
-          className={cn(
-            "text-[10px] transition-colors",
-            isActive ? "border-foreground/40 text-foreground" : ""
-          )}
-        >
-          {item.category}
-        </Badge>
-      </div>
+        {item.company}
+      </h3>
 
       <div className="font-mono text-xs text-muted-foreground">
         <span>{item.period}</span>
-        {item.location && (
-          <span className="text-muted-foreground/70"> · {item.location}</span>
-        )}
       </div>
     </div>
   )
@@ -486,17 +450,17 @@ function ExperienceCard({ item, align, isActive }: ExperienceCardProps) {
             "absolute top-[26px] -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent z-10 transition-colors pointer-events-none",
             align === "left"
               ? cn(
-                  "-right-2 border-l-[8px]",
-                  isActive || isHovered
-                    ? "border-l-foreground"
-                    : "border-l-border group-hover:border-l-foreground/30"
-                )
+                "-right-2 border-l-[8px]",
+                isActive || isHovered
+                  ? "border-l-foreground"
+                  : "border-l-border group-hover:border-l-foreground/30"
+              )
               : cn(
-                  "-left-2 border-r-[8px]",
-                  isActive || isHovered
-                    ? "border-r-foreground"
-                    : "border-r-border group-hover:border-r-foreground/30"
-                )
+                "-left-2 border-r-[8px]",
+                isActive || isHovered
+                  ? "border-r-foreground"
+                  : "border-r-border group-hover:border-r-foreground/30"
+              )
           )}
           aria-hidden="true"
         />
@@ -504,27 +468,22 @@ function ExperienceCard({ item, align, isActive }: ExperienceCardProps) {
 
       <div
         className={cn(
-          "relative rounded-sm border bg-card p-4 md:p-5 text-left transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+          "relative rounded-sm border bg-card py-3.5 px-4 md:py-3.5 md:px-5 text-left transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
           isActive || isHovered
             ? "border-foreground/50 bg-surface/90 shadow-xs"
             : "border-border hover:border-foreground/30 hover:bg-surface/40"
         )}
       >
-        {/* Header - Always visible: shows position and expand cue */}
+        {/* Header - Always visible: shows role and expand cue */}
         <div className="flex items-center justify-between gap-3">
-          <div className="flex flex-col">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/80">
-              Position
-            </span>
-            <h4
-              className={cn(
-                "font-sans text-sm font-semibold tracking-tight transition-colors",
-                isActive || isHovered ? "text-foreground" : "text-foreground/90"
-              )}
-            >
-              {item.role}
-            </h4>
-          </div>
+          <h4
+            className={cn(
+              "font-sans text-sm font-semibold tracking-tight transition-colors",
+              isActive || isHovered ? "text-foreground" : "text-foreground/90"
+            )}
+          >
+            {item.role}
+          </h4>
 
           <div className="flex items-center gap-2">
             {!isHovered && (
