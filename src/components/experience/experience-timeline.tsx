@@ -148,8 +148,10 @@ export function ExperienceTimeline({
 }: ExperienceTimelineProps) {
   const containerRef = React.useRef<HTMLDivElement>(null)
   const itemRefs = React.useRef<(HTMLDivElement | null)[]>([])
+  const firstBadgeRef = React.useRef<HTMLDivElement | null>(null)
+  const lastBadgeRef = React.useRef<HTMLDivElement | null>(null)
+  const [lineCoords, setLineCoords] = React.useState<{ top: number; height: number } | null>(null)
   const [progressHeight, setProgressHeight] = React.useState<number>(0)
-  const [containerHeight, setContainerHeight] = React.useState<number>(0)
   const [activeIndices, setActiveIndices] = React.useState<number[]>([])
 
   React.useEffect(() => {
@@ -157,25 +159,37 @@ export function ExperienceTimeline({
 
     const updateProgress = () => {
       const container = containerRef.current
-      if (!container) return
+      const firstBadge = firstBadgeRef.current
+      const lastBadge = lastBadgeRef.current
+      if (!container || !firstBadge || !lastBadge) return
 
       const containerRect = container.getBoundingClientRect()
-      const totalHeight = containerRect.height
-      setContainerHeight(totalHeight)
+      const firstBadgeRect = firstBadge.getBoundingClientRect()
+      const lastBadgeRect = lastBadge.getBoundingClientRect()
+
+      const firstCenter = firstBadgeRect.top + firstBadgeRect.height / 2
+      const lastCenter = lastBadgeRect.top + lastBadgeRect.height / 2
+
+      const topOffset = firstCenter - containerRect.top
+      const totalLineHeight = Math.max(0, lastCenter - firstCenter)
+
+      setLineCoords({ top: topOffset, height: totalLineHeight })
 
       // Viewport anchor point: center of the viewport (50% of window height)
       const viewportAnchor = window.innerHeight * 0.5
-      const scrolled = viewportAnchor - containerRect.top
+      const scrolled = viewportAnchor - firstCenter
 
-      const currentProgress = Math.max(0, Math.min(scrolled, totalHeight))
+      const currentProgress = Math.max(0, Math.min(scrolled, totalLineHeight))
       setProgressHeight(currentProgress)
 
       const reached: number[] = []
       itemRefs.current.forEach((el, index) => {
         if (!el) return
         const itemRect = el.getBoundingClientRect()
-        // Badge is anchored at item's header level (26px from item top)
-        const itemHeaderCenter = itemRect.top + 26
+        // Badge is anchored at item's header level (26px from item top on desktop, 22px on mobile)
+        const isMobile = window.innerWidth < 768
+        const badgeOffset = isMobile ? 22 : 26
+        const itemHeaderCenter = itemRect.top + badgeOffset
         if (itemHeaderCenter <= viewportAnchor) {
           reached.push(index)
         }
@@ -209,46 +223,37 @@ export function ExperienceTimeline({
   }, [items.length])
 
   return (
-    <div ref={containerRef} className="relative w-full pt-20 pb-64">
-      {/* Top terminal anchor point */}
-      <div
-        className={cn(
-          "absolute left-6 -translate-x-1/2 md:left-1/2 top-0 z-10 h-2 w-2 rounded-full border border-border bg-background transition-colors duration-300",
-          progressHeight > 0 ? "border-foreground bg-foreground" : ""
-        )}
-        aria-hidden="true"
-      />
+    <div ref={containerRef} className="relative w-full py-4">
+      {lineCoords && (
+        <>
+          {/* Central Timeline Spine (Continuous grey base line starting at first badge) */}
+          <div
+            className="absolute left-6 w-0.5 -translate-x-1/2 bg-border md:left-1/2 pointer-events-none"
+            style={{
+              top: `${lineCoords.top}px`,
+              height: `${lineCoords.height}px`,
+            }}
+            aria-hidden="true"
+          />
 
-      {/* Central Timeline Spine (Continuous grey base line extending full length) */}
-      <div
-        className="absolute left-6 w-0.5 -translate-x-1/2 bg-border md:left-1/2 top-0 bottom-0 pointer-events-none"
-        aria-hidden="true"
-      />
-
-      {/* Scroll Progression Line (Foreground active line, anchored at top) */}
-      <div
-        className="absolute left-6 w-0.5 -translate-x-1/2 bg-foreground md:left-1/2 top-0 transition-[height] duration-75 ease-out will-change-[height] pointer-events-none"
-        style={{
-          height: `${progressHeight}px`,
-        }}
-        aria-hidden="true"
-      />
-
-      {/* Bottom terminal anchor point */}
-      <div
-        className={cn(
-          "absolute left-6 -translate-x-1/2 md:left-1/2 bottom-0 z-10 h-2 w-2 rounded-full border border-border bg-background transition-colors duration-300",
-          containerHeight > 0 && progressHeight >= containerHeight - 12
-            ? "border-foreground bg-foreground"
-            : ""
-        )}
-        aria-hidden="true"
-      />
+          {/* Scroll Progression Line (Foreground active line, anchored at first badge) */}
+          <div
+            className="absolute left-6 w-0.5 -translate-x-1/2 bg-foreground md:left-1/2 transition-[height] duration-75 ease-out will-change-[height] pointer-events-none"
+            style={{
+              top: `${lineCoords.top}px`,
+              height: `${progressHeight}px`,
+            }}
+            aria-hidden="true"
+          />
+        </>
+      )}
 
       <div className="space-y-36 md:space-y-52">
         {items.map((item, index) => {
           const isOdd = index % 2 === 0 // 0, 2 (1st and 3rd): Card on left, Company on right
           const isActive = activeIndices.includes(index)
+          const isFirst = index === 0
+          const isLast = index === items.length - 1
 
           return (
             <div
@@ -260,6 +265,10 @@ export function ExperienceTimeline({
             >
               {/* Timeline Center Badge - Anchored to header level so it never shifts on card hover */}
               <div
+                ref={(el) => {
+                  if (isFirst) firstBadgeRef.current = el
+                  if (isLast) lastBadgeRef.current = el
+                }}
                 className={cn(
                   "absolute left-6 -translate-x-1/2 top-0 md:top-[26px] md:-translate-y-1/2 md:left-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-sm border bg-card shadow-xs transition-all duration-300",
                   isActive
