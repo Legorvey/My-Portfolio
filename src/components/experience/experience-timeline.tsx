@@ -1,11 +1,14 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 import * as React from "react"
-import { motion, AnimatePresence, type Variants } from "framer-motion"
-import { ChevronDown } from "lucide-react"
+import { Code, Share2, Zap } from "lucide-react"
 import { cn } from "@/lib/utils"
+import {
+  WorkflowBuilderCard,
+  type User,
+  type Action,
+} from "@/components/ui/workflow-builder-card"
 
 export interface ExperienceItem {
   id: string
@@ -29,7 +32,38 @@ export interface ExperienceItem {
     subtext?: string
     variant?: "primary" | "secondary" | "accent" | "neutral"
   }
+  // WorkflowBuilderCard visual fields (3D banner placeholders, users, actions)
+  imageUrl: string
+  status: "Active" | "Inactive"
+  lastUpdated?: string
+  users: readonly User[]
+  actions: readonly Action[]
 }
+
+const DEFAULT_USERS: readonly User[] = [
+  {
+    src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
+    fallback: "U1",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+    fallback: "U2",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
+    fallback: "U3",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+    fallback: "+3",
+  },
+]
+
+const DEFAULT_ACTIONS: readonly Action[] = [
+  { Icon: Zap, bgColor: "bg-blue-500", label: "Active Project" },
+  { Icon: Code, bgColor: "bg-zinc-700", label: "Tech Stack" },
+  { Icon: Share2, bgColor: "bg-red-500", label: "Share" },
+]
 
 export const EXPERIENCES: readonly ExperienceItem[] = [
   {
@@ -57,6 +91,13 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "UNPAD",
       variant: "primary",
     },
+    // 3D Banner Placeholder (matches 21st.dev reference screenshot)
+    imageUrl:
+      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+    status: "Active",
+    lastUpdated: "Jan 2026 — Present",
+    users: DEFAULT_USERS,
+    actions: DEFAULT_ACTIONS,
   },
   {
     id: "matcha-craft",
@@ -83,6 +124,13 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "CRAFT",
       variant: "accent",
     },
+    // 3D Banner Placeholder (Replace with real experience image in the future)
+    imageUrl:
+      "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800&auto=format&fit=crop",
+    status: "Active",
+    lastUpdated: "2026",
+    users: DEFAULT_USERS,
+    actions: DEFAULT_ACTIONS,
   },
   {
     id: "futura",
@@ -109,6 +157,13 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "2025",
       variant: "primary",
     },
+    // 3D Banner Placeholder (Replace with real experience image in the future)
+    imageUrl:
+      "https://images.unsplash.com/photo-1633493106115-46a78281b66a?q=80&w=800&auto=format&fit=crop",
+    status: "Inactive",
+    lastUpdated: "Feb — Nov 2025",
+    users: DEFAULT_USERS,
+    actions: DEFAULT_ACTIONS,
   },
   {
     id: "pgs25",
@@ -135,6 +190,13 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "ROAD",
       variant: "secondary",
     },
+    // 3D Banner Placeholder (Replace with real experience image in the future)
+    imageUrl:
+      "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=800&auto=format&fit=crop",
+    status: "Inactive",
+    lastUpdated: "Nov '24 — Feb '25",
+    users: DEFAULT_USERS,
+    actions: DEFAULT_ACTIONS,
   },
 ] as const
 
@@ -185,9 +247,9 @@ export function ExperienceTimeline({
       itemRefs.current.forEach((el, index) => {
         if (!el) return
         const itemRect = el.getBoundingClientRect()
-        // Badge is anchored at item's header level (26px from item top on desktop, 22px on mobile)
+        // Badge is anchored at item's top banner level (72px from item top on desktop, 24px on mobile)
         const isMobile = window.innerWidth < 768
-        const badgeOffset = isMobile ? 22 : 26
+        const badgeOffset = isMobile ? 24 : 72
         const itemHeaderCenter = itemRect.top + badgeOffset
         if (itemHeaderCenter <= viewportAnchor) {
           reached.push(index)
@@ -222,377 +284,246 @@ export function ExperienceTimeline({
   }, [items.length])
 
   return (
-    <div ref={containerRef} className="relative w-full py-4">
-      {lineCoords && (
-        <>
-          {/* Central Timeline Spine (Continuous grey base line starting at first badge) */}
-          <div
-            className="absolute left-6 w-0.5 -translate-x-1/2 bg-border md:left-1/2 pointer-events-none"
-            style={{
-              top: `${lineCoords.top}px`,
-              height: `${lineCoords.height}px`,
-            }}
-            aria-hidden="true"
-          />
-
-          {/* Scroll Progression Line (Foreground active line, anchored at first badge) */}
-          <div
-            className="absolute left-6 w-0.5 -translate-x-1/2 bg-foreground md:left-1/2 transition-[height] duration-75 ease-out will-change-[height] pointer-events-none"
-            style={{
-              top: `${lineCoords.top}px`,
-              height: `${progressHeight}px`,
-            }}
-            aria-hidden="true"
-          />
-        </>
-      )}
-
-      <div className="space-y-36 md:space-y-52">
-        {items.map((item, index) => {
-          const isOdd = index % 2 === 0 // 0, 2 (1st and 3rd): Card on left, Company on right
-          const isActive = activeIndices.includes(index)
-          const isFirst = index === 0
-          const isLast = index === items.length - 1
-
-          return (
+      <div ref={containerRef} className="relative w-full py-6">
+        {lineCoords && (
+          <>
+            {/* Central Timeline Spine (Continuous grey base line starting at first badge) */}
             <div
-              key={item.id}
-              ref={(el) => {
-                itemRefs.current[index] = el
+              className="absolute left-6 w-0.5 -translate-x-1/2 bg-border md:left-1/2 pointer-events-none"
+              style={{
+                top: `${lineCoords.top}px`,
+                height: `${lineCoords.height}px`,
               }}
-              className="relative grid grid-cols-1 items-start md:grid-cols-2 md:gap-16"
-            >
-              {/* Timeline Center Badge - Anchored to header level so it never shifts on card hover */}
-              <div
-                ref={(el) => {
-                  if (isFirst) firstBadgeRef.current = el
-                  if (isLast) lastBadgeRef.current = el
-                }}
-                className={cn(
-                  "absolute left-6 -translate-x-1/2 top-0 md:top-[26px] md:-translate-y-1/2 md:left-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-sm border bg-card shadow-xs transition-all duration-300",
-                  isActive
-                    ? "border-foreground bg-surface text-foreground ring-1 ring-foreground/20"
-                    : "border-border text-muted-foreground hover:border-foreground/40"
-                )}
-                aria-hidden="true"
-              >
-                {item.logo.src ? (
-                  <Image
-                    src={item.logo.src}
-                    alt={item.company}
-                    width={28}
-                    height={28}
+              aria-hidden="true"
+            />
+
+            {/* Scroll Progression Line (Active white/foreground line, anchored at first badge) */}
+            <div
+              className="absolute left-6 w-0.5 -translate-x-1/2 bg-foreground md:left-1/2 transition-[height] duration-75 ease-out will-change-[height] pointer-events-none"
+              style={{
+                top: `${lineCoords.top}px`,
+                height: `${progressHeight}px`,
+              }}
+              aria-hidden="true"
+            />
+          </>
+        )}
+
+          <div className="space-y-28 md:space-y-40">
+            {items.map((item, index) => {
+              const isOdd = index % 2 === 0 // 0, 2 (1st and 3rd): Card on left, Company on right
+              const isActive = activeIndices.includes(index)
+              const isFirst = index === 0
+              const isLast = index === items.length - 1
+
+              return (
+                <div
+                  key={item.id}
+                  ref={(el) => {
+                    itemRefs.current[index] = el
+                  }}
+                  className="relative grid grid-cols-1 items-start md:grid-cols-2 md:gap-16"
+                >
+                  {/* Timeline Center Badge - Anchored to banner level (72px) so it never shifts on card hover */}
+                  <div
+                    ref={(el) => {
+                      if (isFirst) firstBadgeRef.current = el
+                      if (isLast) lastBadgeRef.current = el
+                    }}
                     className={cn(
-                      "h-7 w-7 object-contain transition-opacity",
-                      isActive ? "opacity-100" : "opacity-80"
+                      "absolute left-6 -translate-x-1/2 top-6 md:top-[72px] md:-translate-y-1/2 md:left-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-sm border bg-card shadow-xs transition-all duration-300",
+                      isActive
+                        ? "border-foreground bg-surface text-foreground ring-1 ring-foreground/20"
+                        : "border-border text-muted-foreground hover:border-foreground/40"
                     )}
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center leading-none select-none">
-                    <span
-                      className={cn(
-                        "font-mono text-xs font-bold tracking-tight transition-colors",
-                        isActive ? "text-foreground" : "text-muted-foreground"
-                      )}
-                    >
-                      {item.logo.text}
-                    </span>
-                    {item.logo.subtext && (
-                      <span
+                    aria-hidden="true"
+                  >
+                    {item.logo.src ? (
+                      <Image
+                        src={item.logo.src}
+                        alt={item.company}
+                        width={28}
+                        height={28}
                         className={cn(
-                          "font-mono text-[9px] font-semibold uppercase transition-colors",
-                          isActive ? "text-primary" : "text-muted-foreground/80"
+                          "h-7 w-7 object-contain transition-opacity",
+                          isActive ? "opacity-100" : "opacity-80"
+                        )}
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center leading-none select-none">
+                        <span
+                          className={cn(
+                            "font-mono text-xs font-bold tracking-tight transition-colors",
+                            isActive ? "text-foreground" : "text-muted-foreground"
+                          )}
+                        >
+                          {item.logo.text}
+                        </span>
+                        {item.logo.subtext && (
+                          <span
+                            className={cn(
+                              "font-mono text-[9px] font-semibold uppercase transition-colors",
+                              isActive ? "text-primary" : "text-muted-foreground/80"
+                            )}
+                          >
+                            {item.logo.subtext}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Desktop Left Slot */}
+                  <div
+                    className={cn(
+                      "hidden md:block",
+                      isOdd ? "order-1" : "order-1 text-right"
+                    )}
+                  >
+                    {isOdd ? (
+                      /* Left Content Card */
+                      <ExperienceCard item={item} align="left" isActive={isActive} />
+                    ) : (
+                      /* Left Company Summary */
+                      <CompanySummary item={item} align="right" isActive={isActive} />
+                    )}
+                  </div>
+
+                  {/* Desktop Right Slot */}
+                  <div
+                    className={cn(
+                      "hidden md:block",
+                      isOdd ? "order-2 text-left" : "order-2"
+                    )}
+                  >
+                    {isOdd ? (
+                      /* Right Company Summary */
+                      <CompanySummary item={item} align="left" isActive={isActive} />
+                    ) : (
+                      /* Right Content Card */
+                      <ExperienceCard item={item} align="right" isActive={isActive} />
+                    )}
+                  </div>
+
+                  {/* Mobile View (< md) */}
+                  <div className="pl-14 md:hidden space-y-3">
+                    <div className="flex flex-col justify-center min-h-[44px]">
+                      <h3
+                        className={cn(
+                          "font-sans text-base font-bold transition-colors",
+                          isActive ? "text-foreground" : "text-foreground/90"
                         )}
                       >
-                        {item.logo.subtext}
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Desktop Left Slot */}
-              <div
-                className={cn(
-                  "hidden md:block",
-                  isOdd ? "order-1" : "order-1 text-right"
-                )}
-              >
-                {isOdd ? (
-                  /* Left Content Card */
-                  <ExperienceCard item={item} align="left" isActive={isActive} />
-                ) : (
-                  /* Left Company Summary */
-                  <CompanySummary item={item} align="right" isActive={isActive} />
-                )}
-              </div>
-
-              {/* Desktop Right Slot */}
-              <div
-                className={cn(
-                  "hidden md:block",
-                  isOdd ? "order-2 text-left" : "order-2"
-                )}
-              >
-                {isOdd ? (
-                  /* Right Company Summary */
-                  <CompanySummary item={item} align="left" isActive={isActive} />
-                ) : (
-                  /* Right Content Card */
-                  <ExperienceCard item={item} align="right" isActive={isActive} />
-                )}
-              </div>
-
-              {/* Mobile View (< md) */}
-              <div className="pl-14 md:hidden space-y-3">
-                <div className="flex flex-col justify-center min-h-[44px]">
-                    <h3
-                      className={cn(
-                        "font-sans text-base font-bold transition-colors",
-                        isActive ? "text-foreground" : "text-foreground/90"
-                      )}
-                    >
-                      {item.company}
-                    </h3>
-                    <div className="font-mono text-xs text-muted-foreground">
-                      <span>{item.period}</span>
+                        {item.company}
+                      </h3>
+                      <div className="font-mono text-xs text-muted-foreground">
+                        <span>{item.period}</span>
+                        {item.specification && <span> · {item.specification}</span>}
+                      </div>
                     </div>
-                  </div>
 
                   <ExperienceCard item={item} align="mobile" isActive={isActive} />
                 </div>
-              </div>
-              )
-        })}
             </div>
-    </div>
-      )
-}
-
-      interface CompanySummaryProps {
-        item: ExperienceItem
-      align: "left" | "right"
-      isActive: boolean
-}
-
-      function CompanySummary({item, align, isActive}: CompanySummaryProps) {
-  return (
-      <div
-        className={cn(
-        "space-y-1 pt-1",
-          align === "right" ? "pr-4 text-right" : "pl-4 text-left"
-        )}
-      >
-          <h3
-        className={cn(
-          "font-sans text-lg font-bold tracking-tight transition-colors",
-            isActive ? "text-foreground" : "text-foreground/90"
-          )}
-        >
-        {item.company}
-      </h3>
-
-      <div className="font-mono text-xs text-muted-foreground">
-        <span>{item.period}</span>
+          )
+        })}
       </div>
     </div>
   )
 }
 
-interface ExperienceCardProps {
+interface CompanySummaryProps {
   item: ExperienceItem
-  align: "left" | "right" | "mobile"
+  align: "left" | "right"
   isActive: boolean
 }
 
-const detailVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    height: 0,
-    marginTop: 0,
-    transition: {
-      duration: 0.2,
-      ease: "easeInOut",
-    },
-  },
-  visible: {
-    opacity: 1,
-    height: "auto",
-    marginTop: "0.75rem",
-    transition: {
-      duration: 0.28,
-      ease: [0.25, 1, 0.5, 1],
-    },
-  },
-}
-
-function ExperienceCard({ item, align, isActive }: ExperienceCardProps) {
-  const [isHovered, setIsHovered] = React.useState(false)
-
-  return (
+  function CompanySummary({ item, align, isActive }: CompanySummaryProps) {
+    return (
     <div
-      className="relative group"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={() => setIsHovered((prev) => !prev)}
-      onFocus={() => setIsHovered(true)}
-      onBlur={() => setIsHovered(false)}
-      tabIndex={0}
-      role="button"
-      aria-expanded={isHovered}
-      aria-label={`${item.role} at ${item.company}, toggle details`}
-    >
-      {/* Triangular pointer fixed to the card header level (26px) so it never jumps on hover */}
-      {align !== "mobile" && (
-        <div
-          className={cn(
-            "absolute top-[26px] -translate-y-1/2 w-0 h-0 border-y-[6px] border-y-transparent z-10 transition-colors pointer-events-none",
-            align === "left"
-              ? cn(
-                "-right-2 border-l-[8px]",
-                isActive || isHovered
-                  ? "border-l-foreground"
-                  : "border-l-border group-hover:border-l-foreground/30"
-              )
-              : cn(
-                "-left-2 border-r-[8px]",
-                isActive || isHovered
-                  ? "border-r-foreground"
-                  : "border-r-border group-hover:border-r-foreground/30"
-              )
-          )}
-          aria-hidden="true"
-        />
+      className={cn(
+        "space-y-1.5 pt-4",
+        align === "right" ? "pr-6 text-right" : "pl-6 text-left"
       )}
-
+    >
       <div
         className={cn(
-          "relative rounded-sm border bg-card py-3.5 px-4 md:py-3.5 md:px-5 text-left transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-          isActive || isHovered
-            ? "border-foreground/50 bg-surface/90 shadow-xs"
-            : "border-border hover:border-foreground/30 hover:bg-surface/40"
+          "flex items-center gap-2 font-mono text-xs text-muted-foreground",
+          align === "right" ? "justify-end" : "justify-start"
         )}
       >
-        {/* Header - Always visible: shows role and expand cue */}
-        <div className="flex items-center justify-between gap-3">
-          <h4
-            className={cn(
-              "font-sans text-sm font-semibold tracking-tight transition-colors",
-              isActive || isHovered ? "text-foreground" : "text-foreground/90"
-            )}
-          >
-            {item.role}
-          </h4>
-
-          <div className="flex items-center gap-2">
-            {!isHovered && (
-              <span className="hidden sm:inline-flex font-mono text-[10px] text-muted-foreground/70">
-                Hover to expand
-              </span>
-            )}
-            <div
-              className={cn(
-                "flex h-6 w-6 items-center justify-center rounded-sm text-muted-foreground transition-all duration-200",
-                isHovered
-                  ? "bg-muted text-foreground rotate-180"
-                  : "group-hover:text-foreground"
-              )}
-            >
-              <ChevronDown size={14} aria-hidden="true" />
-            </div>
-          </div>
-        </div>
-
-        {/* Animated Details Section: shows description, bullets, links */}
-        <AnimatePresence initial={false}>
-          {isHovered && (
-            <motion.div
-              key="details"
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={detailVariants}
-              className="overflow-hidden pt-1"
-            >
-              {/* Explanatory description */}
-              {item.description && (
-                <p className="mb-3 text-xs leading-relaxed text-muted-foreground">
-                  {item.description}
-                </p>
-              )}
-
-              {/* Bullet points */}
-              <ul className="space-y-2 text-xs leading-relaxed text-muted-foreground">
-                {item.bullets.map((bullet, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span
-                      className={cn(
-                        "mt-1.5 h-1 w-1 shrink-0 rounded-full transition-colors",
-                        isActive ? "bg-primary" : "bg-muted-foreground/60"
-                      )}
-                    />
-                    <span className="max-w-[65ch] text-foreground/85">
-                      {bullet}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Links */}
-              {item.links && item.links.length > 0 && (
-                <div
-                  className="mt-3 flex flex-wrap items-center gap-3"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {item.links.map((link) => (
-                    <ExperienceLink key={link.label} link={link} />
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <span>{item.period}</span>
+        <span>•</span>
+        <span className="font-semibold text-primary">{item.category}</span>
       </div>
-    </div>
-  )
-}
 
-function ExperienceLink({
-  link,
-}: {
-  link: { label: string; href: string; isExternal?: boolean }
-}) {
-  const content = (
-    <span className="group/link inline-flex items-center gap-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary">
-      <span>{link.label.replace(/ ↗$/, "")}</span>
-      <span
-        className="text-primary transition-transform duration-150 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-        aria-hidden="true"
+      <h3
+        className={cn(
+          "font-sans text-xl font-bold tracking-tight transition-colors",
+          isActive ? "text-foreground" : "text-foreground/90"
+        )}
       >
-        ↗
-      </span>
-    </span>
-  )
+        {item.company}
+      </h3>
 
-  if (link.isExternal) {
-    return (
-      <a
-        href={link.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        {content}
-      </a>
-    )
+      {
+      item.specification && (
+        <p
+          className={cn(
+            "font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-xs",
+            align === "right" ? "ml-auto" : "mr-auto"
+          )}
+        >
+          {item.specification}
+        </p>
+      )
+    }
+
+    {
+      item.location && (
+        <div className="font-mono text-[11px] text-muted-foreground/70">
+          📍 {item.location}
+        </div>
+      )
+    }
+    </div >
+  )
   }
 
-  return (
-    <Link
-      href={link.href}
-      className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-    >
-      {content}
-    </Link>
-  )
-}
+  interface ExperienceCardProps {
+    item: ExperienceItem
+    align: "left" | "right" | "mobile"
+    isActive: boolean
+  }
+
+    function ExperienceCard({ item, align }: ExperienceCardProps) {
+      return (
+        <div
+          className={cn(
+            "w-full flex",
+            align === "left"
+              ? "justify-end"
+              : align === "right"
+                ? "justify-start"
+                : "justify-start"
+          )}
+        >
+            <WorkflowBuilderCard
+        imageUrl={item.imageUrl}
+            status={item.status}
+            lastUpdated={item.lastUpdated ?? item.period}
+            title={item.role}
+            description={item.description ?? ""}
+            tags={item.tags ?? []}
+            users={item.users}
+            actions={item.actions}
+            bullets={item.bullets}
+            links={item.links}
+            className={cn(
+          "w-full max-w-sm sm:max-w-[390px]",
+              align === "left" ? "ml-auto" : align === "right" ? "mr-auto" : ""
+            )}
+      />
+        </div>
+      )
+    }
