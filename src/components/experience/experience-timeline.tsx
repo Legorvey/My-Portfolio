@@ -5,7 +5,6 @@ import Link from "next/link"
 import * as React from "react"
 import { motion, AnimatePresence, type Variants } from "framer-motion"
 import { ChevronDown } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
 export interface ExperienceItem {
@@ -504,7 +503,7 @@ function ExperienceCard({ item, align, isActive }: ExperienceCardProps) {
           </div>
         </div>
 
-        {/* Animated Details Section: shows specification, description, bullets, tags, links */}
+        {/* Animated Details Section: shows description, bullets, links */}
         <AnimatePresence initial={false}>
           {isHovered && (
             <motion.div
@@ -513,26 +512,8 @@ function ExperienceCard({ item, align, isActive }: ExperienceCardProps) {
               animate="visible"
               exit="hidden"
               variants={detailVariants}
-              className="overflow-hidden border-t border-border/70 pt-3"
+              className="overflow-hidden pt-1"
             >
-              {/* Position Specification */}
-              <div className="mb-2.5 flex flex-wrap items-center gap-2">
-                <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-primary">
-                  Specification:
-                </span>
-                <Badge
-                  variant="secondary"
-                  className="text-[11px] font-sans font-medium"
-                >
-                  {item.specification ?? item.category}
-                </Badge>
-                {item.location && (
-                  <span className="font-mono text-[11px] text-muted-foreground/70">
-                    · {item.location}
-                  </span>
-                )}
-              </div>
-
               {/* Explanatory description */}
               {item.description && (
                 <p className="mb-3 text-xs leading-relaxed text-muted-foreground">
@@ -557,24 +538,10 @@ function ExperienceCard({ item, align, isActive }: ExperienceCardProps) {
                 ))}
               </ul>
 
-              {/* Context tags */}
-              {item.tags && item.tags.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {item.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center rounded-sm bg-muted/50 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
               {/* Links */}
               {item.links && item.links.length > 0 && (
                 <div
-                  className="mt-3 flex flex-wrap items-center gap-3 border-t border-border/50 pt-2.5"
+                  className="mt-3 flex flex-wrap items-center gap-3"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {item.links.map((link) => (
