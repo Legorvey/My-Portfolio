@@ -116,7 +116,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       "Traced the anomalies to mechanical vibration loosening and hydraulic crimping failures.",
     ],
     links: [
-      { label: "Company Profile ↗", href: "https://web.pln.co.id", isExternal: true },
+      { label: "Company Profile ↗", href: "https://www.instagram.com/ultg_bandungbarat/?hl=en", isExternal: true },
     ],
     logo: {
       text: "PLN",
