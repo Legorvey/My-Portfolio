@@ -25,11 +25,34 @@ function subscribe(callback: () => void): () => void {
 }
 
 export function LocationTime() {
+  const [temp, setTemp] = React.useState<string>("24°C")
   const timeStr = React.useSyncExternalStore(
     subscribe,
     getBandungTime,
     getServerSnapshot
   )
+
+  React.useEffect(() => {
+    let isMounted = true
+
+    fetch("/api/weather")
+      .then((res) => {
+        if (!res.ok) throw new Error("Network response was not ok")
+        return res.json()
+      })
+      .then((data: { temp?: string }) => {
+        if (isMounted && data.temp) {
+          setTemp(data.temp)
+        }
+      })
+      .catch(() => {
+        // Fallback remains 24°C
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   return (
     <div className="shrink-0 text-right font-sans text-xs sm:text-sm leading-snug">
@@ -38,7 +61,7 @@ export function LocationTime() {
       </div>
       <div>
         <time className="font-mono text-xs text-muted-foreground">
-          {timeStr} GMT+7 · 24°C
+          {timeStr} GMT+7 · {temp}
         </time>
       </div>
     </div>
