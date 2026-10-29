@@ -416,14 +416,15 @@ export function ExperienceTimeline({
                       >
                         {item.company}
                       </h3>
-                      <div className="font-mono text-xs text-muted-foreground">
-                        <span>{item.period}</span>
-                        {item.specification && <span> · {item.specification}</span>}
-                      </div>
+                      {item.specification && (
+                        <div className="font-sans text-xs text-muted-foreground/80">
+                          {item.specification}
+                        </div>
+                      )}
                     </div>
 
-                  <ExperienceCard item={item} align="mobile" isActive={isActive} />
-                </div>
+                    <ExperienceCard item={item} align="mobile" isActive={isActive} />
+                  </div>
             </div>
           )
         })}
@@ -438,36 +439,24 @@ interface CompanySummaryProps {
   isActive: boolean
 }
 
-  function CompanySummary({ item, align, isActive }: CompanySummaryProps) {
-    return (
+function CompanySummary({ item, align, isActive }: CompanySummaryProps) {
+  return (
     <div
       className={cn(
-        "space-y-1.5 pt-4",
-        align === "right" ? "pr-6 text-right" : "pl-6 text-left"
+        "h-36 flex flex-col justify-center space-y-1",
+        align === "right" ? "pr-6 text-right items-end" : "pl-6 text-left items-start"
       )}
     >
-      <div
-        className={cn(
-          "flex items-center gap-2 font-mono text-xs text-muted-foreground",
-          align === "right" ? "justify-end" : "justify-start"
-        )}
-      >
-        <span>{item.period}</span>
-        <span>•</span>
-        <span className="font-semibold text-primary">{item.category}</span>
-      </div>
-
       <h3
         className={cn(
-          "font-sans text-xl font-bold tracking-tight transition-colors",
+          "font-sans text-xl md:text-2xl font-bold tracking-tight transition-colors",
           isActive ? "text-foreground" : "text-foreground/90"
         )}
       >
         {item.company}
       </h3>
 
-      {
-      item.specification && (
+      {item.specification && (
         <p
           className={cn(
             "font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-xs",
@@ -476,19 +465,10 @@ interface CompanySummaryProps {
         >
           {item.specification}
         </p>
-      )
-    }
-
-    {
-      item.location && (
-        <div className="font-mono text-[11px] text-muted-foreground/70">
-          📍 {item.location}
-        </div>
-      )
-    }
-    </div >
+      )}
+    </div>
   )
-  }
+}
 
   interface ExperienceCardProps {
     item: ExperienceItem
@@ -496,34 +476,33 @@ interface CompanySummaryProps {
     isActive: boolean
   }
 
-    function ExperienceCard({ item, align }: ExperienceCardProps) {
-      return (
-        <div
-          className={cn(
-            "w-full flex",
-            align === "left"
-              ? "justify-end"
-              : align === "right"
-                ? "justify-start"
-                : "justify-start"
-          )}
-        >
-            <WorkflowBuilderCard
+function ExperienceCard({ item, align }: ExperienceCardProps) {
+  return (
+    <div
+      className={cn(
+        "w-full flex",
+        align === "left"
+          ? "justify-end"
+          : align === "right"
+            ? "justify-start"
+            : "justify-start"
+      )}
+    >
+      <WorkflowBuilderCard
         imageUrl={item.imageUrl}
-            status={item.status}
-            lastUpdated={item.lastUpdated ?? item.period}
-            title={item.role}
-            description={item.description ?? ""}
-            tags={item.tags ?? []}
-            users={item.users}
-            actions={item.actions}
-            bullets={item.bullets}
-            links={item.links}
-            className={cn(
+        status={item.status}
+        lastUpdated={item.lastUpdated ?? item.period}
+        title={item.role}
+        description={item.description ?? ""}
+        users={item.users}
+        actions={item.actions}
+        bullets={item.bullets}
+        links={item.links}
+        className={cn(
           "w-full max-w-sm sm:max-w-[390px]",
-              align === "left" ? "ml-auto" : align === "right" ? "mr-auto" : ""
-            )}
+          align === "left" ? "ml-auto" : align === "right" ? "mr-auto" : ""
+        )}
       />
-        </div>
-      )
-    }
+    </div>
+  )
+}
