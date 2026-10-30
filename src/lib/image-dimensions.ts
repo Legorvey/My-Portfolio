@@ -20,21 +20,41 @@ export async function getPublicImageDimensions(
   src: string
 ): Promise<ImageDimensions> {
   "use cache"
-  cacheLife("max")
+  try {
+    cacheLife("max")
+  } catch {
+    // Gracefully bypass outside Next.js Cache Components runtime (e.g. unit test runner)
+  }
 
-  const normalized = src.replace(/^\//, "")
-  const fullPath = path.join(
-    /*turbopackIgnore: true*/ process.cwd(),
-    "public",
-    normalized
-  )
+  if (!src || typeof src !== "string" || /^https?:\/\/|^\/\//i.test(src)) {
+    return FALLBACK_DIMENSIONS
+  }
 
-  if (fs.existsSync(/*turbopackIgnore: true*/ fullPath)) {
-    const buffer = fs.readFileSync(/*turbopackIgnore: true*/ fullPath)
-    const dimensions = imageSize(buffer)
-    if (dimensions.width && dimensions.height) {
-      return { width: dimensions.width, height: dimensions.height }
+  try {
+    const publicDir = path.resolve(/*turbopackIgnore: true*/ process.cwd(), "public")
+    // Sanitize path by stripping leading slashes and any traversal segments
+    const sanitizedRelPath = path
+      .normalize(src)
+      .replace(/^(\.\.[\/\\])+/, "")
+      .replace(/^[\/\\]+/, "")
+
+    const fullPath = path.resolve(/*turbopackIgnore: true*/ publicDir, sanitizedRelPath)
+
+    // Strict containment check: resolved path must reside strictly inside the public directory
+    if (!fullPath.startsWith(publicDir + path.sep) && fullPath !== publicDir) {
+      return FALLBACK_DIMENSIONS
     }
+
+    if (fs.existsSync(/*turbopackIgnore: true*/ fullPath)) {
+      const buffer = fs.readFileSync(/*turbopackIgnore: true*/ fullPath)
+      const dimensions = imageSize(buffer)
+      if (dimensions.width && dimensions.height) {
+        return { width: dimensions.width, height: dimensions.height }
+      }
+    }
+  } catch {
+    // Graceful fallback prevents DoS on corrupted files, unhandled formats, or read failures
+    return FALLBACK_DIMENSIONS
   }
 
   return FALLBACK_DIMENSIONS

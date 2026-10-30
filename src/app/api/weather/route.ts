@@ -12,6 +12,7 @@ interface OpenMeteoResponse {
 export async function GET() {
   try {
     const res = await fetch(WEATHER_URL, {
+      signal: AbortSignal.timeout(3000),
       next: { revalidate: 900 },
     })
 
@@ -36,6 +37,13 @@ export async function GET() {
       }
     )
   } catch {
-    return NextResponse.json({ temp: "24°C" })
+    return NextResponse.json(
+      { temp: "24°C" },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=300, stale-while-revalidate=600",
+        },
+      }
+    )
   }
 }

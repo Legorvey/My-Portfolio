@@ -24,7 +24,12 @@ export const EndDateSchema = z.union([YearMonthSchema, z.literal("present")])
 
 export const ProjectLinkSchema = z.object({
   label: z.string().min(1),
-  url: z.string().url(),
+  url: z
+    .string()
+    .url()
+    .refine((val) => /^https?:\/\//i.test(val), {
+      message: "Project link must use HTTP or HTTPS protocol",
+    }),
 })
 
 export type ProjectLink = z.infer<typeof ProjectLinkSchema>
@@ -84,7 +89,12 @@ export function getProjects(
   const projects = entries.map((filename) => {
     const filePath = path.join(/*turbopackIgnore: true*/ contentDir, filename)
     const raw = fs.readFileSync(/*turbopackIgnore: true*/ filePath, "utf8")
-    const { data, content } = matter(raw)
+    const { data, content } = matter(raw, {
+      engines: {
+        js: () => ({}),
+        javascript: () => ({}),
+      },
+    })
 
     const parsed = ProjectFrontmatterSchema.safeParse(data)
     if (!parsed.success) {

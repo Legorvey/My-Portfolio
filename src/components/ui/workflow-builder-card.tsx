@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { MoreHorizontal } from "lucide-react";
@@ -9,6 +10,26 @@ import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+
+function sanitizeUrl(url?: string): string {
+  if (!url) return "#";
+  const trimmed = url.trim();
+  if (trimmed.startsWith("//")) return "#";
+  if (trimmed.startsWith("/") || trimmed.startsWith("#")) return trimmed;
+  try {
+    const parsed = new URL(trimmed);
+    if (
+      parsed.protocol === "http:" ||
+      parsed.protocol === "https:" ||
+      parsed.protocol === "mailto:"
+    ) {
+      return trimmed;
+    }
+  } catch {
+    return "#";
+  }
+  return "#";
+}
 
 // Define the types for the component props for type-safety and reusability
 export interface User {
@@ -25,6 +46,7 @@ export interface Action {
 
 export interface WorkflowBuilderCardProps {
   imageUrl: string;
+  imagePosition?: string;
   status: "Active" | "Inactive";
   lastUpdated: string;
   title: string;
@@ -43,6 +65,7 @@ export interface WorkflowBuilderCardProps {
 
 export const WorkflowBuilderCard = ({
   imageUrl,
+  imagePosition,
   status,
   lastUpdated,
   title,
@@ -55,6 +78,13 @@ export const WorkflowBuilderCard = ({
   className,
 }: WorkflowBuilderCardProps) => {
   const [isHovered, setIsHovered] = React.useState(false);
+  const [prevImageUrl, setPrevImageUrl] = React.useState(imageUrl);
+  const [imageError, setImageError] = React.useState(false);
+
+  if (prevImageUrl !== imageUrl) {
+    setPrevImageUrl(imageUrl);
+    setImageError(false);
+  }
 
   // Animation variants for the details section
   const detailVariants: Variants = {
@@ -81,13 +111,31 @@ export const WorkflowBuilderCard = ({
     >
       <Card className="overflow-hidden rounded-xl border border-border bg-card shadow-md transition-shadow duration-300 hover:shadow-xl">
         {/* Card Image */}
-        <div className="relative h-36 w-full overflow-hidden bg-muted">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={imageUrl}
-            alt={title}
-            className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-          />
+        <div className="relative h-36 w-full overflow-hidden bg-muted/40">
+          {!imageError && imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={title}
+              fill
+              sizes="(max-width: 768px) 100vw, 390px"
+              className={cn(
+                "object-cover transition-transform duration-500 hover:scale-105",
+                imagePosition ?? "object-center"
+              )}
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-secondary/30 text-muted-foreground select-none">
+              <div className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card shadow-xs">
+                <span className="font-mono text-xs font-semibold text-primary">
+                  {title.slice(0, 2).toUpperCase()}
+                </span>
+              </div>
+              <span className="font-mono text-[10px] tracking-wider uppercase text-muted-foreground/70">
+                Awaiting Image Asset
+              </span>
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
         </div>
 
@@ -173,11 +221,12 @@ export const WorkflowBuilderCard = ({
                     className="mt-3 flex flex-wrap items-center gap-3 border-t border-border/50 pt-2.5"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {links.map((link) =>
-                      link.isExternal ? (
+                    {links.map((link) => {
+                      const safeUrl = sanitizeUrl(link.href);
+                      return link.isExternal ? (
                         <a
                           key={link.label}
-                          href={link.href}
+                          href={safeUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="group/link inline-flex items-center gap-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -193,7 +242,7 @@ export const WorkflowBuilderCard = ({
                       ) : (
                         <Link
                           key={link.label}
-                          href={link.href}
+                          href={safeUrl}
                           className="group/link inline-flex items-center gap-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                         >
                           <span>{link.label.replace(/ ↗$/, "")}</span>
@@ -204,8 +253,8 @@ export const WorkflowBuilderCard = ({
                             ↗
                           </span>
                         </Link>
-                      )
-                    )}
+                      );
+                    })}
                   </div>
                 )}
               </motion.div>
@@ -248,10 +297,11 @@ export const WorkflowBuilderCard = ({
                 </div>
               );
               if (href) {
+                const safeActionHref = sanitizeUrl(href);
                 return (
                   <a
                     key={index}
-                    href={href}
+                    href={safeActionHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}

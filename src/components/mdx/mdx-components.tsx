@@ -70,6 +70,37 @@ export async function ComponentRow({
   )
 }
 
+/**
+ * Sanitizes URLs to prevent executable schemes like javascript:, vbscript:, data:.
+ */
+export function sanitizeUrl(url?: string): string {
+  if (!url) return "#"
+  const trimmed = url.trim()
+
+  // Disallow protocol-relative URLs that could redirect to arbitrary external origins
+  if (trimmed.startsWith("//")) return "#"
+
+  // Allow safe relative paths and anchor hashes
+  if (trimmed.startsWith("/") || trimmed.startsWith("#")) {
+    return trimmed
+  }
+
+  try {
+    const parsed = new URL(trimmed)
+    if (
+      parsed.protocol === "http:" ||
+      parsed.protocol === "https:" ||
+      parsed.protocol === "mailto:"
+    ) {
+      return trimmed
+    }
+  } catch {
+    return "#"
+  }
+
+  return "#"
+}
+
 interface PressCardProps {
   src: string
   alt: string
@@ -113,9 +144,13 @@ export async function PressCard({
           {children}
         </div>
         <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={sanitizeUrl(href)}
+          target={sanitizeUrl(href).startsWith("http") ? "_blank" : undefined}
+          rel={
+            sanitizeUrl(href).startsWith("http")
+              ? "noopener noreferrer"
+              : undefined
+          }
           className="mt-4 inline-flex items-center font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline"
         >
           {ctaLabel}
@@ -184,12 +219,17 @@ export const mdxComponents = {
   tr: (props: React.ComponentProps<"tr">) => <TableRow {...props} />,
   th: (props: React.ComponentProps<"th">) => <TableHead {...props} />,
   td: (props: React.ComponentProps<"td">) => <TableCell {...props} />,
-  a: (props: React.ComponentProps<"a">) => (
-    <a
-      target={props.href?.startsWith("http") ? "_blank" : undefined}
-      rel={props.href?.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      {...props}
-    />
-  ),
+  a: ({ href, ...props }: React.ComponentProps<"a">) => {
+    const safeHref = sanitizeUrl(href)
+    const isExternal = safeHref.startsWith("http")
+    return (
+      <a
+        {...props}
+        href={safeHref}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+        className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      />
+    )
+  },
 }
