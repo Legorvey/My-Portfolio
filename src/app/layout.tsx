@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google"
 import { SiteFooter } from "@/components/layout/site-footer"
 import { SiteHeader } from "@/components/layout/site-header"
+import { LenisProvider } from "@/components/providers/lenis-provider"
+import "lenis/dist/lenis.css"
 import "./globals.css"
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -106,17 +108,19 @@ export default function RootLayout({
         suppressHydrationWarning
         className="flex min-h-full flex-col bg-background text-foreground"
       >
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-sm focus:border focus:border-primary focus:bg-background focus:px-3 focus:py-2 focus:font-mono focus:text-xs focus:text-foreground"
-        >
-          Skip to main content
-        </a>
-        <SiteHeader />
-        <main id="main-content" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
+        <LenisProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-sm focus:border focus:border-primary focus:bg-background focus:px-3 focus:py-2 focus:font-mono focus:text-xs focus:text-foreground"
+          >
+            Skip to main content
+          </a>
+          <SiteHeader />
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
+          <SiteFooter />
+        </LenisProvider>
       </body>
     </html>
   )
