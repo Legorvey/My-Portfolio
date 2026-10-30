@@ -20,31 +20,75 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://adityac.dev"),
-  title: "Aditya Chandrasa",
+  title: {
+    default: "Aditya Chandrasa | Technologist & Systems Portfolio",
+    template: "%s | Aditya Chandrasa",
+  },
   description:
-    "Portfolio of Aditya Chandrasa. Electrical Engineering Student at Unpad specializing in hardware logic, data analytics, and real-world business execution.",
-  authors: [{ name: "Aditya Chandrasa" }],
+    "Portfolio of Aditya Chandrasa. Technologist and Electrical Engineering Student at Unpad bridging hardware logic, software architecture, data analytics, and real-world execution.",
+  authors: [{ name: "Aditya Chandrasa", url: "https://adityac.dev" }],
+  creator: "Aditya Chandrasa",
+  publisher: "Aditya Chandrasa",
   keywords: [
     "Aditya Chandrasa",
     "Aditya Cakti Chandrasa",
     "Aditya Cakti",
-    "Portfolio",
+    "Technologist",
     "Electrical Engineering",
+    "Hardware Logic",
+    "Software Architecture",
+    "Data Analytics",
+    "Tech Innovation",
+    "Portfolio",
   ],
+  alternates: {
+    canonical: "/",
+    languages: {
+      "en-US": "/",
+      "x-default": "/",
+    },
+  },
   openGraph: {
-    title: "Aditya Chandrasa | Engineering Portfolio",
-    description:
-      "Portfolio of Aditya Chandrasa. Bridging the gap between embedded hardware, data-driven logic, and business execution.",
+    type: "website",
+    locale: "en_US",
     url: "https://adityac.dev",
     siteName: "Aditya Chandrasa",
-    images: [{ url: "/images/web-thumbnail.png" }],
-    type: "website",
+    title: "Aditya Chandrasa | Technologist & Systems Portfolio",
+    description:
+      "Portfolio of Aditya Chandrasa. Technologist bridging hardware logic, software systems, data analytics, and business execution.",
+    images: [
+      {
+        url: "/images/web-thumbnail.png",
+        width: 1200,
+        height: 630,
+        alt: "Aditya Chandrasa Engineering Portfolio",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    title: "Aditya Chandrasa | Technologist & Systems Portfolio",
+    description:
+      "Portfolio of Aditya Chandrasa. Technologist bridging hardware logic, software systems, data analytics, and business execution.",
+    images: ["/images/web-thumbnail.png"],
   },
-  alternates: {
-    canonical: "https://adityac.dev",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/icon.png" },
+      { url: "/images/favicon.png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/icon.png" }],
   },
 }
 

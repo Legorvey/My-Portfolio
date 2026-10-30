@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getPublicImageDimensions } from "@/lib/image-dimensions"
+import { cn } from "@/lib/utils"
 
 interface MdxImageProps {
   src?: string
@@ -160,22 +161,63 @@ export async function PressCard({
   )
 }
 
+function slugifyHeading(children: React.ReactNode): string | undefined {
+  if (typeof children === "string") {
+    return children
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+  }
+  if (Array.isArray(children)) {
+    const text = children
+      .map((c) => (typeof c === "string" ? c : ""))
+      .join("")
+      .trim()
+    if (text) {
+      return text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+    }
+  }
+  return undefined
+}
+
 export const mdxComponents = {
   img: MdxImage,
   ComponentRow,
   PressCard,
-  h2: (props: React.ComponentProps<"h2">) => (
-    <h2
-      className="mt-10 mb-3 border-b border-border pb-2 font-sans text-base font-semibold tracking-tight text-foreground"
-      {...props}
-    />
-  ),
-  h3: (props: React.ComponentProps<"h3">) => (
-    <h3
-      className="mt-6 mb-2 font-sans text-base font-semibold text-foreground"
-      {...props}
-    />
-  ),
+  h2: ({ children, id, className, ...props }: React.ComponentProps<"h2">) => {
+    const headingId = id || slugifyHeading(children)
+    return (
+      <h2
+        id={headingId}
+        className={cn(
+          "mt-10 mb-3 border-b border-border pb-2 font-sans text-base font-semibold tracking-tight text-foreground scroll-mt-24",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </h2>
+    )
+  },
+  h3: ({ children, id, className, ...props }: React.ComponentProps<"h3">) => {
+    const headingId = id || slugifyHeading(children)
+    return (
+      <h3
+        id={headingId}
+        className={cn(
+          "mt-6 mb-2 font-sans text-base font-semibold text-foreground scroll-mt-24",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </h3>
+    )
+  },
   p: (props: React.ComponentProps<"p">) => (
     <p
       className="my-3 max-w-[72ch] text-base text-foreground [&>em:only-child]:block [&>em:only-child]:font-mono [&>em:only-child]:text-xs [&>em:only-child]:not-italic [&>em:only-child]:text-muted-foreground"

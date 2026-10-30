@@ -116,7 +116,10 @@ export function SiteFooter({
           </div>
         </motion.div>
 
-        <div className="mt-8 grid grid-cols-2 items-start gap-8 sm:mt-0 sm:grid-cols-4 sm:gap-10">
+        <nav
+          aria-label="Footer Navigation"
+          className="mt-8 grid grid-cols-2 items-start gap-8 sm:mt-0 sm:grid-cols-4 sm:gap-10"
+        >
           {columns.map((col, ci) => (
             <motion.div
               key={ci}
@@ -162,7 +165,7 @@ export function SiteFooter({
               </ul>
             </motion.div>
           ))}
-        </div>
+        </nav>
       </motion.div>
 
       <motion.div

@@ -42,19 +42,33 @@ export async function generateMetadata({
     : "https://adityac.dev/images/web-thumbnail.png"
 
   return {
-    title: `${project.title} | Aditya Chandrasa`,
+    title: project.title,
     description,
     openGraph: {
+      type: "article",
       title: `${project.title} | Aditya Chandrasa`,
       description,
       url: `https://adityac.dev/projects/${project.slug}`,
-      images: [ogImage],
+      publishedTime: project.start ? `${project.start}-01` : undefined,
+      authors: ["Aditya Chandrasa"],
+      tags: project.tags,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: `${project.title} - Aditya Chandrasa`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
+      title: `${project.title} | Aditya Chandrasa`,
+      description,
+      images: [ogImage],
     },
     alternates: {
-      canonical: `https://adityac.dev/projects/${project.slug}`,
+      canonical: `/projects/${project.slug}`,
     },
   }
 }
@@ -87,16 +101,112 @@ async function ProjectDetail({ params }: ProjectPageProps) {
     ? await getPublicImageDimensions(project.thumbnail)
     : null
 
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "@id": `https://adityac.dev/projects/${project.slug}/#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: "https://adityac.dev",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Projects",
+            item: "https://adityac.dev/projects",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: project.title,
+            item: `https://adityac.dev/projects/${project.slug}`,
+          },
+        ],
+      },
+      {
+        "@type": ["TechArticle", "CreativeWork"],
+        "@id": `https://adityac.dev/projects/${project.slug}/#article`,
+        headline: project.title,
+        description:
+          project.summary ??
+          `Technical case study for ${project.title} by Aditya Chandrasa.`,
+        image: project.thumbnail
+          ? `https://adityac.dev${project.thumbnail}`
+          : "https://adityac.dev/images/web-thumbnail.png",
+        datePublished: project.start ? `${project.start}-01` : undefined,
+        dateModified:
+          project.end && project.end !== "present"
+            ? `${project.end}-01`
+            : undefined,
+        author: {
+          "@type": "Person",
+          name: "Aditya Chandrasa",
+          url: "https://adityac.dev",
+        },
+        publisher: {
+          "@id": "https://adityac.dev/#person",
+        },
+        isPartOf: {
+          "@id": "https://adityac.dev/#website",
+        },
+        keywords: project.tags?.join(", "),
+        about: project.tools,
+      },
+    ],
+  }
+
   return (
-    <Container className="space-y-10 pt-20 sm:pt-24 pb-12 sm:pb-16">
-      <div>
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-1 font-mono text-xs font-medium text-muted-foreground transition-colors duration-150 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(projectJsonLd)
+            .replace(/</g, "\\u003c")
+            .replace(/>/g, "\\u003e"),
+        }}
+      />
+      <Container className="space-y-10 pt-20 sm:pt-24 pb-12 sm:pb-16">
+        {/* Semantic Breadcrumbs (Datasheet style) */}
+        <nav
+          aria-label="Breadcrumb"
+          className="font-mono text-xs text-muted-foreground"
         >
-          ← Back to Projects
-        </Link>
-      </div>
+          <ol className="flex flex-wrap items-center gap-1.5">
+            <li>
+              <Link
+                href="/"
+                className="transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                Home
+              </Link>
+            </li>
+            <li aria-hidden="true" className="text-muted-foreground/50">
+              /
+            </li>
+            <li>
+              <Link
+                href="/projects"
+                className="transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                Projects
+              </Link>
+            </li>
+            <li aria-hidden="true" className="text-muted-foreground/50">
+              /
+            </li>
+            <li
+              aria-current="page"
+              className="font-medium text-foreground max-w-[260px] sm:max-w-none truncate"
+            >
+              {project.title}
+            </li>
+          </ol>
+        </nav>
 
       {/* Infobox-style Datasheet Header */}
       <header className="rounded-sm border border-border bg-surface p-6">
@@ -256,5 +366,6 @@ async function ProjectDetail({ params }: ProjectPageProps) {
         />
       </article>
     </Container>
+    </>
   )
 }

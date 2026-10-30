@@ -123,7 +123,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "ULTG",
       variant: "primary",
     },
-    imageUrl: "/images/experience/pln.jpg",
+    imageUrl: "/images/experience/pln-internship.PNG",
     imagePosition: "object-center",
     status: "Inactive",
     lastUpdated: "Jul — Aug 2026",

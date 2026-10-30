@@ -8,5 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       disallow: ["/api/"],
     },
     sitemap: "https://adityac.dev/sitemap.xml",
+    host: "https://adityac.dev",
   }
 }

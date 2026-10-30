@@ -14,8 +14,15 @@ const JSON_LD = {
       "@id": "https://adityac.dev/#website",
       url: "https://adityac.dev",
       name: "Aditya Chandrasa",
+      alternateName: [
+        "Aditya Cakti Chandrasa",
+        "Aditya Cakti",
+        "Legorvey",
+        "adityac.dev",
+      ],
       description:
-        "Portfolio of Aditya Chandrasa. Electrical Engineering Student at Unpad specializing in hardware logic, data analytics, and real-world business execution.",
+        "Portfolio of Aditya Chandrasa. Technologist and Electrical Engineering Student at Unpad bridging hardware logic, software architecture, data analytics, and real-world execution.",
+      inLanguage: "en-US",
       publisher: {
         "@id": "https://adityac.dev/#person",
       },
@@ -27,7 +34,24 @@ const JSON_LD = {
       alternateName: ["Aditya Cakti Chandrasa", "Aditya Cakti"],
       url: "https://adityac.dev",
       image: "https://adityac.dev/images/web-thumbnail.png",
-      jobTitle: "Electrical Engineering Student",
+      jobTitle: "Technologist & Systems Developer",
+      alumniOf: {
+        "@type": "EducationalOrganization",
+        name: "Universitas Padjadjaran",
+        url: "https://www.unpad.ac.id",
+      },
+      worksFor: {
+        "@type": "Organization",
+        name: "Universitas Padjadjaran",
+      },
+      knowsAbout: [
+        "Technology & Innovation",
+        "Electrical Engineering",
+        "Hardware Logic",
+        "Software Architecture",
+        "Data Analytics",
+        "Full-Stack Development",
+      ],
       sameAs: [
         "https://linkedin.com/in/adityachandrasa",
         "https://github.com/Legorvey",

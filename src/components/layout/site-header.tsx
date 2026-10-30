@@ -40,11 +40,39 @@ export function SiteHeader() {
         {/* Brand Mark <A> */}
         <Link
           href="/"
-          aria-label="Home"
+          aria-label="Aditya Chandrasa Home"
           className="group inline-flex shrink-0 items-center font-mono text-xl sm:text-2xl font-bold tracking-tight text-primary transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <span>&lt;A&gt;</span>
         </Link>
+
+        {/* Primary Navigation - Essential for Google Sitelinks Discovery */}
+        <nav
+          aria-label="Primary"
+          className="flex items-center gap-3 sm:gap-6 font-mono text-xs font-semibold tracking-wider uppercase text-muted-foreground"
+        >
+          <Link
+            href="/projects"
+            className="transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            Projects
+          </Link>
+          <Link
+            href="/#experiences"
+            className="transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            Experience
+          </Link>
+          <a
+            href="/Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-0.5 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <span>Résumé</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </nav>
 
         {/* Location & Time / Weather */}
         <LocationTime />
