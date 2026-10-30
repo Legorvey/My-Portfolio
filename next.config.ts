@@ -1,8 +1,10 @@
 import type { NextConfig } from "next"
 
+const isProd = process.env.NODE_ENV === "production"
+
 const contentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval';
+  script-src 'self' 'unsafe-inline'${isProd ? "" : " 'unsafe-eval'"};
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data: https://images.unsplash.com;
   font-src 'self' data:;

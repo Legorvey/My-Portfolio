@@ -47,7 +47,7 @@ npm run lint
 - `src/components/` — Layout shell (`layout/`), UI primitives (`ui/`), project table and filter controls (`projects/`), MDX custom components (`mdx/`), and motion wrappers (`motion/`).
 - `src/lib/` — Zod frontmatter schema and MDX loader (`content.ts`), formatting utilities (`utils.ts`), and unit tests (`__tests__/`).
 - `content/projects/` — Project and experience case studies written in `.mdx` with YAML frontmatter.
-- `public/` — Static assets including `Resume.pdf`, site images (`images/`), and per-project image folders (`projects/<slug>/`).
+- `public/` — Static assets including `resume.pdf`, site images (`images/`), and per-project image folders (`projects/<slug>/`).
 
 ## How to Add a Project
 

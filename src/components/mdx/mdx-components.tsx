@@ -27,6 +27,7 @@ export async function MdxImage({ src, alt }: MdxImageProps) {
         alt={alt ?? ""}
         width={width}
         height={height}
+        sizes="(min-width: 768px) 72ch, 100vw"
         className="h-auto w-full object-cover"
       />
     </span>
@@ -56,6 +57,7 @@ export async function ComponentRow({
           alt={alt}
           width={width}
           height={height}
+          sizes="96px"
           className="h-full w-full object-cover"
         />
       </div>

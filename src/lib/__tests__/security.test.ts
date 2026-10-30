@@ -85,6 +85,14 @@ describe("getPublicImageDimensions Traversal Defense & Exception Safety", () => 
     expect(dotDotResult).toEqual({ width: 1200, height: 675 })
   })
 
+  it("returns fallback dimensions and does not throw on Windows drive letters or UNC paths", async () => {
+    const driveLetterResult = await getPublicImageDimensions("C:\\Windows\\System32\\cmd.exe")
+    expect(driveLetterResult).toEqual({ width: 1200, height: 675 })
+
+    const uncResult = await getPublicImageDimensions("\\\\localhost\\share\\image.png")
+    expect(uncResult).toEqual({ width: 1200, height: 675 })
+  })
+
   it("returns fallback dimensions and does not throw on external URLs", async () => {
     const externalResult = await getPublicImageDimensions("https://images.unsplash.com/photo-test")
     expect(externalResult).toEqual({ width: 1200, height: 675 })

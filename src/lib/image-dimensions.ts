@@ -26,7 +26,13 @@ export async function getPublicImageDimensions(
     // Gracefully bypass outside Next.js Cache Components runtime (e.g. unit test runner)
   }
 
-  if (!src || typeof src !== "string" || /^https?:\/\/|^\/\//i.test(src)) {
+  if (
+    !src ||
+    typeof src !== "string" ||
+    /^https?:\/\/|^\/\//i.test(src) ||
+    src.includes(":") ||
+    /^[\\\/]{2,}/.test(src)
+  ) {
     return FALLBACK_DIMENSIONS
   }
 

@@ -27,7 +27,7 @@ const defaultColumns: FooterColumn[] = [
       { text: "Featured Work", url: "/#projects" },
       { text: "All Projects", url: "/projects" },
       { text: "Experience", url: "/#experiences" },
-      { text: "Full Résumé ↗", url: "/Resume.pdf" },
+      { text: "Full Résumé ↗", url: "/resume.pdf" },
     ],
   },
   {
