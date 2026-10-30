@@ -1,5 +1,3 @@
-import { CursorBadge } from "@/components/hero/cursor-badge"
-
 export function HeroSection() {
   return (
     <section
@@ -13,11 +11,6 @@ export function HeroSection() {
       {/* Center Stage: Display Headline + Close Metadata Group */}
       <div className="my-auto flex w-full flex-col items-center justify-center">
         <div className="relative inline-flex flex-col items-start max-w-full">
-          {/* Floating Cursor Tag with smooth looping lane motion */}
-          <div className="absolute -top-12 sm:-top-16 lg:-top-20 right-2 sm:right-6 md:right-8 lg:right-10 z-10 pointer-events-none">
-            <CursorBadge label="Scroll Down!" />
-          </div>
-
           {/* Headline */}
           <h1
             id="hero-heading"
