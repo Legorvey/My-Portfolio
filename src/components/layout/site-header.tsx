@@ -6,7 +6,7 @@ import { LocationTime } from "@/components/layout/location-time"
 import { cn } from "@/lib/utils"
 
 function subscribeScroll(callback: () => void): () => void {
-  if (typeof window === "undefined") return () => {}
+  if (typeof window === "undefined") return () => { }
   window.addEventListener("scroll", callback, { passive: true })
   return () => window.removeEventListener("scroll", callback)
 }
@@ -45,34 +45,6 @@ export function SiteHeader() {
         >
           <span>&lt;A&gt;</span>
         </Link>
-
-        {/* Primary Navigation - Essential for Google Sitelinks Discovery */}
-        <nav
-          aria-label="Primary"
-          className="flex items-center gap-3 sm:gap-6 font-mono text-xs font-semibold tracking-wider uppercase text-muted-foreground"
-        >
-          <Link
-            href="/projects"
-            className="transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            Projects
-          </Link>
-          <Link
-            href="/#experiences"
-            className="transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            Experience
-          </Link>
-          <a
-            href="/Resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-0.5 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <span>Résumé</span>
-            <span aria-hidden="true">↗</span>
-          </a>
-        </nav>
 
         {/* Location & Time / Weather */}
         <LocationTime />
