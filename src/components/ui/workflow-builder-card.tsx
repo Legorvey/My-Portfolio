@@ -61,6 +61,7 @@ export interface WorkflowBuilderCardProps {
     isExternal?: boolean;
   }[];
   className?: string;
+  bannerClassName?: string;
 }
 
 export const WorkflowBuilderCard = ({
@@ -76,6 +77,7 @@ export const WorkflowBuilderCard = ({
   bullets,
   links,
   className,
+  bannerClassName,
 }: WorkflowBuilderCardProps) => {
   const [isHovered, setIsHovered] = React.useState(false);
   const [prevImageUrl, setPrevImageUrl] = React.useState(imageUrl);
@@ -107,17 +109,17 @@ export const WorkflowBuilderCard = ({
       tabIndex={0}
       role="region"
       aria-label={`${title} card`}
-      className={cn("w-full max-w-sm cursor-pointer select-none", className)}
+      className={cn("w-full cursor-pointer select-none", className)}
     >
       <Card className="overflow-hidden rounded-xl border border-border bg-card shadow-md transition-shadow duration-300 hover:shadow-xl">
         {/* Card Image */}
-        <div className="relative h-36 w-full overflow-hidden bg-muted/40">
+        <div className={cn("relative h-44 sm:h-48 md:h-52 w-full overflow-hidden bg-muted/40", bannerClassName)}>
           {!imageError && imageUrl ? (
             <Image
               src={imageUrl}
               alt={title}
               fill
-              sizes="(max-width: 768px) 100vw, 390px"
+              sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 600px"
               className={cn(
                 "object-cover transition-transform duration-500 hover:scale-105",
                 imagePosition ?? "object-center"
@@ -139,7 +141,7 @@ export const WorkflowBuilderCard = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
         </div>
 
-        <div className="p-4">
+        <div className="p-4 sm:p-5">
           {/* Always-visible header content */}
           <div className="flex items-start justify-between gap-2">
             <div className="flex flex-col">
@@ -159,7 +161,7 @@ export const WorkflowBuilderCard = ({
                   <span>{status}</span>
                 </div>
               </div>
-              <h3 className="mt-1 text-lg font-semibold tracking-tight text-card-foreground">
+              <h3 className="mt-1 text-lg sm:text-xl font-semibold tracking-tight text-card-foreground">
                 {title}
               </h3>
             </div>
@@ -263,7 +265,7 @@ export const WorkflowBuilderCard = ({
         </div>
 
         {/* Card Footer */}
-        <div className="flex items-center justify-between border-t border-border p-4">
+        <div className="flex items-center justify-between border-t border-border p-4 sm:p-5">
           {users && users.length > 0 ? (
             <div className="flex -space-x-2">
               {users.map((user, index) => (

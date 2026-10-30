@@ -243,9 +243,9 @@ export function ExperienceTimeline({
       itemRefs.current.forEach((el, index) => {
         if (!el) return
         const itemRect = el.getBoundingClientRect()
-        // Badge is anchored at item's top banner level (72px from item top on desktop, 24px on mobile)
+        // Badge is anchored at item's top banner level (104px from item top on desktop, 24px on mobile)
         const isMobile = window.innerWidth < 768
-        const badgeOffset = isMobile ? 24 : 72
+        const badgeOffset = isMobile ? 24 : 104
         const itemHeaderCenter = itemRect.top + badgeOffset
         if (itemHeaderCenter <= viewportAnchor) {
           reached.push(index)
@@ -320,14 +320,14 @@ export function ExperienceTimeline({
               }}
               className="relative grid grid-cols-1 items-start md:grid-cols-2 md:gap-16"
             >
-              {/* Timeline Center Badge - Anchored to banner level (72px) so it never shifts on card hover */}
+              {/* Timeline Center Badge - Anchored to banner level (104px) so it never shifts on card hover */}
               <div
                 ref={(el) => {
                   if (isFirst) firstBadgeRef.current = el
                   if (isLast) lastBadgeRef.current = el
                 }}
                 className={cn(
-                  "absolute left-6 -translate-x-1/2 top-6 md:top-[72px] md:-translate-y-1/2 md:left-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-sm border bg-card shadow-xs transition-all duration-300",
+                  "absolute left-6 -translate-x-1/2 top-6 md:top-[104px] md:-translate-y-1/2 md:left-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-sm border bg-card shadow-xs transition-all duration-300",
                   isActive
                     ? "border-foreground bg-surface text-foreground ring-1 ring-foreground/20"
                     : "border-border text-muted-foreground hover:border-foreground/40"
@@ -439,7 +439,7 @@ function CompanySummary({ item, align, isActive }: CompanySummaryProps) {
   return (
     <div
       className={cn(
-        "h-36 flex flex-col justify-center space-y-1",
+        "h-44 sm:h-48 md:h-52 flex flex-col justify-center space-y-1.5",
         align === "right" ? "pr-6 text-right items-end" : "pl-6 text-left items-start"
       )}
     >
@@ -455,7 +455,7 @@ function CompanySummary({ item, align, isActive }: CompanySummaryProps) {
       {item.specification && (
         <p
           className={cn(
-            "font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-xs",
+            "font-sans text-xs text-muted-foreground/80 leading-relaxed max-w-sm sm:max-w-md",
             align === "right" ? "ml-auto" : "mr-auto"
           )}
         >
@@ -472,18 +472,9 @@ interface ExperienceCardProps {
   isActive: boolean
 }
 
-function ExperienceCard({ item, align }: ExperienceCardProps) {
+function ExperienceCard({ item }: ExperienceCardProps) {
   return (
-    <div
-      className={cn(
-        "w-full flex",
-        align === "left"
-          ? "justify-end"
-          : align === "right"
-            ? "justify-start"
-            : "justify-start"
-      )}
-    >
+    <div className="w-full">
       <WorkflowBuilderCard
         imageUrl={item.imageUrl}
         imagePosition={item.imagePosition}
@@ -494,10 +485,7 @@ function ExperienceCard({ item, align }: ExperienceCardProps) {
         actions={item.actions}
         bullets={item.bullets}
         links={item.links}
-        className={cn(
-          "w-full max-w-sm sm:max-w-[390px]",
-          align === "left" ? "ml-auto" : align === "right" ? "mr-auto" : ""
-        )}
+        className="w-full"
       />
     </div>
   )
