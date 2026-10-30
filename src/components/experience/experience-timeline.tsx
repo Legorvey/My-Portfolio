@@ -34,6 +34,7 @@ export interface ExperienceItem {
   }
   // WorkflowBuilderCard visual fields (3D banner placeholders, users, actions)
   imageUrl: string
+  imagePosition?: string
   status: "Active" | "Inactive"
   lastUpdated?: string
   users?: readonly User[]
@@ -90,9 +91,8 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "UNPAD",
       variant: "primary",
     },
-    // 3D Banner Placeholder (matches 21st.dev reference screenshot)
-    imageUrl:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+    imageUrl: "/images/experience/hmte-experience.jpg",
+    imagePosition: "object-center",
     status: "Active",
     lastUpdated: "Jan 2026 — Present",
     users: DEFAULT_USERS,
@@ -123,9 +123,8 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "ULTG",
       variant: "primary",
     },
-    // 3D Banner Placeholder (Replace with real experience image in the future)
-    imageUrl:
-      "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=800&auto=format&fit=crop",
+    imageUrl: "/images/experience/pln.jpg",
+    imagePosition: "object-center",
     status: "Inactive",
     lastUpdated: "Jul — Aug 2026",
     users: DEFAULT_USERS,
@@ -156,9 +155,8 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "2025",
       variant: "primary",
     },
-    // 3D Banner Placeholder (Replace with real experience image in the future)
-    imageUrl:
-      "https://images.unsplash.com/photo-1633493106115-46a78281b66a?q=80&w=800&auto=format&fit=crop",
+    imageUrl: "/images/experience/futura.jpg",
+    imagePosition: "object-center",
     status: "Inactive",
     lastUpdated: "Feb — Nov 2025",
     users: DEFAULT_USERS,
@@ -189,9 +187,8 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "SYS",
       variant: "secondary",
     },
-    // 3D Banner Placeholder (Replace with real experience image in the future)
-    imageUrl:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
+    imageUrl: "/images/experience/technologist.jpg",
+    imagePosition: "object-center",
     status: "Active",
     lastUpdated: "Aug 2024 — Present",
     users: DEFAULT_USERS,
@@ -489,6 +486,7 @@ function ExperienceCard({ item, align }: ExperienceCardProps) {
     >
       <WorkflowBuilderCard
         imageUrl={item.imageUrl}
+        imagePosition={item.imagePosition}
         status={item.status}
         lastUpdated={item.lastUpdated ?? item.period}
         title={item.role}
