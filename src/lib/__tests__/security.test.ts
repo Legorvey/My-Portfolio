@@ -15,8 +15,11 @@ describe("Security Sanitizer (sanitizeUrl)", () => {
     expect(sanitizeUrl("vbscript:MsgBox(1)")).toBe("#")
   })
 
-  it("blocks protocol-relative URLs that attempt open redirection", () => {
+  it("blocks protocol-relative URLs and backslash variations that attempt open redirection", () => {
     expect(sanitizeUrl("//malicious.example.com/payload")).toBe("#")
+    expect(sanitizeUrl("/\\malicious.example.com")).toBe("#")
+    expect(sanitizeUrl("\\\\malicious.example.com")).toBe("#")
+    expect(sanitizeUrl("/projects/\\malicious")).toBe("#")
   })
 
   it("permits safe HTTP and HTTPS URLs", () => {

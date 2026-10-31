@@ -14,7 +14,15 @@ import { Badge } from "@/components/ui/badge";
 function sanitizeUrl(url?: string): string {
   if (!url) return "#";
   const trimmed = url.trim();
-  if (trimmed.startsWith("//")) return "#";
+  if (
+    trimmed.startsWith("//") ||
+    trimmed.startsWith("\\") ||
+    /^[/\\]{2,}/.test(trimmed) ||
+    /^\/[\\/]/.test(trimmed) ||
+    trimmed.includes("\\")
+  ) {
+    return "#";
+  }
   if (trimmed.startsWith("/") || trimmed.startsWith("#")) return trimmed;
   try {
     const parsed = new URL(trimmed);

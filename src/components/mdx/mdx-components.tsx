@@ -74,14 +74,23 @@ export async function ComponentRow({
 }
 
 /**
- * Sanitizes URLs to prevent executable schemes like javascript:, vbscript:, data:.
+ * Sanitizes URLs to prevent executable schemes like javascript:, vbscript:, data:,
+ * and protocol-relative / backslash-based open redirect vectors.
  */
 export function sanitizeUrl(url?: string): string {
   if (!url) return "#"
   const trimmed = url.trim()
 
-  // Disallow protocol-relative URLs that could redirect to arbitrary external origins
-  if (trimmed.startsWith("//")) return "#"
+  // Disallow protocol-relative URLs (//) and backslash variations (/\, \\) that can bypass protocol checks
+  if (
+    trimmed.startsWith("//") ||
+    trimmed.startsWith("\\") ||
+    /^[/\\]{2,}/.test(trimmed) ||
+    /^\/[\\/]/.test(trimmed) ||
+    trimmed.includes("\\")
+  ) {
+    return "#"
+  }
 
   // Allow safe relative paths and anchor hashes
   if (trimmed.startsWith("/") || trimmed.startsWith("#")) {

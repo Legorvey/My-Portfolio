@@ -8,7 +8,7 @@ const contentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data: https://images.unsplash.com;
   font-src 'self' data:;
-  connect-src 'self' https://api.open-meteo.com;
+  connect-src 'self';
   media-src 'self';
   object-src 'none';
   base-uri 'self';
