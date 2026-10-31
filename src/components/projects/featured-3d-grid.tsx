@@ -69,6 +69,7 @@ function ProjectCard3D({
   isHero,
 }: ProjectCard3DProps) {
   const cardRef = React.useRef<HTMLDivElement>(null)
+  const rafRef = React.useRef<number | null>(null)
   const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 })
   const [hovered, setHovered] = React.useState(false)
   const shouldReduceMotion = useReducedMotion()
@@ -79,7 +80,12 @@ function ProjectCard3D({
       const rect = e.currentTarget.getBoundingClientRect()
       const x = (e.clientX - rect.left) / rect.width - 0.5
       const y = (e.clientY - rect.top) / rect.height - 0.5
-      setMousePos({ x, y })
+
+      if (rafRef.current !== null) return
+      rafRef.current = requestAnimationFrame(() => {
+        setMousePos({ x, y })
+        rafRef.current = null
+      })
     },
     [shouldReduceMotion]
   )
@@ -89,8 +95,21 @@ function ProjectCard3D({
   }, [])
 
   const handleMouseLeave = React.useCallback(() => {
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
     setHovered(false)
     setMousePos({ x: 0, y: 0 })
+  }, [])
+
+  React.useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
+    }
   }, [])
 
   const watermarkNumber = String(index + 1).padStart(2, "0")

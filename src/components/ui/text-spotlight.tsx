@@ -60,7 +60,6 @@ export function TextSpotlight({
   ...props
 }: TextSpotlightProps) {
   const containerRef = React.useRef<HTMLDivElement>(null)
-  const [position, setPosition] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 })
   const [isHovered, setIsHovered] = React.useState(false)
 
   const isCoarsePointer = React.useSyncExternalStore(
@@ -68,6 +67,13 @@ export function TextSpotlight({
     getCoarseSnapshot,
     getCoarseServerSnapshot
   )
+
+  const updatePosition = React.useCallback((x: number, y: number) => {
+    if (containerRef.current) {
+      containerRef.current.style.setProperty("--spotlight-x", `${x}px`)
+      containerRef.current.style.setProperty("--spotlight-y", `${y}px`)
+    }
+  }, [])
 
   // Autonomous sweep for mobile/touch screens when animateOnPhone is enabled
   React.useEffect(() => {
@@ -86,32 +92,29 @@ export function TextSpotlight({
       const height = containerRef.current?.clientHeight ?? 80
       const norm = (Math.sin(progress * Math.PI * 2 - Math.PI / 2) + 1) / 2
 
-      setPosition({
-        x: norm * width,
-        y: height / 2,
-      })
-      setIsHovered(true)
+      updatePosition(norm * width, height / 2)
 
       rafId = requestAnimationFrame(loop)
     }
 
     rafId = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(rafId)
-  }, [animateOnPhone, isCoarsePointer])
+  }, [animateOnPhone, isCoarsePointer, updatePosition])
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!containerRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
-    setPosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    })
-    setIsHovered(true)
+    updatePosition(e.clientX - rect.left, e.clientY - rect.top)
+    if (!isHovered) {
+      setIsHovered(true)
+    }
   }
 
   const handlePointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
     handlePointerMove(e)
-    setIsHovered(true)
+    if (!isHovered) {
+      setIsHovered(true)
+    }
   }
 
   const handlePointerLeave = () => {
@@ -120,14 +123,15 @@ export function TextSpotlight({
     }
   }
 
+  const isSpotlightActive = isHovered || (Boolean(animateOnPhone) && isCoarsePointer)
   const content = text ?? children
 
   const maskStyle: React.CSSProperties = {
-    maskImage: isHovered
-      ? `radial-gradient(circle ${spotlightSize}px at ${position.x}px ${position.y}px, black ${spotlightArea}%, transparent 100%)`
+    maskImage: isSpotlightActive
+      ? `radial-gradient(circle ${spotlightSize}px at var(--spotlight-x, 0px) var(--spotlight-y, 0px), black ${spotlightArea}%, transparent 100%)`
       : "radial-gradient(circle 0px at 0px 0px, black 0%, transparent 100%)",
-    WebkitMaskImage: isHovered
-      ? `radial-gradient(circle ${spotlightSize}px at ${position.x}px ${position.y}px, black ${spotlightArea}%, transparent 100%)`
+    WebkitMaskImage: isSpotlightActive
+      ? `radial-gradient(circle ${spotlightSize}px at var(--spotlight-x, 0px) var(--spotlight-y, 0px), black ${spotlightArea}%, transparent 100%)`
       : "radial-gradient(circle 0px at 0px 0px, black 0%, transparent 100%)",
     color: spotlightColor ? `rgb(${spotlightColor})` : undefined,
     ...spotlightStyle,
@@ -157,7 +161,7 @@ export function TextSpotlight({
           "pointer-events-none absolute inset-0 select-none transition-opacity duration-300",
           textClassName,
           spotlightClassName,
-          isHovered ? "opacity-100" : "opacity-0"
+          isSpotlightActive ? "opacity-100" : "opacity-0"
         )}
         style={maskStyle}
       >

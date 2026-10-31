@@ -20,8 +20,29 @@ function getServerSnapshot(): string {
 }
 
 function subscribe(callback: () => void): () => void {
-  const timer = setInterval(callback, 30000)
-  return () => clearInterval(timer)
+  const timer = setInterval(() => {
+    if (typeof document !== "undefined" && document.hidden) {
+      return
+    }
+    callback()
+  }, 30000)
+
+  const handleVisibilityChange = () => {
+    if (typeof document !== "undefined" && !document.hidden) {
+      callback()
+    }
+  }
+
+  if (typeof document !== "undefined") {
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+  }
+
+  return () => {
+    clearInterval(timer)
+    if (typeof document !== "undefined") {
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+    }
+  }
 }
 
 export function LocationTime() {

@@ -59,6 +59,8 @@ export interface Project extends ProjectFrontmatter {
 
 const DEFAULT_CONTENT_DIR = path.join(process.cwd(), "content", "projects")
 
+let cachedProductionProjects: Project[] | null = null
+
 export function sortProjectsByStartDesc<
   T extends { start?: string; slug: string },
 >(items: readonly T[]): T[] {
@@ -78,6 +80,14 @@ export function sortProjectsByStartDesc<
 export function getProjects(
   contentDir: string = DEFAULT_CONTENT_DIR
 ): Project[] {
+  if (
+    process.env.NODE_ENV === "production" &&
+    contentDir === DEFAULT_CONTENT_DIR &&
+    cachedProductionProjects !== null
+  ) {
+    return cachedProductionProjects
+  }
+
   if (!fs.existsSync(/*turbopackIgnore: true*/ contentDir)) {
     return []
   }
@@ -119,7 +129,16 @@ export function getProjects(
     }
   })
 
-  return sortProjectsByStartDesc(projects)
+  const sorted = sortProjectsByStartDesc(projects)
+
+  if (
+    process.env.NODE_ENV === "production" &&
+    contentDir === DEFAULT_CONTENT_DIR
+  ) {
+    cachedProductionProjects = sorted
+  }
+
+  return sorted
 }
 
 export function getFeatured(
