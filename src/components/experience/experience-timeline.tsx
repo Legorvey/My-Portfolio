@@ -87,6 +87,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       { label: "Instagram ↗", href: "https://www.instagram.com/p/DW4Q1S-GH0x/", isExternal: true },
     ],
     logo: {
+      src: "/images/experience/hmte-logo.svg",
       text: "HMTE",
       subtext: "UNPAD",
       variant: "primary",
@@ -119,6 +120,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       { label: "Company Profile ↗", href: "https://www.instagram.com/ultg_bandungbarat/?hl=en", isExternal: true },
     ],
     logo: {
+      src: "/images/experience/pln-logo.svg",
       text: "PLN",
       subtext: "ULTG",
       variant: "primary",
@@ -151,6 +153,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       { label: "Robotics Recap ↗", href: "#", isExternal: true },
     ],
     logo: {
+      src: "/images/experience/futura-logo.svg",
       text: "FUT",
       subtext: "2025",
       variant: "primary",
@@ -183,6 +186,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       { label: "GitHub ↗", href: "https://github.com/Legorvey", isExternal: true },
     ],
     logo: {
+      src: "/images/experience/technologist-logo.svg",
       text: "TECH",
       subtext: "SYS",
       variant: "secondary",
@@ -243,9 +247,9 @@ export function ExperienceTimeline({
       itemRefs.current.forEach((el, index) => {
         if (!el) return
         const itemRect = el.getBoundingClientRect()
-        // Badge is anchored at item's top banner level (104px from item top on desktop, 24px on mobile)
+        // Badge is anchored at item's top banner level (104px from item top on desktop, 28px on mobile)
         const isMobile = window.innerWidth < 768
-        const badgeOffset = isMobile ? 24 : 104
+        const badgeOffset = isMobile ? 28 : 104
         const itemHeaderCenter = itemRect.top + badgeOffset
         if (itemHeaderCenter <= viewportAnchor) {
           reached.push(index)
@@ -318,7 +322,7 @@ export function ExperienceTimeline({
               ref={(el) => {
                 itemRefs.current[index] = el
               }}
-              className="relative grid grid-cols-1 items-start md:grid-cols-2 md:gap-16"
+              className="relative grid grid-cols-1 items-start md:grid-cols-2 md:gap-20"
             >
               {/* Timeline Center Badge - Anchored to banner level (104px) so it never shifts on card hover */}
               <div
@@ -327,26 +331,25 @@ export function ExperienceTimeline({
                   if (isLast) lastBadgeRef.current = el
                 }}
                 className={cn(
-                  "absolute left-6 -translate-x-1/2 top-6 md:top-[104px] md:-translate-y-1/2 md:left-1/2 z-10 flex h-11 w-11 items-center justify-center rounded-sm border bg-card shadow-xs transition-all duration-300",
+                  "absolute left-6 -translate-x-1/2 top-7 -translate-y-1/2 md:top-[104px] md:left-1/2 z-10 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center overflow-hidden rounded-md shadow-md transition-all duration-300",
                   isActive
-                    ? "border-foreground bg-surface text-foreground ring-1 ring-foreground/20"
-                    : "border-border text-muted-foreground hover:border-foreground/40"
+                    ? "opacity-100 scale-105 shadow-lg"
+                    : "opacity-80 scale-100 hover:opacity-100 hover:scale-105"
                 )}
                 aria-hidden="true"
               >
                 {item.logo.src ? (
-                  <Image
-                    src={item.logo.src}
-                    alt={item.company}
-                    width={28}
-                    height={28}
-                    className={cn(
-                      "h-7 w-7 object-contain transition-opacity",
-                      isActive ? "opacity-100" : "opacity-80"
-                    )}
-                  />
+                  <div className="relative h-full w-full">
+                    <Image
+                      src={item.logo.src}
+                      alt={item.company}
+                      fill
+                      sizes="(max-width: 768px) 48px, 56px"
+                      className="h-full w-full object-cover select-none"
+                    />
+                  </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center leading-none select-none">
+                  <div className="flex h-full w-full flex-col items-center justify-center bg-card leading-none select-none">
                     <span
                       className={cn(
                         "font-mono text-xs font-bold tracking-tight transition-colors",
@@ -402,7 +405,7 @@ export function ExperienceTimeline({
               </div>
 
               {/* Mobile View (< md) */}
-              <div className="pl-14 md:hidden space-y-3">
+              <div className="pl-16 md:hidden space-y-3">
                 <div className="flex flex-col justify-center min-h-[44px]">
                   <h3
                     className={cn(

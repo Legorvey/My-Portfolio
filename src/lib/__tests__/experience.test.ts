@@ -40,4 +40,13 @@ describe("Experience section data integrity", () => {
       }
     }
   })
+
+  it("has valid and existing logo files for all records with logo.src", () => {
+    for (const exp of EXPERIENCES) {
+      if (exp.logo?.src) {
+        const filePath = path.join(process.cwd(), "public", exp.logo.src)
+        expect(fs.existsSync(filePath), `Logo image missing for ${exp.id}: ${filePath}`).toBe(true)
+      }
+    }
+  })
 })
