@@ -1,3 +1,5 @@
+import fs from "node:fs"
+import path from "node:path"
 import { describe, expect, it } from "vitest"
 import { EXPERIENCES } from "@/components/experience/experience-timeline"
 
@@ -26,6 +28,15 @@ describe("Experience section data integrity", () => {
           expect(link.label).toBeTruthy()
           expect(link.href).toBeTruthy()
         }
+      }
+    }
+  })
+
+  it("has valid and existing image files for all records with imageUrl", () => {
+    for (const exp of EXPERIENCES) {
+      if (exp.imageUrl) {
+        const filePath = path.join(process.cwd(), "public", exp.imageUrl)
+        expect(fs.existsSync(filePath), `Image missing for ${exp.id}: ${filePath}`).toBe(true)
       }
     }
   })

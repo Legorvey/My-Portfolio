@@ -155,7 +155,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       subtext: "2025",
       variant: "primary",
     },
-    imageUrl: "/images/experience/futura.jpg",
+    imageUrl: "/images/experience/futura.png",
     imagePosition: "object-center",
     status: "Inactive",
     lastUpdated: "Feb — Nov 2025",
