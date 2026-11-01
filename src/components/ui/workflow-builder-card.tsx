@@ -112,14 +112,14 @@ export const WorkflowBuilderCard = ({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       onClick={() => setIsHovered((prev) => !prev)}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
       tabIndex={0}
       role="region"
       aria-label={`${title} card`}
       className={cn("w-full cursor-pointer select-none", className)}
     >
-      <Card className="overflow-hidden rounded-xl border border-border bg-card shadow-md transition-shadow duration-300 hover:shadow-xl">
+      <Card className="overflow-hidden rounded-xl border border-border bg-card shadow-xs transition-colors duration-200 hover:border-primary/50">
         {/* Card Image */}
         <div className={cn("relative h-44 sm:h-48 md:h-52 w-full overflow-hidden bg-muted/40", bannerClassName)}>
           {!imageError && imageUrl ? (
@@ -152,35 +152,39 @@ export const WorkflowBuilderCard = ({
         <div className="p-4 sm:p-5">
           {/* Always-visible header content */}
           <div className="flex items-start justify-between gap-2">
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
-                <span>{lastUpdated}</span>
-                <span>•</span>
-                <div className="flex items-center gap-1.5 font-sans">
+            <div className="flex flex-col min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-muted-foreground">
+                <span className="shrink-0">{lastUpdated}</span>
+                <span className="hidden sm:inline">•</span>
+                <div className="flex shrink-0 items-center gap-1.5 font-sans">
                   <span
                     className={cn(
                       "h-2 w-2 rounded-full",
                       status === "Active"
-                        ? "bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]"
-                        : "bg-red-500"
+                        ? "bg-green-600 dark:bg-green-500"
+                        : "bg-red-600 dark:bg-red-500"
                     )}
                     aria-label={status}
                   />
                   <span>{status}</span>
                 </div>
               </div>
-              <h3 className="mt-1 text-lg sm:text-xl font-semibold tracking-tight text-card-foreground">
+              <h3 className="mt-1 text-base sm:text-xl font-semibold tracking-tight text-card-foreground">
                 {title}
               </h3>
+              <div className="mt-0.5 font-mono text-[10px] text-muted-foreground/70 sm:hidden">
+                {isHovered ? "Tap to hide details ▴" : "Tap to view details ▾"}
+              </div>
             </div>
             <button
               type="button"
-              aria-label="Toggle details"
+              aria-label={isHovered ? "Collapse details" : "Expand details"}
+              aria-expanded={isHovered}
               onClick={(e) => {
                 e.stopPropagation();
                 setIsHovered((prev) => !prev);
               }}
-              className="text-muted-foreground transition-colors hover:text-foreground p-0.5 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center -mr-2 -mt-2 p-2 rounded-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring shrink-0"
             >
               <MoreHorizontal size={20} />
             </button>
@@ -239,7 +243,7 @@ export const WorkflowBuilderCard = ({
                           href={safeUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group/link inline-flex items-center gap-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                          className="group/link inline-flex items-center gap-1 py-1.5 -my-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                         >
                           <span>{link.label.replace(/ ↗$/, "")}</span>
                           <span
@@ -253,7 +257,7 @@ export const WorkflowBuilderCard = ({
                         <Link
                           key={link.label}
                           href={safeUrl}
-                          className="group/link inline-flex items-center gap-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                          className="group/link inline-flex items-center gap-1 py-1.5 -my-1 font-mono text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                         >
                           <span>{link.label.replace(/ ↗$/, "")}</span>
                           <span

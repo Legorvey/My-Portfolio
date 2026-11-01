@@ -76,12 +76,12 @@ export function LocationTime() {
   }, [])
 
   return (
-    <div className="shrink-0 text-right font-sans text-xs sm:text-sm leading-snug">
-      <div className="font-medium text-foreground">
+    <div className="min-w-0 shrink text-right font-sans text-xs sm:text-sm leading-tight sm:leading-snug">
+      <div className="font-medium text-foreground truncate sm:whitespace-normal">
         Based in Bandung, Indonesia
       </div>
       <div>
-        <time className="font-mono text-xs text-muted-foreground">
+        <time className="font-mono text-[11px] sm:text-xs text-muted-foreground">
           {timeStr} GMT+7 · {temp}
         </time>
       </div>

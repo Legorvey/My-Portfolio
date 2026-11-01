@@ -112,8 +112,8 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 rounded-sm border border-border bg-surface p-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="flex w-full items-center gap-2 overflow-x-auto pb-1 sm:w-auto sm:overflow-visible sm:pb-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <span className="shrink-0 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Filter:
           </span>
           <ToggleGroup
@@ -122,19 +122,24 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
             value={[selectedType]}
             onValueChange={handleFilterChange}
             aria-label="Filter projects by type"
+            className="flex-nowrap sm:flex-wrap"
           >
-            <ToggleGroupItem value="all">
+            <ToggleGroupItem value="all" className="h-8 min-h-[36px] px-2.5 sm:h-7 sm:min-h-0 sm:px-2">
               All ({projects.length})
             </ToggleGroupItem>
             {typeCounts.map((option) => (
-              <ToggleGroupItem key={option.value} value={option.value}>
+              <ToggleGroupItem
+                key={option.value}
+                value={option.value}
+                className="h-8 min-h-[36px] px-2.5 sm:h-7 sm:min-h-0 sm:px-2"
+              >
                 {option.label} ({option.count})
               </ToggleGroupItem>
             ))}
           </ToggleGroup>
         </div>
 
-        <div className="flex items-center justify-between gap-3 sm:justify-end">
+        <div className="flex items-center justify-between gap-3 sm:justify-end shrink-0">
           <span className="font-mono text-xs text-muted-foreground">
             {filteredAndSorted.length} of {projects.length} entries
           </span>
@@ -143,6 +148,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
             variant="outline"
             size="sm"
             onClick={toggleSortDirection}
+            className="h-8 min-h-[36px] sm:h-7 sm:min-h-0"
             aria-label={`Sort by period (${sortDirection === "desc" ? "newest first" : "oldest first"})`}
           >
             Period: {sortDirection === "desc" ? "Newest ↓" : "Oldest ↑"}
@@ -242,30 +248,33 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
           <div className="divide-y divide-border rounded-sm border border-border bg-background md:hidden">
             {filteredAndSorted.map((project) => (
               <article key={project.slug} className="space-y-3 p-4">
-                <div className="flex items-start justify-between gap-2">
+                <div className="flex items-start justify-between gap-3">
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="font-sans text-sm font-semibold text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="font-sans text-sm font-semibold text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring inline-flex items-center gap-1.5 py-1 -my-1"
                   >
-                    {project.title}
+                    <span>{project.title}</span>
+                    <span className="text-primary text-xs" aria-hidden="true">
+                      ↗
+                    </span>
                   </Link>
-                  <Badge variant="default">
+                  <Badge variant="default" className="shrink-0">
                     {formatProjectTypeLabel(project.type)}
                   </Badge>
                 </div>
 
                 {project.summary && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground leading-relaxed">
                     {project.summary}
                   </p>
                 )}
 
-                <dl className="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border pt-3 text-xs">
+                <dl className="grid grid-cols-2 gap-x-4 gap-y-2.5 border-t border-border pt-3 text-xs">
                   <div>
                     <dt className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
                       Role
                     </dt>
-                    <dd className="mt-0.5 text-foreground break-words">
+                    <dd className="mt-0.5 text-foreground break-words text-[11px] xs:text-xs">
                       {project.role ?? "—"}
                     </dd>
                   </div>
@@ -273,7 +282,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                     <dt className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
                       Period
                     </dt>
-                    <dd className="mt-0.5 font-mono text-foreground">
+                    <dd className="mt-0.5 font-mono text-[11px] xs:text-xs text-foreground">
                       {formatPeriod(project.start, project.end)}
                     </dd>
                   </div>

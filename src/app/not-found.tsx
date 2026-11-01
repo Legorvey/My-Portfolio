@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <Container className="flex min-h-[calc(100vh-16rem)] flex-col items-start justify-center pt-24 pb-16">
-      <div className="max-w-md space-y-4 rounded-sm border border-border bg-surface p-6">
+      <div className="max-w-md space-y-4 rounded-sm border border-border bg-surface p-4 sm:p-6">
         <p className="font-mono text-xl font-semibold text-primary">404</p>
         <h1 className="inline-flex">
           <TextSpotlight
@@ -25,13 +25,13 @@ export default function NotFound() {
             <span className="text-primary">.</span>
           </TextSpotlight>
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground leading-relaxed">
           The requested page or project does not exist. It may have been moved or archived.
         </p>
         <div className="pt-2">
           <Link
             href="/"
-            className="inline-flex h-8 items-center rounded-sm border border-primary bg-primary px-3 py-1 font-mono text-xs font-medium text-primary-foreground transition-colors duration-150 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex h-9 sm:h-8 items-center rounded-sm border border-primary bg-primary px-3 py-1.5 sm:py-1 font-mono text-xs font-medium text-primary-foreground transition-colors duration-150 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             ← Return to Home
           </Link>

@@ -78,12 +78,17 @@ export function TextSpotlight({
   // Autonomous sweep for mobile/touch screens when animateOnPhone is enabled
   React.useEffect(() => {
     if (!animateOnPhone || !isCoarsePointer) return
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    const el = containerRef.current
+    if (!el) return
 
     let rafId: number
     let startTime: number | null = null
     const cycleDuration = 4800 // 4.8s sweep cycle
+    let isVisible = false
 
     const loop = (timestamp: number) => {
+      if (!isVisible) return
       if (!startTime) startTime = timestamp
       const elapsed = timestamp - startTime
       const progress = (elapsed % cycleDuration) / cycleDuration
@@ -97,8 +102,26 @@ export function TextSpotlight({
       rafId = requestAnimationFrame(loop)
     }
 
-    rafId = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(rafId)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return
+        isVisible = entry.isIntersecting
+        if (isVisible) {
+          startTime = null
+          rafId = requestAnimationFrame(loop)
+        } else {
+          cancelAnimationFrame(rafId)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    observer.observe(el)
+
+    return () => {
+      observer.disconnect()
+      cancelAnimationFrame(rafId)
+    }
   }, [animateOnPhone, isCoarsePointer, updatePosition])
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {

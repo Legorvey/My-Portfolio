@@ -209,7 +209,7 @@ async function ProjectDetail({ params }: ProjectPageProps) {
         </nav>
 
       {/* Infobox-style Datasheet Header */}
-      <header className="rounded-sm border border-border bg-surface p-6">
+      <header className="rounded-sm border border-border bg-surface p-4 sm:p-6">
         <div className="space-y-2 border-b border-border pb-5">
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="default">
@@ -329,7 +329,7 @@ async function ProjectDetail({ params }: ProjectPageProps) {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80"
+                    className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80 py-1.5 -my-1 inline-flex items-center"
                   >
                     {link.label} ➔
                   </a>

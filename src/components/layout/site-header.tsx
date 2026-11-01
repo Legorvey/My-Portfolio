@@ -36,12 +36,12 @@ export function SiteHeader() {
           : "border-b border-transparent bg-transparent backdrop-blur-none"
       )}
     >
-      <div className="flex w-full items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
-        {/* Brand Mark <A> */}
+      <div className="flex w-full items-center justify-between gap-3 px-4 sm:px-6 py-2.5 sm:py-4">
+        {/* Brand Mark <A> with compliant 44x44px tap target on mobile */}
         <Link
           href="/"
           aria-label="Aditya Chandrasa Home"
-          className="group inline-flex shrink-0 items-center font-mono text-xl sm:text-2xl font-bold tracking-tight text-primary transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="group inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center -my-2 -ml-2 p-2 rounded-sm font-mono text-xl sm:text-2xl font-bold tracking-tight text-primary transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <span>&lt;A&gt;</span>
         </Link>

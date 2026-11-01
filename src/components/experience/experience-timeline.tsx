@@ -289,7 +289,7 @@ export function ExperienceTimeline({
         <>
           {/* Central Timeline Spine (Continuous grey base line starting at first badge) */}
           <div
-            className="absolute left-6 w-0.5 -translate-x-1/2 bg-border md:left-1/2 pointer-events-none"
+            className="absolute left-5 w-0.5 -translate-x-1/2 bg-border md:left-1/2 pointer-events-none"
             style={{
               top: `${lineCoords.top}px`,
               height: `${lineCoords.height}px`,
@@ -299,7 +299,7 @@ export function ExperienceTimeline({
 
           {/* Scroll Progression Line (Active white/foreground line, anchored at first badge) */}
           <div
-            className="absolute left-6 w-0.5 -translate-x-1/2 bg-foreground md:left-1/2 transition-[height] duration-75 ease-out will-change-[height] pointer-events-none"
+            className="absolute left-5 w-0.5 -translate-x-1/2 bg-foreground md:left-1/2 transition-[height] duration-75 ease-out will-change-[height] pointer-events-none"
             style={{
               top: `${lineCoords.top}px`,
               height: `${progressHeight}px`,
@@ -324,14 +324,14 @@ export function ExperienceTimeline({
               }}
               className="relative grid grid-cols-1 items-start md:grid-cols-2 md:gap-20"
             >
-              {/* Timeline Center Badge - Anchored to banner level (104px) so it never shifts on card hover */}
+              {/* Timeline Center Badge - Anchored to banner level (104px on desktop) so it never shifts on card hover */}
               <div
                 ref={(el) => {
                   if (isFirst) firstBadgeRef.current = el
                   if (isLast) lastBadgeRef.current = el
                 }}
                 className={cn(
-                  "absolute left-6 -translate-x-1/2 top-7 -translate-y-1/2 md:top-[104px] md:left-1/2 z-10 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center overflow-hidden rounded-md shadow-md transition-all duration-300",
+                  "absolute left-5 -translate-x-1/2 top-7 -translate-y-1/2 md:top-[104px] md:left-1/2 z-10 flex h-10 w-10 md:h-14 md:w-14 items-center justify-center overflow-hidden rounded-md shadow-md transition-all duration-300",
                   isActive
                     ? "opacity-100 scale-105 shadow-lg"
                     : "opacity-80 scale-100 hover:opacity-100 hover:scale-105"
@@ -405,7 +405,7 @@ export function ExperienceTimeline({
               </div>
 
               {/* Mobile View (< md) */}
-              <div className="pl-16 md:hidden space-y-3">
+              <div className="pl-12 sm:pl-14 md:hidden space-y-3">
                 <div className="flex flex-col justify-center min-h-[44px]">
                   <h3
                     className={cn(

@@ -16,6 +16,22 @@ export interface Featured3DGridProps {
   className?: string
 }
 
+function subscribeCoarsePointer(callback: () => void) {
+  if (typeof window === "undefined") return () => {}
+  const media = window.matchMedia("(pointer: coarse)")
+  media.addEventListener("change", callback)
+  return () => media.removeEventListener("change", callback)
+}
+
+function getCoarseSnapshot() {
+  if (typeof window === "undefined") return false
+  return window.matchMedia("(pointer: coarse)").matches
+}
+
+function getCoarseServerSnapshot() {
+  return false
+}
+
 const FEATURED_SLOT_PRIORITY: readonly string[] = [
   "gardapati",
   "motosense",
@@ -73,10 +89,15 @@ function ProjectCard3D({
   const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 })
   const [hovered, setHovered] = React.useState(false)
   const shouldReduceMotion = useReducedMotion()
+  const isCoarsePointer = React.useSyncExternalStore(
+    subscribeCoarsePointer,
+    getCoarseSnapshot,
+    getCoarseServerSnapshot
+  )
 
   const handleMouseMove = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (shouldReduceMotion) return
+      if (shouldReduceMotion || isCoarsePointer) return
       const rect = e.currentTarget.getBoundingClientRect()
       const x = (e.clientX - rect.left) / rect.width - 0.5
       const y = (e.clientY - rect.top) / rect.height - 0.5
@@ -87,7 +108,7 @@ function ProjectCard3D({
         rafRef.current = null
       })
     },
-    [shouldReduceMotion]
+    [shouldReduceMotion, isCoarsePointer]
   )
 
   const handleMouseEnter = React.useCallback(() => {
@@ -113,14 +134,14 @@ function ProjectCard3D({
   }, [])
 
   const watermarkNumber = String(index + 1).padStart(2, "0")
-  const rotateX = shouldReduceMotion ? 0 : mousePos.y * -14
-  const rotateY = shouldReduceMotion ? 0 : mousePos.x * 14
+  const rotateX = shouldReduceMotion || isCoarsePointer ? 0 : mousePos.y * -14
+  const rotateY = shouldReduceMotion || isCoarsePointer ? 0 : mousePos.x * 14
 
   return (
     <div
       ref={cardRef}
       className={cn("relative group", colSpan)}
-      style={{ perspective: "1200px" }}
+      style={{ perspective: isCoarsePointer ? "none" : "1200px" }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -133,13 +154,13 @@ function ProjectCard3D({
 
       <motion.div
         className={cn(
-          "relative flex h-full flex-col justify-between overflow-hidden rounded-xl border border-border bg-card p-7 md:p-9 lg:p-10 text-card-foreground transition-all duration-300 ease-out group-hover:border-primary/50 group-hover:bg-primary/[0.02] dark:group-hover:bg-primary/[0.04]",
+          "relative flex h-full flex-col justify-between overflow-hidden rounded-xl border border-border bg-card p-5 sm:p-6 md:p-8 lg:p-10 text-card-foreground transition-all duration-300 ease-out group-hover:border-primary/50 group-hover:bg-primary/[0.02] dark:group-hover:bg-primary/[0.04]",
           minHeight
         )}
         animate={{
           rotateX,
           rotateY,
-          z: !shouldReduceMotion && hovered ? 12 : 0,
+          z: !shouldReduceMotion && !isCoarsePointer && hovered ? 12 : 0,
         }}
         transition={{
           type: "spring",
@@ -148,14 +169,14 @@ function ProjectCard3D({
           mass: 0.6,
         }}
         style={{
-          transformStyle: "preserve-3d",
+          transformStyle: isCoarsePointer ? "flat" : "preserve-3d",
         }}
       >
         {/* Background Visual Layer */}
         {project.thumbnail ? (
           <div
             className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl"
-            style={{ transform: "translateZ(-8px)" }}
+            style={{ transform: isCoarsePointer ? undefined : "translateZ(-8px)" }}
           >
             <Image
               src={project.thumbnail}
@@ -168,8 +189,8 @@ function ProjectCard3D({
           </div>
         ) : null}
 
-        {/* Specular Light Reflection Follower */}
-        {!shouldReduceMotion && (
+        {/* Specular Light Reflection Follower (Fine pointer desktop only) */}
+        {!shouldReduceMotion && !isCoarsePointer && (
           <motion.div
             className="pointer-events-none absolute -inset-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             style={{
@@ -183,8 +204,8 @@ function ProjectCard3D({
 
         {/* Top-Right Clean Arrow */}
         <span
-          className="absolute top-6 right-6 z-20 font-mono text-base text-muted-foreground transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary md:top-8 md:right-8"
-          style={{ transform: "translateZ(20px)" }}
+          className="absolute top-5 right-5 z-20 font-mono text-base text-muted-foreground transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary md:top-8 md:right-8"
+          style={{ transform: isCoarsePointer ? undefined : "translateZ(20px)" }}
           aria-hidden="true"
         >
           ↗
@@ -193,17 +214,17 @@ function ProjectCard3D({
         {/* Main Content Stack */}
         <div
           className="relative z-10 flex h-full flex-col justify-between pb-4"
-          style={{ transform: "translateZ(24px)" }}
+          style={{ transform: isCoarsePointer ? undefined : "translateZ(24px)" }}
         >
           <div>
-            <h3 className="pr-8 font-heading text-xl font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary md:pr-10 md:text-2xl">
+            <h3 className="pr-8 font-heading text-lg sm:text-xl md:text-2xl font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary md:pr-10">
               {project.title}
             </h3>
 
             {project.summary && (
               <p
                 className={cn(
-                  "mt-3 font-sans text-sm leading-relaxed text-muted-foreground",
+                  "mt-2.5 sm:mt-3 font-sans text-xs sm:text-sm leading-relaxed text-muted-foreground",
                   isHero ? "max-w-2xl lg:max-w-3xl" : "max-w-md lg:max-w-lg"
                 )}
               >
@@ -215,8 +236,8 @@ function ProjectCard3D({
 
         {/* Bottom-Right Number Watermark */}
         <div
-          className="pointer-events-none absolute -right-2 -bottom-3 z-0 select-none font-mono text-7xl font-black leading-none tracking-tighter text-foreground/[0.04] transition-all duration-300 ease-out group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:text-primary/20 md:-right-3 md:-bottom-5 md:text-9xl dark:text-primary/10 dark:group-hover:text-primary/30"
-          style={{ transform: "translateZ(6px)" }}
+          className="pointer-events-none absolute -right-2 -bottom-3 z-0 select-none font-mono text-6xl sm:text-7xl font-black leading-none tracking-tighter text-foreground/[0.04] transition-all duration-300 ease-out group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:text-primary/20 md:-right-3 md:-bottom-5 md:text-9xl dark:text-primary/10 dark:group-hover:text-primary/30"
+          style={{ transform: isCoarsePointer ? undefined : "translateZ(6px)" }}
           aria-hidden="true"
         >
           {watermarkNumber}

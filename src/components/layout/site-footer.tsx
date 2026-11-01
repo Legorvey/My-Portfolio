@@ -95,7 +95,7 @@ export function SiteFooter({
   return (
     <footer
       className={cn(
-        "relative w-full overflow-hidden border-t border-border bg-background px-6 pt-12 pb-16 sm:px-8 sm:pt-16 sm:pb-20 lg:pt-20 lg:pb-24 dark:bg-neutral-950",
+        "relative w-full overflow-hidden border-t border-border bg-background px-4 pt-12 pb-16 sm:px-8 sm:pt-16 sm:pb-20 lg:pt-20 lg:pb-24 dark:bg-neutral-950",
         className
       )}
     >
@@ -128,7 +128,7 @@ export function SiteFooter({
 
         <nav
           aria-label="Footer Navigation"
-          className="mt-8 grid grid-cols-2 items-start gap-8 sm:mt-0 sm:grid-cols-4 sm:gap-10"
+          className="mt-8 grid grid-cols-2 items-start gap-x-4 gap-y-8 sm:mt-0 sm:grid-cols-4 sm:gap-10"
         >
           {columns.map((col, ci) => (
             <motion.div
@@ -163,7 +163,7 @@ export function SiteFooter({
                     <li key={li} className="list-none">
                       {isExternal ? (
                         <a
-                          className="inline-flex items-center gap-1 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="inline-flex items-center gap-1 py-1.5 -my-1 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                           href={link.url}
                           target={isHttp || isPdf ? "_blank" : undefined}
                           rel={
@@ -176,7 +176,7 @@ export function SiteFooter({
                         </a>
                       ) : (
                         <Link
-                          className="inline-flex items-center gap-1 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          className="inline-flex items-center gap-1 py-1.5 -my-1 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                           href={link.url}
                         >
                           {linkContent}
@@ -204,12 +204,12 @@ export function SiteFooter({
           textClassName="font-bold tracking-tight leading-none text-center select-none"
           baseClassName="text-transparent dark:[--stroke:#d4d4d4] [--stroke:#525252]"
           baseStyle={{
-            fontSize: "clamp(3rem, 14vw, 11rem)",
+            fontSize: "clamp(1.35rem, 11vw, 11rem)",
             WebkitTextStroke: "1.5px var(--stroke, #525252)",
           }}
           spotlightClassName="text-foreground dark:text-neutral-100"
           spotlightStyle={{
-            fontSize: "clamp(3rem, 14vw, 11rem)",
+            fontSize: "clamp(1.35rem, 11vw, 11rem)",
             WebkitTextStroke: "0px transparent",
           }}
           spotlightSize={240}

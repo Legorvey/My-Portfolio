@@ -163,7 +163,7 @@ export async function PressCard({
               ? "noopener noreferrer"
               : undefined
           }
-          className="mt-4 inline-flex items-center font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline"
+          className="mt-4 inline-flex items-center py-1.5 -my-1 font-mono text-xs font-semibold text-primary underline-offset-4 hover:underline"
         >
           {ctaLabel}
         </a>
@@ -258,7 +258,7 @@ export const mdxComponents = {
   ),
   code: (props: React.ComponentProps<"code">) => (
     <code
-      className="rounded-sm border border-border bg-surface px-1 py-0 font-mono text-xs text-foreground"
+      className="rounded-sm border border-border bg-surface px-1 py-0 font-mono text-xs text-foreground break-words [word-break:break-word]"
       {...props}
     />
   ),
@@ -281,7 +281,7 @@ export const mdxComponents = {
         href={safeHref}
         target={isExternal ? "_blank" : undefined}
         rel={isExternal ? "noopener noreferrer" : undefined}
-        className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring py-0.5 inline-block"
       />
     )
   },
