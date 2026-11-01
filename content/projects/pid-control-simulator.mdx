@@ -1,0 +1,51 @@
+---
+title: "PID Control Simulator"
+slug: "pid-control-simulator"
+type: "software"
+summary: "Browser-based software-in-the-loop simulator for testing PID controllers in real time."
+role: "Developer"
+start: "2026-05"
+end: "2026-05"
+tools: ["Next.js", "TypeScript", "Tailwind CSS", "Plotly.js", "Radix UI", "cmdk"]
+tags: ["Control Systems", "Simulation"]
+links:
+  - label: "GitHub"
+    url: "https://github.com/Legorvey/SITL-PID-Simulator"
+featured: true
+---
+
+## Overview
+
+The PID Control Simulator is a software-in-the-loop environment for testing closed-loop feedback systems in the browser. It simulates a plant, runs a PID controller against it, and plots the response live. It has a multi-pane editor for experimenting and a separate learning section for people new to PID control.
+
+## What it includes
+
+- **Editor:** a central plot editor with a properties panel for configuring the system.
+- **Learning section:** PID concepts, the underlying math, tuning heuristics, and real-world applications.
+- **Command palette:** `Cmd/Ctrl + K` opens a palette (cmdk) for overriding parameters and running auto-tuning.
+- **Live telemetry:** parameters can be changed continuously without resetting the timeline.
+
+## How it works
+
+- **Plant model:** first-order Euler integration in a 100 Hz discrete loop, computing the plant's momentum and position.
+- **Controller:** a full PID algorithm with actuator saturation clamping and integrator anti-windup.
+- **Rendering:** Plotly.js with WebGL acceleration, with updates scheduled through `requestAnimationFrame`.
+- **Interface:** monochrome, with 1px borders and no shadows. Inter for labels and Geist Mono for telemetry data.
+
+## Limitations
+
+- Loop timing depends on the JavaScript engine and browser frame intervals. It is a heuristic simulation, not a real-time operating system.
+- First-order Euler integration favors browser performance. Over long runs, expect small drift compared with a fourth-order Runge-Kutta solver.
+
+## Run it locally
+
+```bash
+git clone https://github.com/Legorvey/SITL-PID-Simulator.git
+cd SITL-PID-Simulator
+npm install
+npm run dev
+```
+
+Then open http://localhost:3000.
+
+{/* TODO: add a screenshot or short recording of the simulator, and a link to the live demo if it is deployed. */}
