@@ -186,7 +186,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       { label: "GitHub ↗", href: "https://github.com/Legorvey", isExternal: true },
     ],
     logo: {
-      src: "/images/experience/technologist-logo.svg",
+      src: "/logo.svg",
       text: "TECH",
       subtext: "SYS",
       variant: "secondary",
