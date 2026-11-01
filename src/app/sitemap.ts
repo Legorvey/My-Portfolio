@@ -1,6 +1,7 @@
 import fs from "node:fs"
 import path from "node:path"
 import type { MetadataRoute } from "next"
+import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import { getProjects } from "@/lib/content"
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,29 +10,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const contentDir = path.join(process.cwd(), "content", "projects")
 
   let latestDate = new Date("2025-01-01")
+  const caseStudiesEnabled = areCaseStudiesEnabled()
 
-  const projectEntries: MetadataRoute.Sitemap = projects.map((project) => {
-    const filePath = path.join(contentDir, `${project.slug}.mdx`)
-    let lastModified = new Date()
-    try {
-      if (fs.existsSync(filePath)) {
-        lastModified = fs.statSync(filePath).mtime
-      }
-    } catch {
-      lastModified = new Date()
-    }
+  const projectEntries: MetadataRoute.Sitemap = caseStudiesEnabled
+    ? projects.map((project) => {
+        const filePath = path.join(contentDir, `${project.slug}.mdx`)
+        let lastModified = new Date()
+        try {
+          if (fs.existsSync(filePath)) {
+            lastModified = fs.statSync(filePath).mtime
+          }
+        } catch {
+          lastModified = new Date()
+        }
 
-    if (lastModified > latestDate) {
-      latestDate = lastModified
-    }
+        if (lastModified > latestDate) {
+          latestDate = lastModified
+        }
 
-    return {
-      url: `${baseUrl}/projects/${project.slug}`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    }
-  })
+        return {
+          url: `${baseUrl}/projects/${project.slug}`,
+          lastModified,
+          changeFrequency: "monthly",
+          priority: 0.8,
+        }
+      })
+    : []
 
   return [
     {

@@ -4,6 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, useReducedMotion } from "motion/react"
+import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import type { ProjectFrontmatter } from "@/lib/content"
 import { cn } from "@/lib/utils"
 
@@ -84,6 +85,7 @@ function ProjectCard3D({
   minHeight,
   isHero,
 }: ProjectCard3DProps) {
+  const caseStudiesEnabled = areCaseStudiesEnabled()
   const cardRef = React.useRef<HTMLDivElement>(null)
   const rafRef = React.useRef<number | null>(null)
   const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 })
@@ -146,11 +148,13 @@ function ProjectCard3D({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Link
-        href={`/projects/${project.slug}`}
-        className="absolute inset-0 z-30 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        aria-label={`View ${project.title}`}
-      />
+      {caseStudiesEnabled && (
+        <Link
+          href={`/projects/${project.slug}`}
+          className="absolute inset-0 z-30 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          aria-label={`View ${project.title}`}
+        />
+      )}
 
       <motion.div
         className={cn(
@@ -203,13 +207,15 @@ function ProjectCard3D({
         )}
 
         {/* Top-Right Clean Arrow */}
-        <span
-          className="absolute top-5 right-5 z-20 font-mono text-base text-muted-foreground transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary md:top-8 md:right-8"
-          style={{ transform: isCoarsePointer ? undefined : "translateZ(20px)" }}
-          aria-hidden="true"
-        >
-          ↗
-        </span>
+        {caseStudiesEnabled && (
+          <span
+            className="absolute top-5 right-5 z-20 font-mono text-base text-muted-foreground transition-all duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary md:top-8 md:right-8"
+            style={{ transform: isCoarsePointer ? undefined : "translateZ(20px)" }}
+            aria-hidden="true"
+          >
+            ↗
+          </span>
+        )}
 
         {/* Main Content Stack */}
         <div

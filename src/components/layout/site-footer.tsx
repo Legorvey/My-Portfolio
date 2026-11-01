@@ -3,6 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { motion, type Variants } from "motion/react"
+import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import { cn } from "@/lib/utils"
 import { TextSpotlight } from "@/components/ui/text-spotlight"
 
@@ -90,6 +91,7 @@ export function SiteFooter({
   copyright = "© 2026 Aditya Cakti Chandrasa",
   className,
 }: FooterProps) {
+  const caseStudiesEnabled = areCaseStudiesEnabled()
   const displayOutline = outlineText ?? "ADITYA CAKTI CHANDRASA"
 
   return (
@@ -174,6 +176,16 @@ export function SiteFooter({
                         >
                           {linkContent}
                         </a>
+                      ) : !caseStudiesEnabled &&
+                        link.url.startsWith("/projects/") &&
+                        link.url !== "/projects" ? (
+                        <Link
+                          className="inline-flex items-center gap-1 py-1.5 -my-1 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          href="/projects"
+                          title="View in Project Archive"
+                        >
+                          {linkContent}
+                        </Link>
                       ) : (
                         <Link
                           className="inline-flex items-center gap-1 py-1.5 -my-1 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

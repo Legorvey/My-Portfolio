@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import { Container } from "@/components/layout/container"
 import { ProjectsTable } from "@/components/projects/projects-table"
 import { TextSpotlight } from "@/components/ui/text-spotlight"
+import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import { getProjects, type ProjectFrontmatter } from "@/lib/content"
 
 export const metadata: Metadata = {
@@ -79,7 +80,9 @@ export default function ProjectsPage() {
           itemListElement: projects.map((project, index) => ({
             "@type": "ListItem",
             position: index + 1,
-            url: `https://adityac.dev/projects/${project.slug}`,
+            url: areCaseStudiesEnabled()
+              ? `https://adityac.dev/projects/${project.slug}`
+              : `https://adityac.dev/projects`,
             name: project.title,
             description: project.summary,
           })),

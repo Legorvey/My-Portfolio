@@ -59,6 +59,10 @@ yarn-error.log*
 # local agent artifacts
 .antigravity/
 
+# local MVP case study lockdown documentation
+CASE_STUDIES_LOCKDOWN.md
+docs/CASE_STUDIES_LOCKDOWN.md
+
 # env files (can opt-in for committing if needed)
 .env*
 !.env.example

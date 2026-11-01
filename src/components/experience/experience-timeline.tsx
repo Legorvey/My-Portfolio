@@ -3,6 +3,7 @@
 import Image from "next/image"
 import * as React from "react"
 import { Code, Share2, Zap } from "lucide-react"
+import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import { cn } from "@/lib/utils"
 import {
   WorkflowBuilderCard,
@@ -207,6 +208,19 @@ interface ExperienceTimelineProps {
 export function ExperienceTimeline({
   items = EXPERIENCES,
 }: ExperienceTimelineProps) {
+  const caseStudiesEnabled = areCaseStudiesEnabled()
+
+  const processedItems = React.useMemo(() => {
+    if (caseStudiesEnabled) return items
+    return items.map((item) => {
+      if (!item.links) return item
+      const filteredLinks = item.links.filter(
+        (link) => !link.href.startsWith("/projects/") || link.href === "/projects"
+      )
+      return { ...item, links: filteredLinks }
+    })
+  }, [items, caseStudiesEnabled])
+
   const containerRef = React.useRef<HTMLDivElement>(null)
   const itemRefs = React.useRef<(HTMLDivElement | null)[]>([])
   const firstBadgeRef = React.useRef<HTMLDivElement | null>(null)
@@ -281,7 +295,7 @@ export function ExperienceTimeline({
       resizeObserver.disconnect()
       cancelAnimationFrame(animationFrameId)
     }
-  }, [items.length])
+  }, [processedItems.length])
 
   return (
     <div ref={containerRef} className="relative w-full py-6">
@@ -310,11 +324,11 @@ export function ExperienceTimeline({
       )}
 
       <div className="space-y-28 md:space-y-40">
-        {items.map((item, index) => {
+        {processedItems.map((item, index) => {
           const isOdd = index % 2 === 0 // 0, 2 (1st and 3rd): Card on left, Company on right
           const isActive = activeIndices.includes(index)
           const isFirst = index === 0
-          const isLast = index === items.length - 1
+          const isLast = index === processedItems.length - 1
 
           return (
             <div

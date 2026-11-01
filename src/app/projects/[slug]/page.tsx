@@ -9,6 +9,7 @@ import { Container } from "@/components/layout/container"
 import { mdxComponents } from "@/components/mdx/mdx-components"
 import { Badge } from "@/components/ui/badge"
 import { TextSpotlight } from "@/components/ui/text-spotlight"
+import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import { getProject, getProjects } from "@/lib/content"
 import { getPublicImageDimensions } from "@/lib/image-dimensions"
 import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
@@ -26,6 +27,12 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
+  if (!areCaseStudiesEnabled()) {
+    return {
+      title: "404 | Project Not Found",
+    }
+  }
+
   const { slug } = await params
   const project = getProject(slug)
 
@@ -74,6 +81,10 @@ export async function generateMetadata({
 }
 
 export default function ProjectDetailPage({ params }: ProjectPageProps) {
+  if (!areCaseStudiesEnabled()) {
+    notFound()
+  }
+
   return (
     <Suspense
       fallback={
@@ -90,6 +101,10 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
 }
 
 async function ProjectDetail({ params }: ProjectPageProps) {
+  if (!areCaseStudiesEnabled()) {
+    notFound()
+  }
+
   const { slug } = await params
   const project = getProject(slug)
 

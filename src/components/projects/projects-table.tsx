@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import type { ProjectFrontmatter, ProjectType } from "@/lib/content"
 import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
 
@@ -41,6 +42,7 @@ interface ProjectsTableProps {
 }
 
 export function ProjectsTable({ projects }: ProjectsTableProps) {
+  const caseStudiesEnabled = areCaseStudiesEnabled()
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -191,12 +193,18 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
                 {filteredAndSorted.map((project) => (
                   <TableRow key={project.slug}>
                     <TableCell className="max-w-xs">
-                      <Link
-                        href={`/projects/${project.slug}`}
-                        className="font-sans text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      >
-                        {project.title}
-                      </Link>
+                      {caseStudiesEnabled ? (
+                        <Link
+                          href={`/projects/${project.slug}`}
+                          className="font-sans text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        >
+                          {project.title}
+                        </Link>
+                      ) : (
+                        <span className="font-sans text-sm font-medium text-foreground">
+                          {project.title}
+                        </span>
+                      )}
                       {project.summary && (
                         <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
                           {project.summary}
@@ -249,15 +257,21 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
             {filteredAndSorted.map((project) => (
               <article key={project.slug} className="space-y-3 p-4">
                 <div className="flex items-start justify-between gap-3">
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    className="font-sans text-sm font-semibold text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring inline-flex items-center gap-1.5 py-1 -my-1"
-                  >
-                    <span>{project.title}</span>
-                    <span className="text-primary text-xs" aria-hidden="true">
-                      ↗
+                  {caseStudiesEnabled ? (
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      className="font-sans text-sm font-semibold text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring inline-flex items-center gap-1.5 py-1 -my-1"
+                    >
+                      <span>{project.title}</span>
+                      <span className="text-primary text-xs" aria-hidden="true">
+                        ↗
+                      </span>
+                    </Link>
+                  ) : (
+                    <span className="font-sans text-sm font-semibold text-foreground inline-flex items-center py-1 -my-1">
+                      {project.title}
                     </span>
-                  </Link>
+                  )}
                   <Badge variant="default" className="shrink-0">
                     {formatProjectTypeLabel(project.type)}
                   </Badge>
