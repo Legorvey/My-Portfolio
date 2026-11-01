@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:ci": "vitest run --passWithNoTests --reporter=default --reporter=github-actions"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
