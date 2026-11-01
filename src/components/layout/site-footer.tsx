@@ -33,11 +33,11 @@ const defaultColumns: FooterColumn[] = [
   {
     heading: "Selected Projects",
     links: [
-      { text: "AquaFeeder", url: "/projects/aquafeeder" },
-      { text: "Gardapati Robot", url: "/projects/gardapati" },
-      { text: "Futura Megaproject", url: "/projects/futura" },
-      { text: "MotoSense Telemetry", url: "/projects/motosense" },
-      { text: "Matcha Craft", url: "/projects/matcha-tasikmalaya" },
+      { text: "Gardapati Safety System", url: "/projects/gardapati" },
+      { text: "MOTOSENSE Vibration Monitor", url: "/projects/motosense" },
+      { text: "AquaFeeder IoT", url: "/projects/aquafeeder" },
+      { text: "PID Control Simulator", url: "/projects/pid-control-simulator" },
+      { text: "PLN Thermography", url: "/projects/pln-thermography-internship" },
     ],
   },
   {
@@ -45,17 +45,26 @@ const defaultColumns: FooterColumn[] = [
     links: [
       { text: "GitHub ↗", url: "https://github.com/Legorvey" },
       { text: "LinkedIn ↗", url: "https://linkedin.com/in/adityachandrasa" },
-      { text: "Email Inquiries ↗", url: "mailto:aditchandrasa1@gmail.com" },
-      { text: "Instagram ↗", url: "https://instagram.com/hmte_unpad" },
+      {
+        text: "Email Inquiries ↗",
+        url: "mailto:aditchandrasa1@gmail.com?subject=Portfolio%20Inquiry",
+      },
+      { text: "Instagram ↗", url: "https://instagram.com/hmteunpad" },
     ],
   },
   {
     heading: "Location & Focus",
     links: [
-      { text: "Bandung / Tasik, ID", url: "/#hero" },
-      { text: "UTC+7 Timezone", url: "/#hero" },
-      { text: "Padjadjaran Univ ↗", url: "https://www.unpad.ac.id" },
-      { text: "Open to Roles", url: "mailto:aditchandrasa1@gmail.com" },
+      {
+        text: "Bandung, Indonesia ↗",
+        url: "https://maps.google.com/?q=Bandung,Indonesia",
+      },
+      { text: "UTC+7 Timezone ↗", url: "https://time.is/UTC+7" },
+      { text: "Padjadjaran University ↗", url: "https://www.unpad.ac.id" },
+      {
+        text: "Open to Roles ↗",
+        url: "mailto:aditchandrasa1@gmail.com?subject=Role%20Inquiry%20-%20Aditya%20Chandrasa",
+      },
     ],
   },
 ]
@@ -100,6 +109,7 @@ export function SiteFooter({
         <motion.div variants={itemVariants} className="space-y-1.5">
           <div className="mr-0 mb-3 md:mr-4 md:flex">
             <Link
+              aria-label="Aditya Chandrasa - Home"
               className="relative z-20 flex items-center space-x-2 py-0.5 text-sm font-normal text-foreground transition-colors hover:text-primary"
               href="/"
             >
@@ -108,11 +118,11 @@ export function SiteFooter({
               </span>
             </Link>
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-xs text-muted-foreground" suppressHydrationWarning>
             {copyright}
           </div>
-          <div className="text-xs text-muted-foreground/80">
-            All right reserved.
+          <div className="text-xs text-muted-foreground/80" suppressHydrationWarning>
+            All rights reserved.
           </div>
         </motion.div>
 
@@ -131,8 +141,23 @@ export function SiteFooter({
               </p>
               <ul className="list-none space-y-2.5 font-sans text-sm text-muted-foreground">
                 {col.links.map((link, li) => {
-                  const isExternal =
-                    link.url.startsWith("http") || link.url.startsWith("mailto:")
+                  const isPdf = link.url.endsWith(".pdf")
+                  const isHttp = link.url.startsWith("http")
+                  const isMail = link.url.startsWith("mailto:")
+                  const isExternal = isHttp || isMail || isPdf
+                  const hasArrow = link.text.endsWith("↗")
+                  const label = hasArrow ? link.text.slice(0, -1).trim() : link.text
+
+                  const linkContent = (
+                    <>
+                      <span>{label}</span>
+                      {hasArrow && (
+                        <span aria-hidden="true" className="text-primary/70">
+                          ↗
+                        </span>
+                      )}
+                    </>
+                  )
 
                   return (
                     <li key={li} className="list-none">
@@ -140,23 +165,21 @@ export function SiteFooter({
                         <a
                           className="inline-flex items-center gap-1 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                           href={link.url}
-                          target={
-                            link.url.startsWith("http") ? "_blank" : undefined
-                          }
+                          target={isHttp || isPdf ? "_blank" : undefined}
                           rel={
-                            link.url.startsWith("http")
+                            isHttp || isPdf
                               ? "noopener noreferrer"
                               : undefined
                           }
                         >
-                          {link.text}
+                          {linkContent}
                         </a>
                       ) : (
                         <Link
                           className="inline-flex items-center gap-1 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                           href={link.url}
                         >
-                          {link.text}
+                          {linkContent}
                         </Link>
                       )}
                     </li>
