@@ -120,7 +120,7 @@ export const EXPERIENCES: readonly ExperienceItem[] = [
       { label: "Company Profile ↗", href: "https://www.instagram.com/ultg_bandungbarat/?hl=en", isExternal: true },
     ],
     logo: {
-      src: "/images/experience/pln-logo.svg",
+      src: "/images/experience/pln.svg",
       text: "PLN",
       subtext: "ULTG",
       variant: "primary",
