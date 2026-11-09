@@ -34,19 +34,65 @@ export const ProjectLinkSchema = z.object({
 
 export type ProjectLink = z.infer<typeof ProjectLinkSchema>
 
+export const RESOURCE_KINDS = [
+  "repository",
+  "documentation",
+  "photos",
+  "diagram",
+  "report",
+  "dataset",
+  "presentation",
+  "demo",
+  "download",
+  "other",
+] as const
+
+export const ResourceKindSchema = z.enum(RESOURCE_KINDS)
+export type ResourceKind = z.infer<typeof ResourceKindSchema>
+
+export const ProjectResourceSchema = z.object({
+  label: z.string().trim().min(1),
+  url: z
+    .string()
+    .trim()
+    .url()
+    .refine((val) => /^https?:\/\//i.test(val), {
+      message: "Project resource must use HTTP or HTTPS protocol",
+    }),
+  kind: ResourceKindSchema.default("other"),
+  description: z.string().trim().max(180).optional(),
+  format: z.string().trim().max(40).optional(),
+})
+
+export type ProjectResource = z.infer<typeof ProjectResourceSchema>
+
+export const ProjectCoverSchema = z.object({
+  src: z.string().trim().min(1),
+  alt: z.string().trim().min(1),
+  caption: z.string().trim().optional(),
+  fit: z.enum(["cover", "contain"]).default("cover"),
+})
+
+export type ProjectCover = z.infer<typeof ProjectCoverSchema>
+
 export const ProjectFrontmatterSchema = z.object({
   title: z.string().min(1),
   slug: z.string().min(1).regex(/^[a-z0-9-]+$/),
   type: ProjectTypeSchema,
+  subtitle: z.string().trim().min(1).optional(),
   summary: z.string().optional(),
+  outcome: z.string().trim().min(1).optional(),
   role: z.string().optional(),
   start: YearMonthSchema.optional(),
   end: EndDateSchema.optional(),
+  updated: YearMonthSchema.optional(),
   status: z.string().optional(),
   tools: z.array(z.string().min(1)).optional(),
   tags: z.array(z.string().min(1)).optional(),
   links: z.array(ProjectLinkSchema).optional(),
+  resources: z.array(ProjectResourceSchema).optional(),
   thumbnail: z.string().min(1).optional(),
+  cover: ProjectCoverSchema.optional(),
   featured: z.boolean().default(false),
   order: z.number().optional(),
 })
