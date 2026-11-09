@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import * as React from "react"
+import { SearchIcon, XIcon } from "lucide-react"
 import { StaggerIn } from "@/components/motion/stagger-in"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -52,6 +53,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
     ? queryType
     : "all"
 
+  const [searchQuery, setSearchQuery] = React.useState("")
   const [sortDirection, setSortDirection] =
     React.useState<SortDirection>("desc")
 
@@ -70,10 +72,28 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
   }, [projects])
 
   const filteredAndSorted = React.useMemo(() => {
-    const filtered =
+    const byType =
       selectedType === "all"
         ? projects
         : projects.filter((project) => project.type === selectedType)
+
+    const normalizedQuery = searchQuery.trim().toLowerCase()
+    const filtered = normalizedQuery
+      ? byType.filter((project) => {
+          const searchable = [
+            project.title,
+            project.subtitle,
+            project.summary,
+            project.role,
+            ...(project.tools ?? []),
+            ...(project.tags ?? []),
+          ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase()
+          return searchable.includes(normalizedQuery)
+        })
+      : byType
 
     return [...filtered].sort((a, b) => {
       if (a.start && b.start) {
@@ -88,7 +108,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
       if (!a.start && b.start) return 1
       return a.slug.localeCompare(b.slug)
     })
-  }, [projects, selectedType, sortDirection])
+  }, [projects, selectedType, searchQuery, sortDirection])
 
   function handleFilterChange(groupValue: string[]) {
     const val = groupValue[0]
@@ -111,53 +131,106 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
     setSortDirection((prev) => (prev === "desc" ? "asc" : "desc"))
   }
 
+  function resetFilters() {
+    setSearchQuery("")
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete("type")
+    const queryString = params.toString()
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname, {
+      scroll: false,
+    })
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 rounded-sm border border-border bg-surface p-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex w-full items-center gap-2 overflow-x-auto pb-1 sm:w-auto sm:overflow-visible sm:pb-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <ToggleGroup
-            variant="outline"
-            size="sm"
-            value={[selectedType]}
-            onValueChange={handleFilterChange}
-            aria-label="Filter projects by type"
-            className="flex-nowrap sm:flex-wrap"
-          >
-            <ToggleGroupItem value="all" className="h-8 min-h-[36px] px-2.5 sm:h-7 sm:min-h-0 sm:px-2">
-              All ({projects.length})
-            </ToggleGroupItem>
-            {typeCounts.map((option) => (
-              <ToggleGroupItem
-                key={option.value}
-                value={option.value}
-                className="h-8 min-h-[36px] px-2.5 sm:h-7 sm:min-h-0 sm:px-2"
-              >
-                {option.label} ({option.count})
+      <div className="flex flex-col gap-3 rounded-sm border border-border bg-surface p-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex w-full items-center gap-2 overflow-x-auto pb-1 sm:w-auto sm:overflow-visible sm:pb-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <ToggleGroup
+              variant="outline"
+              size="sm"
+              value={[selectedType]}
+              onValueChange={handleFilterChange}
+              aria-label="Filter projects by type"
+              className="flex-nowrap sm:flex-wrap"
+            >
+              <ToggleGroupItem value="all" className="h-8 min-h-[36px] px-2.5 sm:h-7 sm:min-h-0 sm:px-2">
+                All ({projects.length})
               </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
+              {typeCounts.map((option) => (
+                <ToggleGroupItem
+                  key={option.value}
+                  value={option.value}
+                  className="h-8 min-h-[36px] px-2.5 sm:h-7 sm:min-h-0 sm:px-2"
+                >
+                  {option.label} ({option.count})
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 sm:justify-end shrink-0">
+            <span className="font-mono text-xs text-muted-foreground">
+              {filteredAndSorted.length} of {projects.length} entries
+            </span>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={toggleSortDirection}
+              className="h-8 min-h-[36px] sm:h-7 sm:min-h-0"
+              aria-label={`Sort by period (${sortDirection === "desc" ? "newest first" : "oldest first"})`}
+            >
+              {sortDirection === "desc" ? "Newest ↓" : "Oldest ↑"}
+            </Button>
+          </div>
         </div>
 
-        <div className="flex items-center justify-between gap-3 sm:justify-end shrink-0">
-          <span className="font-mono text-xs text-muted-foreground">
-            {filteredAndSorted.length} of {projects.length} entries
-          </span>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={toggleSortDirection}
-            className="h-8 min-h-[36px] sm:h-7 sm:min-h-0"
-            aria-label={`Sort by period (${sortDirection === "desc" ? "newest first" : "oldest first"})`}
-          >
-            {sortDirection === "desc" ? "Newest ↓" : "Oldest ↑"}
-          </Button>
+        {/* Keyword Search Input */}
+        <div className="relative flex items-center">
+          <SearchIcon
+            className="pointer-events-none absolute left-2.5 size-3.5 text-muted-foreground"
+            aria-hidden="true"
+          />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search projects by title, role, tool, or keyword..."
+            aria-label="Search projects by keyword"
+            className="h-8 w-full rounded-sm border border-border bg-background pl-8 pr-8 font-sans text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              aria-label="Clear search query"
+              className="absolute right-1.5 inline-flex size-6 items-center justify-center rounded-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <XIcon className="size-3.5" aria-hidden="true" />
+            </button>
+          )}
         </div>
       </div>
 
       {filteredAndSorted.length === 0 ? (
-        <div className="rounded-sm border border-border bg-surface p-6 font-mono text-xs text-muted-foreground">
-          No entries match the selected filter ({formatProjectTypeLabel(selectedType)}).
+        <div
+          role="status"
+          className="flex flex-col items-start justify-between gap-3 rounded-sm border border-border bg-surface p-6 sm:flex-row sm:items-center"
+        >
+          <p className="font-mono text-xs text-muted-foreground">
+            No project dossiers match the current filter
+            {selectedType !== "all" ? ` (${formatProjectTypeLabel(selectedType)})` : ""}
+            {searchQuery.trim() ? ` and search "${searchQuery.trim()}"` : ""}.
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={resetFilters}
+          >
+            Reset filters
+          </Button>
         </div>
       ) : (
         <StaggerIn selector="tbody > tr, article">

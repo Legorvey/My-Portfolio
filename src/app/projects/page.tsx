@@ -10,7 +10,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { TextSpotlight } from "@/components/ui/text-spotlight"
 import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import { getProjects, type ProjectFrontmatter } from "@/lib/content"
 
@@ -121,24 +120,17 @@ export default function ProjectsPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <header className="space-y-2 border-b border-border pb-8">
-        <h1 className="inline-flex">
-          <TextSpotlight
-            textClassName="font-sans text-xl font-semibold tracking-tight sm:text-2xl"
-            baseClassName="text-muted-foreground/45"
-            spotlightClassName="text-foreground"
-            spotlightSize={120}
-            spotlightArea={65}
-            animateOnPhone={true}
-          >
-            <span>Project Archive</span>
-            <span className="text-primary">.</span>
-          </TextSpotlight>
-        </h1>
-        <p className="max-w-[72ch] text-base text-muted-foreground">
-          A comprehensive record of hardware systems, software architecture, technical research, and organizational initiatives. Filter by domain or sort chronologically.
-        </p>
-      </header>
+        <header className="space-y-3 border-b border-border pb-8">
+          <p className="font-mono text-xs font-semibold uppercase tracking-wider text-primary">
+            Engineering Dossiers & Archive
+          </p>
+          <h1 className="font-sans text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+            Project Archive<span className="text-primary">.</span>
+          </h1>
+          <p className="max-w-[72ch] text-base text-muted-foreground">
+            Projects, engineering notes, and original documentation across hardware systems, software architecture, technical research, and organizational initiatives.
+          </p>
+        </header>
 
       <section aria-label="Projects index">
         <Suspense
