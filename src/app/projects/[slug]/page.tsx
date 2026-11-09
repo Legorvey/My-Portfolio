@@ -1,25 +1,22 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import { notFound } from "next/navigation"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import { Suspense } from "react"
 import remarkGfm from "remark-gfm"
 import { Container } from "@/components/layout/container"
-import { mdxComponents } from "@/components/mdx/mdx-components"
-import { Badge } from "@/components/ui/badge"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { TextSpotlight } from "@/components/ui/text-spotlight"
+import { createMdxComponents, sanitizeUrl } from "@/components/mdx/mdx-components"
+import { ProjectDossierHeader } from "@/components/projects/project-dossier-header"
+import { ProjectResources } from "@/components/projects/project-resources"
+import { ProjectTOC } from "@/components/projects/project-toc"
+import { DossierFooter } from "@/components/projects/related-projects"
 import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
-import { getProject, getProjects } from "@/lib/content"
+import { getProject, getProjects, type ProjectFrontmatter } from "@/lib/content"
 import { getPublicImageDimensions } from "@/lib/image-dimensions"
-import { formatPeriod, formatProjectTypeLabel } from "@/lib/utils"
+import { extractTocFromMdx } from "@/lib/project-toc"
+import {
+  resolveProjectResources,
+  selectPrimaryHeaderActions,
+} from "@/lib/resource-utils"
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>
@@ -97,7 +94,7 @@ export default function ProjectDetailPage({ params }: ProjectPageProps) {
       fallback={
         <Container className="pt-20 sm:pt-24 pb-12 sm:pb-16">
           <p className="font-mono text-xs text-muted-foreground">
-            Loading project...
+            Loading project dossier...
           </p>
         </Container>
       }
@@ -119,9 +116,59 @@ async function ProjectDetail({ params }: ProjectPageProps) {
     notFound()
   }
 
-  const thumbnailDims = project.thumbnail
-    ? await getPublicImageDimensions(project.thumbnail)
-    : null
+  const allProjects: ProjectFrontmatter[] = getProjects().map(
+    ({ content: _content, ...rest }) => {
+      void _content
+      return rest
+    }
+  )
+
+  const resources = resolveProjectResources({
+    resources: project.resources,
+    links: project.links,
+  })
+  const primaryActions = selectPrimaryHeaderActions(resources, 3)
+  const tocItems = extractTocFromMdx(project.content)
+
+  // Resolve optional cover image:
+  // 1. Explicit `project.cover` takes precedence.
+  // 2. Otherwise, if `project.thumbnail` is present AND is not already embedded in the MDX body,
+  //    render it with safe `contain` sizing for technical projects (hardware/software/research)
+  //    and `cover` for event/business photography.
+  const isThumbnailInMdx =
+    project.thumbnail && project.content.includes(project.thumbnail)
+
+  const rawCoverSource = project.cover
+    ? project.cover
+    : project.thumbnail && !isThumbnailInMdx
+      ? {
+          src: project.thumbnail,
+          alt: `${project.title} overview`,
+          fit:
+            project.type === "event" || project.type === "business"
+              ? ("cover" as const)
+              : ("contain" as const),
+        }
+      : null
+
+  const safeCoverSrc = rawCoverSource ? sanitizeUrl(rawCoverSource.src) : "#"
+  const coverDims =
+    rawCoverSource && safeCoverSrc !== "#"
+      ? await getPublicImageDimensions(safeCoverSrc)
+      : null
+
+  const coverImage =
+    rawCoverSource && safeCoverSrc !== "#" && coverDims
+      ? {
+          src: safeCoverSrc,
+          alt: rawCoverSource.alt,
+          caption: rawCoverSource.caption,
+          fit: rawCoverSource.fit,
+          dims: coverDims,
+        }
+      : null
+
+  const hasSidebarContent = resources.length > 0 || tocItems.length >= 2
 
   const projectJsonLd = {
     "@context": "https://schema.org",
@@ -161,10 +208,9 @@ async function ProjectDetail({ params }: ProjectPageProps) {
           ? `https://adityac.dev${project.thumbnail}`
           : "https://adityac.dev/images/web-thumbnail.png",
         datePublished: project.start ? `${project.start}-01` : undefined,
-        dateModified:
-          project.end && project.end !== "present"
-            ? `${project.end}-01`
-            : undefined,
+        dateModified: project.updated
+          ? `${project.updated}-01`
+          : undefined,
         author: {
           "@type": "Person",
           name: "Aditya Chandrasa",
@@ -192,184 +238,69 @@ async function ProjectDetail({ params }: ProjectPageProps) {
             .replace(/>/g, "\\u003e"),
         }}
       />
-      <Container className="space-y-10 pt-20 sm:pt-24 pb-12 sm:pb-16">
-        {/* Semantic Breadcrumbs (Datasheet style) */}
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/projects">Projects</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="max-w-[260px] sm:max-w-none truncate">
-                {project.title}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+      <Container className="space-y-8 sm:space-y-12 pt-20 sm:pt-24 pb-16 sm:pb-20">
+        <ProjectDossierHeader
+          project={project}
+          primaryActions={primaryActions}
+          coverImage={coverImage}
+        />
 
-      {/* Infobox-style Datasheet Header */}
-      <header className="rounded-sm border border-border bg-surface p-4 sm:p-6">
-        <div className="space-y-2 border-b border-border pb-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="default">
-              {formatProjectTypeLabel(project.type)}
-            </Badge>
-            {project.status && (
-              <Badge variant="secondary">{project.status}</Badge>
+        {/* Mobile/Tablet Resource & TOC Access (below lg breakpoint) */}
+        {hasSidebarContent && (
+          <div className="space-y-4 lg:hidden">
+            {resources.length > 0 && (
+              <ProjectResources
+                resources={resources}
+                headingId="project-resources-mobile-heading"
+              />
+            )}
+            {tocItems.length >= 2 && (
+              <ProjectTOC items={tocItems} variant="mobile" />
             )}
           </div>
-          <h1 className="inline-flex">
-            <TextSpotlight
-              textClassName="font-sans text-xl font-semibold tracking-tight sm:text-2xl"
-              baseClassName="text-muted-foreground/45"
-              spotlightClassName="text-foreground"
-              spotlightSize={130}
-              spotlightArea={65}
-              animateOnPhone={true}
-            >
-              <span>{project.title}</span>
-            </TextSpotlight>
-          </h1>
-          {project.summary && (
-            <p className="max-w-[72ch] text-base text-muted-foreground">
-              {project.summary}
-            </p>
-          )}
-        </div>
+        )}
 
-        <dl className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
-          <div>
-            <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Type
-            </dt>
-            <dd className="mt-1 font-mono text-xs text-foreground">
-              {formatProjectTypeLabel(project.type)}
-            </dd>
-          </div>
+        {/* Responsive Dossier Two-Column Grid on Desktop (>= lg) */}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,760px)_300px] lg:justify-between lg:gap-12 xl:gap-14">
+          <div className="min-w-0">
+            <article className="min-w-0">
+              <MDXRemote
+                source={project.content}
+                components={createMdxComponents()}
+                options={{
+                  mdxOptions: {
+                    remarkPlugins: [remarkGfm],
+                  },
+                }}
+              />
+            </article>
 
-          <div>
-            <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Role
-            </dt>
-            <dd className="mt-1 font-sans text-sm text-foreground">
-              {project.role ?? "—"}
-            </dd>
-          </div>
-
-          <div>
-            <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Period
-            </dt>
-            <dd className="mt-1 font-mono text-xs text-foreground">
-              {formatPeriod(project.start, project.end)}
-            </dd>
-          </div>
-
-          <div>
-            <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Status
-            </dt>
-            <dd className="mt-1 font-mono text-xs text-foreground">
-              {project.status || "—"}
-            </dd>
-          </div>
-
-          <div className="sm:col-span-2">
-            <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Tools
-            </dt>
-            <dd className="mt-1.5">
-              {project.tools && project.tools.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5">
-                  {project.tools.map((tool) => (
-                    <Badge key={tool} variant="outline">
-                      {tool}
-                    </Badge>
-                  ))}
-                </div>
-              ) : (
-                <span className="font-mono text-xs text-muted-foreground">
-                  —
-                </span>
-              )}
-            </dd>
-          </div>
-
-          <div className="sm:col-span-2">
-            <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Tags
-            </dt>
-            <dd className="mt-1.5">
-              {project.tags && project.tags.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5">
-                  {project.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              ) : (
-                <span className="font-mono text-xs text-muted-foreground">
-                  —
-                </span>
-              )}
-            </dd>
-          </div>
-
-          {project.links && project.links.length > 0 && (
-            <div className="border-t border-border pt-4 sm:col-span-2 md:col-span-4">
-              <dt className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Links
-              </dt>
-              <dd className="mt-1.5 flex flex-wrap gap-3">
-                {project.links.map((link) => (
-                  <a
-                    key={link.url}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80 py-1.5 -my-1 inline-flex items-center"
-                  >
-                    {link.label} ➔
-                  </a>
-                ))}
-              </dd>
-            </div>
-          )}
-        </dl>
-
-        {project.thumbnail && thumbnailDims && (
-          <div className="mt-6 overflow-hidden rounded-sm border border-border bg-background">
-            <Image
-              src={project.thumbnail}
-              alt={`${project.title} thumbnail`}
-              width={thumbnailDims.width}
-              height={thumbnailDims.height}
-              priority
-              className="max-h-96 w-full object-cover"
+            <DossierFooter
+              currentProject={project}
+              allProjects={allProjects}
             />
           </div>
-        )}
-      </header>
 
-      {/* MDX Case Study Body */}
-      <article className="max-w-[72ch]">
-        <MDXRemote
-          source={project.content}
-          components={mdxComponents}
-          options={{
-            mdxOptions: {
-              remarkPlugins: [remarkGfm],
-            },
-          }}
-        />
-      </article>
-    </Container>
+          {hasSidebarContent && (
+            <aside
+              aria-label="Project navigation and resources"
+              className="hidden lg:block"
+            >
+              <div className="sticky top-24 max-h-[calc(100vh-7rem)] space-y-6 overflow-y-auto pr-1">
+                {resources.length > 0 && (
+                  <ProjectResources
+                    resources={resources}
+                    headingId="project-resources-desktop-heading"
+                  />
+                )}
+                {tocItems.length >= 2 && (
+                  <ProjectTOC items={tocItems} variant="desktop" />
+                )}
+              </div>
+            </aside>
+          )}
+        </div>
+      </Container>
     </>
   )
 }
