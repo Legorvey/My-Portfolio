@@ -2,6 +2,7 @@
 title: "AquaFeeder IoT: Full-Stack Ecosystem"
 slug: "aquafeeder"
 type: "hardware"
+subtitle: "Connected automatic fish-feeding system with ESP32 sensing and a multithreaded Flask control interface"
 summary: "Bridging bare-metal hardware control with a dynamic Python web backend."
 role: "Embedded Systems & Web Dev"
 start: "2025-06"
@@ -19,7 +20,7 @@ thumbnail: "/projects/aquafeeder/1-hero.webp"
 featured: true
 ---
 
-## The Mission
+## Overview & Mission
 
 Manual fish feeding is often inconsistent, leading to unpredictable water quality and poor fish health due to overfeeding or missed schedules. The AquaFeeder IoT project was born to bridge this gap. My objective was to architect and develop an end-to-end e-feeder ecosystem. This system needed to provide precise, automated feeding schedules while offering real-time distance monitoring and remote schedule management through a seamless web interface.
 
@@ -30,13 +31,21 @@ To ensure robustness and flexibility, I avoided instant IoT platforms and built 
 - **ESP32 as Client:** The hardware utilizes the `HTTPClient` library to act as a client. It reads data from the ultrasonic sensor and sends a periodic **POST** request to the Flask server with the food level data in a JSON payload.
 - **Python Flask as Server:** The server acts as the centralized hub. It exposes REST endpoints (`/api/data`, `/api/schedule`) to receive sensor data and serve the current feeding schedules back to the ESP32.
 
-## The Technical Edge: Multithreaded Backend
+<TechnicalDiagram
+  src="/projects/aquafeeder/1-hero.webp"
+  alt="AquaFeeder Wokwi wiring diagram connecting ESP32, HC-SR04 ultrasonic sensor, piezo buzzer, and SG90 servo motor"
+  caption="Simulated Wokwi circuit wiring for the AquaFeeder prototype: ESP32 microcontroller interfaced with an HC-SR04 ultrasonic distance sensor, piezo alert buzzer, and SG90 servo actuator."
+/>
+
+## Implementation: Multithreaded Backend & Web Interface
+
+### Multithreaded Scheduler Loop
 
 This project required rigorous software engineering logic beyond standard IoT scripting. A primary challenge was managing the feeding scheduler without blocking the main web server. I solved this by leveraging Python’s `threading` library.
 
-I engineered a background thread that runs a scheduler loop in parallel with the Flask app. This thread continuously polls the `schedules.json` file. When a scheduled time matches, it executes the feeding command. This architecture ensures that web requests for the dashboard remain lightning-fast and uninterrupted while the automation runs reliably in the background.
+I engineered a background thread that runs a scheduler loop in parallel with the Flask app. This thread continuously polls the `schedules.json` file. When a scheduled time matches, it executes the feeding command. This architecture ensures that web requests for the dashboard remain responsive and uninterrupted while the automation runs reliably in the background.
 
-## Building the Dynamic Web Dashboard
+### Dynamic Web Dashboard
 
 The frontend was designed for an intuitive user experience, served using Jinja2 templating. Instead of generic charts, I created a custom CSS-based water/food level gauge that updates dynamically. To maintain the "application-like" feel, I utilized Vanilla JavaScript (Fetch API) to perform asynchronous data fetching (AJAX). This ensures that the food level, next feeding time, and status update in real-time without requiring a single page reload.
 
@@ -56,14 +65,27 @@ An inside look at the core hardware that drives the AquaFeeder automation and mo
   <p>Utilizes ultrasonic sound waves to measure the distance to the food surface within the container. This raw distance data is sent to the ESP32 and backend to calculate the container’s fullness percentage in real-time.</p>
 </ComponentRow>
 
+## Technical Reference
+
+| Subsystem | Interface / Endpoint | Role in System |
+| :--- | :--- | :--- |
+| **ESP32 Firmware** | `HTTPClient` (C++) | Polls ultrasonic sensor, drives SG90 PWM, and syncs JSON state with Flask |
+| **Telemetry Ingestion** | `POST /api/data` | Receives ultrasonic container distance readings and updates food percentage history |
+| **Schedule Sync** | `GET /api/schedule` | Serves active feeding schedule entries and manual trigger state to the ESP32 |
+| **Background Worker** | Python `threading` + `schedules.json` | Evaluates feeding timestamps concurrently without blocking HTTP dashboard requests |
+| **Client UI** | Jinja2 + Fetch API (AJAX) | Displays food storage percentage, buzzer threshold controls, and feeding schedule |
+
 ## Physical Integration & Prototypes
 
 Translating simulated designs into a physical product requires meticulous prototyping. While high-fidelity documentation was lost during the intensive development and testing phases, these authentic artifacts—a screenshot from a video review and a photo of a phone showing the dynamic dashboard—prove the successful symbiosis of the full-stack system.
 
-![AquaFeeder Physical Integration vs Web Dashboard](/projects/aquafeeder/5-product.webp)
+<ProjectFigure
+  src="/projects/aquafeeder/5-product.webp"
+  alt="AquaFeeder physical prototype container alongside mobile web dashboard views showing food percentage history and schedule controls"
+  kind="photo"
+  caption="From video review to mobile control: physical hopper assembly with top-mounted HC-SR04 sensor (center) flanked by the Flask mobile interface displaying real-time food percentage history and schedule controls — June 2025."
+/>
 
-*From Video Review to Mobile Control: Proving hardware-software symbiosis despite lost high-res documentation.*
-
-## Conclusion
+## Conclusion & Lessons Learned
 
 AquaFeeder IoT is more than just an automatic feeder; it is a full-stack IoT ecosystem that demonstrates rigorous integration across bare-metal logic (C++), multithreaded backend architecture (Python), and responsive web development (JavaScript). Building this solidified my understanding of concurrent programming and RESTful communication in a hardware context.

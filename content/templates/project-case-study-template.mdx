@@ -1,0 +1,110 @@
+---
+# ============================================================================
+# PROJECT DOSSIER AUTHORING TEMPLATE
+# ============================================================================
+# Copy this file into `content/projects/<your-slug>.mdx`.
+# Ensure the filename matches `slug` (e.g. `content/projects/aquafeeder.mdx`).
+# All fields except `title`, `slug`, and `type` are optional.
+# ============================================================================
+title: "Project Title: Clear Engineering or Operational Name"
+slug: "project-slug"
+type: "hardware" # hardware | software | research | event | business | work
+subtitle: "Optional concise one-line description of what was built or investigated"
+summary: "1–2 sentence plain-language summary used in catalog rows, meta tags, and the dossier intro."
+outcome: "Optional single-sentence verified outcome or key result."
+role: "Your Specific Role"
+start: "2025-06" # YYYY-MM
+end: "2025-06"   # YYYY-MM or "present"
+updated: "2025-07" # Optional YYYY-MM when the archive entry was last updated
+status: "Completed" # Optional override; otherwise derived automatically from `end`
+tools:
+  - "ESP32"
+  - "C++"
+  - "Python Flask"
+tags:
+  - "Hardware"
+  - "IoT"
+thumbnail: "/projects/project-slug/1-hero.webp" # Used for OpenGraph and listing cards
+cover:
+  src: "/projects/project-slug/cover-photo.webp"
+  alt: "Descriptive alt text for the cover image"
+  caption: "Optional caption explaining what the cover photograph shows and when it was taken."
+  fit: "cover" # "cover" for photography, "contain" for technical diagrams
+resources:
+  - label: "Firmware & backend source"
+    url: "https://github.com/Legorvey/example-repo"
+    kind: "repository" # repository | documentation | photos | diagram | report | dataset | presentation | demo | download | other
+    description: "Source code, configuration, and commit history"
+  - label: "Original prototype photos"
+    url: "https://drive.google.com/drive/folders/example"
+    kind: "photos"
+    description: "Full-resolution assembly and bench-testing photographs"
+  - label: "Technical report"
+    url: "https://drive.google.com/file/d/example/view"
+    kind: "report"
+    format: "PDF"
+    description: "System design, test results, and schematic appendix"
+featured: false
+---
+
+## Overview
+
+What is this project? What problem does it solve, and what did I specifically own, architect, or execute? Write clearly so a new visitor understands the project in 30 seconds.
+
+## Problem & Constraints
+
+Why was this work necessary? Detail the real operational, hardware, software, organizational, safety, time, or budget constraints that shaped the decisions.
+
+## System Architecture / Methodology
+
+Explain the components, signal or data flow, and high-level methodology. When including wiring diagrams, block diagrams, or flowcharts, use `<TechnicalDiagram />` so the image is never cropped and can be inspected at full size:
+
+<TechnicalDiagram
+  src="/projects/project-slug/architecture-diagram.png"
+  alt="Block diagram showing sensor input, microcontroller processing, and backend API"
+  caption="End-to-end system architecture and communication flow."
+/>
+
+## Implementation / Execution
+
+Document the key engineering or operational decisions, subsystems, protocols, concurrency models, and tradeoffs. Separate what **the team** did from what **I** personally built or led.
+
+## Testing & Results
+
+Describe how the system or initiative was validated and what was observed in practice. Record only verified measurements or outcomes, and state assumptions or limitations plainly.
+
+## Technical Reference
+
+Include pinouts, component specifications, API endpoints, calibration notes, or commands that future-you will want to retrieve years later without digging through old folders.
+
+| Subsystem / Pin | Signal / Interface | Description |
+| :--- | :--- | :--- |
+| `GPIO 2` | `I2C SDA` | Primary sensor data line |
+| `POST /api/data` | `HTTP JSON` | Telemetry ingestion endpoint |
+
+<TechnicalSpec
+  title="System Parameters"
+  items={[
+    { label: "Microcontroller", value: "ESP32-WROOM-32" },
+    { label: "Sampling Rate", value: "100 Hz discrete loop" },
+  ]}
+/>
+
+## Media & Artifacts
+
+Use `<ProjectFigure />` for individual annotated photos or `<ProjectGallery />` for a responsive multi-image grid.
+
+<ProjectFigure
+  src="/projects/project-slug/prototype-bench.webp"
+  alt="Physical prototype on the test bench"
+  kind="photo"
+  caption="Bench testing of the assembled prototype — June 2025. Full-resolution originals linked under Project Resources."
+/>
+
+## Challenges & Lessons Learned
+
+What went wrong or proved harder than expected? How was it resolved, and what would you change in the next revision?
+
+## References & Further Reading
+
+Optional links to datasheets, standards, press articles, or follow-up repositories.
