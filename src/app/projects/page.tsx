@@ -2,6 +2,14 @@ import type { Metadata } from "next"
 import { Suspense } from "react"
 import { Container } from "@/components/layout/container"
 import { ProjectsTable } from "@/components/projects/projects-table"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 import { TextSpotlight } from "@/components/ui/text-spotlight"
 import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import { getProjects, type ProjectFrontmatter } from "@/lib/content"
@@ -101,11 +109,19 @@ export default function ProjectsPage() {
             .replace(/>/g, "\\u003e"),
         }}
       />
-      <Container className="space-y-12 pt-20 sm:pt-24 pb-12 sm:pb-16">
-      <header className="space-y-2 border-b border-border pb-8">
-        <p className="font-mono text-xs font-semibold uppercase tracking-wider text-primary">
-          Complete Index of Technical Projects
-        </p>
+      <Container className="space-y-10 pt-20 sm:pt-24 pb-12 sm:pb-16">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Projects</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <header className="space-y-2 border-b border-border pb-8">
         <h1 className="inline-flex">
           <TextSpotlight
             textClassName="font-sans text-xl font-semibold tracking-tight sm:text-2xl"

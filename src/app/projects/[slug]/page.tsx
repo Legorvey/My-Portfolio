@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import { Suspense } from "react"
@@ -8,6 +7,14 @@ import remarkGfm from "remark-gfm"
 import { Container } from "@/components/layout/container"
 import { mdxComponents } from "@/components/mdx/mdx-components"
 import { Badge } from "@/components/ui/badge"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 import { TextSpotlight } from "@/components/ui/text-spotlight"
 import { areCaseStudiesEnabled } from "@/lib/case-studies-config"
 import { getProject, getProjects } from "@/lib/content"
@@ -187,41 +194,23 @@ async function ProjectDetail({ params }: ProjectPageProps) {
       />
       <Container className="space-y-10 pt-20 sm:pt-24 pb-12 sm:pb-16">
         {/* Semantic Breadcrumbs (Datasheet style) */}
-        <nav
-          aria-label="Breadcrumb"
-          className="font-mono text-xs text-muted-foreground"
-        >
-          <ol className="flex flex-wrap items-center gap-1.5">
-            <li>
-              <Link
-                href="/"
-                className="transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              >
-                Home
-              </Link>
-            </li>
-            <li aria-hidden="true" className="text-muted-foreground/50">
-              /
-            </li>
-            <li>
-              <Link
-                href="/projects"
-                className="transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              >
-                Projects
-              </Link>
-            </li>
-            <li aria-hidden="true" className="text-muted-foreground/50">
-              /
-            </li>
-            <li
-              aria-current="page"
-              className="font-medium text-foreground max-w-[260px] sm:max-w-none truncate"
-            >
-              {project.title}
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/projects">Projects</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage className="max-w-[260px] sm:max-w-none truncate">
+                {project.title}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
       {/* Infobox-style Datasheet Header */}
       <header className="rounded-sm border border-border bg-surface p-4 sm:p-6">

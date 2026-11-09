@@ -115,9 +115,6 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 rounded-sm border border-border bg-surface p-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex w-full items-center gap-2 overflow-x-auto pb-1 sm:w-auto sm:overflow-visible sm:pb-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <span className="shrink-0 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Filter:
-          </span>
           <ToggleGroup
             variant="outline"
             size="sm"
@@ -153,7 +150,7 @@ export function ProjectsTable({ projects }: ProjectsTableProps) {
             className="h-8 min-h-[36px] sm:h-7 sm:min-h-0"
             aria-label={`Sort by period (${sortDirection === "desc" ? "newest first" : "oldest first"})`}
           >
-            Period: {sortDirection === "desc" ? "Newest ↓" : "Oldest ↑"}
+            {sortDirection === "desc" ? "Newest ↓" : "Oldest ↑"}
           </Button>
         </div>
       </div>
