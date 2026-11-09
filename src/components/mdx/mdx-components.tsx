@@ -1,6 +1,15 @@
 import Image from "next/image"
 import * as React from "react"
 import {
+  ProjectFigure,
+  TechnicalDiagram,
+} from "@/components/projects/project-figure"
+import { ProjectGallery } from "@/components/projects/project-gallery"
+import {
+  KeyValueTable,
+  TechnicalSpec,
+} from "@/components/projects/technical-spec"
+import {
   Table,
   TableBody,
   TableCell,
@@ -9,6 +18,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getPublicImageDimensions } from "@/lib/image-dimensions"
+import {
+  createHeadingIdGenerator,
+  extractNodeText,
+  slugifyHeadingText,
+} from "@/lib/project-toc"
 import { cn } from "@/lib/utils"
 
 interface MdxImageProps {
@@ -27,8 +41,9 @@ export async function MdxImage({ src, alt }: MdxImageProps) {
         alt={alt ?? ""}
         width={width}
         height={height}
+        loading="lazy"
         sizes="(min-width: 768px) 72ch, 100vw"
-        className="h-auto w-full object-cover"
+        className="h-auto w-full object-contain bg-background"
       />
     </span>
   )
@@ -51,21 +66,21 @@ export async function ComponentRow({
 
   return (
     <div className="my-4 flex flex-col gap-4 rounded-sm border border-border bg-surface p-4 sm:flex-row sm:items-start">
-      <div className="h-24 w-24 shrink-0 overflow-hidden rounded-sm border border-border bg-background">
+      <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-sm border border-border bg-background p-1.5">
         <Image
           src={src}
           alt={alt}
           width={width}
           height={height}
           sizes="96px"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-contain"
         />
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <h3 className="font-sans text-base font-semibold text-foreground">
           {title}
         </h3>
-        <div className="mt-1 text-sm text-muted-foreground [&>p]:m-0">
+        <div className="mt-1 text-sm text-muted-foreground leading-relaxed [&>p]:m-0">
           {children}
         </div>
       </div>
@@ -172,117 +187,134 @@ export async function PressCard({
   )
 }
 
-function slugifyHeading(children: React.ReactNode): string | undefined {
-  if (typeof children === "string") {
-    return children
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/\s+/g, "-")
-  }
-  if (Array.isArray(children)) {
-    const text = children
-      .map((c) => (typeof c === "string" ? c : ""))
-      .join("")
-      .trim()
-    if (text) {
-      return text
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "-")
-    }
-  }
-  return undefined
+export function slugifyHeading(children: React.ReactNode): string | undefined {
+  const text = extractNodeText(children).trim()
+  if (!text) return undefined
+  return slugifyHeadingText(text)
 }
 
-export const mdxComponents = {
-  img: MdxImage,
-  ComponentRow,
-  PressCard,
-  h2: ({ children, id, className, ...props }: React.ComponentProps<"h2">) => {
-    const headingId = id || slugifyHeading(children)
-    return (
-      <h2
-        id={headingId}
+/**
+ * Creates a fresh set of MDX component mappings with a per-render stateful
+ * heading ID generator so duplicate headings receive deterministic unique IDs
+ * matching `extractTocFromMdx`.
+ */
+export function createMdxComponents() {
+  const slugger = createHeadingIdGenerator()
+
+  return {
+    img: MdxImage,
+    ComponentRow,
+    PressCard,
+    ProjectFigure,
+    TechnicalDiagram,
+    ProjectGallery,
+    TechnicalSpec,
+    KeyValueTable,
+    h2: ({ children, id, className, ...props }: React.ComponentProps<"h2">) => {
+      const headingId = id || slugger.slug(children)
+      return (
+        <h2
+          id={headingId}
+          className={cn(
+            "group mt-12 mb-4 border-b border-border pb-2.5 font-sans text-xl font-semibold tracking-tight text-foreground scroll-mt-24 first:mt-0",
+            className
+          )}
+          {...props}
+        >
+          {children}
+        </h2>
+      )
+    },
+    h3: ({ children, id, className, ...props }: React.ComponentProps<"h3">) => {
+      const headingId = id || slugger.slug(children)
+      return (
+        <h3
+          id={headingId}
+          className={cn(
+            "mt-8 mb-2.5 font-sans text-base sm:text-lg font-semibold text-foreground scroll-mt-24",
+            className
+          )}
+          {...props}
+        >
+          {children}
+        </h3>
+      )
+    },
+    h4: ({ className, ...props }: React.ComponentProps<"h4">) => (
+      <h4
         className={cn(
-          "mt-10 mb-3 border-b border-border pb-2 font-sans text-base font-semibold tracking-tight text-foreground scroll-mt-24",
+          "mt-6 mb-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground",
           className
         )}
         {...props}
-      >
-        {children}
-      </h2>
-    )
-  },
-  h3: ({ children, id, className, ...props }: React.ComponentProps<"h3">) => {
-    const headingId = id || slugifyHeading(children)
-    return (
-      <h3
-        id={headingId}
-        className={cn(
-          "mt-6 mb-2 font-sans text-base font-semibold text-foreground scroll-mt-24",
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </h3>
-    )
-  },
-  p: (props: React.ComponentProps<"p">) => (
-    <p
-      className="my-3 max-w-[72ch] text-base text-foreground [&>em:only-child]:block [&>em:only-child]:font-mono [&>em:only-child]:text-xs [&>em:only-child]:not-italic [&>em:only-child]:text-muted-foreground"
-      {...props}
-    />
-  ),
-  ul: (props: React.ComponentProps<"ul">) => (
-    <ul
-      className="my-3 max-w-[72ch] list-disc space-y-2 pl-5 text-base text-foreground"
-      {...props}
-    />
-  ),
-  li: (props: React.ComponentProps<"li">) => (
-    <li className="text-base text-foreground" {...props} />
-  ),
-  blockquote: (props: React.ComponentProps<"blockquote">) => (
-    <blockquote
-      className="my-6 max-w-[72ch] rounded-sm border border-border border-l-2 border-l-primary bg-surface p-4 font-sans text-base italic text-foreground"
-      {...props}
-    />
-  ),
-  pre: (props: React.ComponentProps<"pre">) => (
-    <pre
-      className="my-4 max-w-[72ch] overflow-x-auto rounded-sm border border-border bg-surface p-4 font-mono text-xs text-foreground [&_code]:border-0 [&_code]:bg-transparent [&_code]:p-0"
-      {...props}
-    />
-  ),
-  code: (props: React.ComponentProps<"code">) => (
-    <code
-      className="rounded-sm border border-border bg-surface px-1 py-0 font-mono text-xs text-foreground break-words [word-break:break-word]"
-      {...props}
-    />
-  ),
-  table: (props: React.ComponentProps<"table">) => (
-    <div className="my-6 max-w-[72ch]">
-      <Table {...props} />
-    </div>
-  ),
-  thead: (props: React.ComponentProps<"thead">) => <TableHeader {...props} />,
-  tbody: (props: React.ComponentProps<"tbody">) => <TableBody {...props} />,
-  tr: (props: React.ComponentProps<"tr">) => <TableRow {...props} />,
-  th: (props: React.ComponentProps<"th">) => <TableHead {...props} />,
-  td: (props: React.ComponentProps<"td">) => <TableCell {...props} />,
-  a: ({ href, ...props }: React.ComponentProps<"a">) => {
-    const safeHref = sanitizeUrl(href)
-    const isExternal = safeHref.startsWith("http")
-    return (
-      <a
-        {...props}
-        href={safeHref}
-        target={isExternal ? "_blank" : undefined}
-        rel={isExternal ? "noopener noreferrer" : undefined}
-        className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring py-0.5 inline-block"
       />
-    )
-  },
+    ),
+    p: (props: React.ComponentProps<"p">) => (
+      <p
+        className="my-3.5 max-w-[72ch] text-base leading-relaxed text-foreground [&>em:only-child]:block [&>em:only-child]:font-mono [&>em:only-child]:text-xs [&>em:only-child]:not-italic [&>em:only-child]:text-muted-foreground"
+        {...props}
+      />
+    ),
+    ul: (props: React.ComponentProps<"ul">) => (
+      <ul
+        className="my-3.5 max-w-[72ch] list-disc space-y-2 pl-5 text-base leading-relaxed text-foreground"
+        {...props}
+      />
+    ),
+    ol: (props: React.ComponentProps<"ol">) => (
+      <ol
+        className="my-3.5 max-w-[72ch] list-decimal space-y-2 pl-5 text-base leading-relaxed text-foreground"
+        {...props}
+      />
+    ),
+    li: (props: React.ComponentProps<"li">) => (
+      <li className="text-base leading-relaxed text-foreground" {...props} />
+    ),
+    blockquote: (props: React.ComponentProps<"blockquote">) => (
+      <blockquote
+        className="my-6 max-w-[72ch] rounded-sm border border-border border-l-2 border-l-primary bg-surface p-4 font-sans text-base italic text-foreground"
+        {...props}
+      />
+    ),
+    pre: (props: React.ComponentProps<"pre">) => (
+      <pre
+        className="my-5 max-w-[72ch] overflow-x-auto rounded-sm border border-border bg-surface p-4 font-mono text-xs leading-relaxed text-foreground [&_code]:border-0 [&_code]:bg-transparent [&_code]:p-0"
+        {...props}
+      />
+    ),
+    code: (props: React.ComponentProps<"code">) => (
+      <code
+        className="rounded-sm border border-border bg-surface px-1 py-0.5 font-mono text-xs text-foreground break-words [word-break:break-word]"
+        {...props}
+      />
+    ),
+    table: (props: React.ComponentProps<"table">) => (
+      <div className="my-6 w-full max-w-full">
+        <Table {...props} />
+      </div>
+    ),
+    thead: (props: React.ComponentProps<"thead">) => <TableHeader {...props} />,
+    tbody: (props: React.ComponentProps<"tbody">) => <TableBody {...props} />,
+    tr: (props: React.ComponentProps<"tr">) => <TableRow {...props} />,
+    th: (props: React.ComponentProps<"th">) => <TableHead {...props} />,
+    td: (props: React.ComponentProps<"td">) => <TableCell {...props} />,
+    hr: (props: React.ComponentProps<"hr">) => (
+      <hr className="my-10 border-border" {...props} />
+    ),
+    a: ({ href, ...props }: React.ComponentProps<"a">) => {
+      const safeHref = sanitizeUrl(href)
+      const isExternal = safeHref.startsWith("http")
+      return (
+        <a
+          {...props}
+          href={safeHref}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+          className="font-mono text-xs font-semibold text-primary underline underline-offset-4 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring py-0.5 inline-block"
+        />
+      )
+    },
+  }
 }
+
+export const mdxComponents = createMdxComponents()
