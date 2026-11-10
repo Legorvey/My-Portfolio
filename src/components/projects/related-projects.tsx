@@ -93,7 +93,7 @@ export function DossierFooter({
                   </h3>
 
                   {project.summary && (
-                    <p className="line-clamp-2 font-sans text-xs text-muted-foreground leading-relaxed">
+                    <p className="line-clamp-2 font-sans text-xs text-muted-foreground leading-relaxed text-justify">
                       {project.summary}
                     </p>
                   )}

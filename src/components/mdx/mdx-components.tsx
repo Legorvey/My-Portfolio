@@ -80,7 +80,7 @@ export async function ComponentRow({
         <h3 className="font-sans text-base font-semibold text-foreground">
           {title}
         </h3>
-        <div className="mt-1 text-sm text-muted-foreground leading-relaxed [&>p]:m-0">
+        <div className="mt-1 text-sm text-muted-foreground leading-relaxed text-justify [&>p]:m-0">
           {children}
         </div>
       </div>
@@ -167,7 +167,7 @@ export async function PressCard({
         <h3 className="mt-1 font-sans text-base font-semibold text-foreground">
           {title}
         </h3>
-        <div className="mt-2 text-sm text-muted-foreground [&>p]:m-0">
+        <div className="mt-2 text-sm text-muted-foreground text-justify [&>p]:m-0">
           {children}
         </div>
         <a
@@ -249,9 +249,12 @@ export function createMdxComponents() {
         {...props}
       />
     ),
-    p: (props: React.ComponentProps<"p">) => (
+    p: ({ className, ...props }: React.ComponentProps<"p">) => (
       <p
-        className="my-3.5 max-w-[72ch] text-base leading-relaxed text-foreground [&>em:only-child]:block [&>em:only-child]:font-mono [&>em:only-child]:text-xs [&>em:only-child]:not-italic [&>em:only-child]:text-muted-foreground"
+        className={cn(
+          "my-3.5 max-w-[72ch] text-base leading-relaxed text-foreground text-justify [&>em:only-child]:block [&>em:only-child]:font-mono [&>em:only-child]:text-xs [&>em:only-child]:not-italic [&>em:only-child]:text-muted-foreground [&>em:only-child]:text-left",
+          className
+        )}
         {...props}
       />
     ),
@@ -267,12 +270,18 @@ export function createMdxComponents() {
         {...props}
       />
     ),
-    li: (props: React.ComponentProps<"li">) => (
-      <li className="text-base leading-relaxed text-foreground" {...props} />
+    li: ({ className, ...props }: React.ComponentProps<"li">) => (
+      <li
+        className={cn("text-base leading-relaxed text-foreground text-justify", className)}
+        {...props}
+      />
     ),
-    blockquote: (props: React.ComponentProps<"blockquote">) => (
+    blockquote: ({ className, ...props }: React.ComponentProps<"blockquote">) => (
       <blockquote
-        className="my-6 max-w-[72ch] rounded-sm border border-border border-l-2 border-l-primary bg-surface p-4 font-sans text-base italic text-foreground"
+        className={cn(
+          "my-6 max-w-[72ch] rounded-sm border border-border border-l-2 border-l-primary bg-surface p-4 font-sans text-base italic text-foreground text-justify",
+          className
+        )}
         {...props}
       />
     ),

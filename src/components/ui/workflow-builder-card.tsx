@@ -202,7 +202,7 @@ export const WorkflowBuilderCard = ({
                 className="overflow-hidden"
               >
                 {description && (
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed text-justify">
                     {description}
                   </p>
                 )}

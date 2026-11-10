@@ -230,7 +230,7 @@ function ProjectCard3D({
             {project.summary && (
               <p
                 className={cn(
-                  "mt-2.5 sm:mt-3 font-sans text-xs sm:text-sm leading-relaxed text-muted-foreground",
+                  "mt-2.5 sm:mt-3 font-sans text-xs sm:text-sm leading-relaxed text-muted-foreground text-justify",
                   isHero ? "max-w-2xl lg:max-w-3xl" : "max-w-md lg:max-w-lg"
                 )}
               >

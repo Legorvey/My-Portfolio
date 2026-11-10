@@ -94,13 +94,13 @@ export function ProjectDossierHeader({
         )}
 
         {project.summary && (
-          <p className="max-w-[72ch] font-sans text-base text-muted-foreground leading-relaxed">
+          <p className="max-w-[72ch] font-sans text-base text-muted-foreground leading-relaxed text-justify">
             {project.summary}
           </p>
         )}
 
         {project.outcome && (
-          <p className="max-w-[72ch] border-l-2 border-primary/60 pl-3 font-sans text-sm text-foreground/90">
+          <p className="max-w-[72ch] border-l-2 border-primary/60 pl-3 font-sans text-sm text-foreground/90 text-justify">
             <span className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground mr-2">
               Outcome:
             </span>
