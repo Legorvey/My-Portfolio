@@ -1,8 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { ChevronDownIcon, ListTreeIcon } from "lucide-react"
-import type { TocHeadingItem } from "@/lib/project-toc"
+import { ChevronDownIcon } from "lucide-react"
+import {
+  formatTocSectionNumbers,
+  type TocHeadingItem,
+} from "@/lib/project-toc"
 import { cn } from "@/lib/utils"
 
 export interface ProjectTOCProps {
@@ -11,27 +14,147 @@ export interface ProjectTOCProps {
   className?: string
 }
 
+const HEADER_SCROLL_OFFSET = 112
+const BOTTOM_THRESHOLD_PX = 36
+const CLICK_LOCK_DURATION_MS = 750
+
 export function ProjectTOC({
   items,
   variant = "desktop",
   className,
 }: ProjectTOCProps) {
+  const numberedItems = React.useMemo(
+    () => formatTocSectionNumbers(items),
+    [items]
+  )
+
   const [activeId, setActiveId] = React.useState<string | null>(
-    items[0]?.id ?? null
+    numberedItems[0]?.id ?? null
   )
   const detailsRef = React.useRef<HTMLDetailsElement>(null)
+  const clickLockRef = React.useRef<{ id: string; until: number } | null>(null)
+
+  const handleSelectHeading = React.useCallback(
+    (id: string, closeMobileDisclosure = false) => {
+      clickLockRef.current = {
+        id,
+        until: Date.now() + CLICK_LOCK_DURATION_MS,
+      }
+      setActiveId(id)
+      if (closeMobileDisclosure && detailsRef.current) {
+        detailsRef.current.open = false
+      }
+    },
+    []
+  )
 
   React.useEffect(() => {
-    if (!items || items.length < 2 || typeof window === "undefined") return
+    if (!numberedItems || numberedItems.length === 0 || typeof window === "undefined") {
+      return
+    }
 
-    const headingElements = items
+    const validIds = new Set(numberedItems.map((item) => item.id))
+
+    const syncFromLocationHash = () => {
+      const rawHash = window.location.hash.replace(/^#/, "")
+      if (!rawHash) return false
+      let decoded = rawHash
+      try {
+        decoded = decodeURIComponent(rawHash)
+      } catch {
+        decoded = rawHash
+      }
+      if (validIds.has(decoded)) {
+        clickLockRef.current = {
+          id: decoded,
+          until: Date.now() + CLICK_LOCK_DURATION_MS,
+        }
+        setActiveId(decoded)
+        return true
+      }
+      return false
+    }
+
+    // Initialize from URL hash if present on load/reload
+    const hasHashMatch = syncFromLocationHash()
+
+    if (numberedItems.length < 2) {
+      if (!hasHashMatch) {
+        setActiveId(numberedItems[0]?.id ?? null)
+      }
+      window.addEventListener("hashchange", syncFromLocationHash)
+      return () => {
+        window.removeEventListener("hashchange", syncFromLocationHash)
+      }
+    }
+
+    const headingElements = numberedItems
       .map((item) => document.getElementById(item.id))
       .filter((el): el is HTMLElement => el !== null)
 
-    if (headingElements.length === 0) return
+    if (headingElements.length === 0) {
+      if (!hasHashMatch) {
+        setActiveId(numberedItems[0]?.id ?? null)
+      }
+      window.addEventListener("hashchange", syncFromLocationHash)
+      return () => {
+        window.removeEventListener("hashchange", syncFromLocationHash)
+      }
+    }
+
+    const computeActiveByPosition = (): string | null => {
+      const docEl = document.documentElement
+      const scrollHeight = docEl.scrollHeight
+      const clientHeight = window.innerHeight
+
+      // When near the bottom of a scrollable document, highlight the final section
+      if (
+        scrollHeight > clientHeight + BOTTOM_THRESHOLD_PX &&
+        clientHeight + Math.ceil(window.scrollY) >=
+          scrollHeight - BOTTOM_THRESHOLD_PX
+      ) {
+        return headingElements[headingElements.length - 1]?.id ?? null
+      }
+
+      // Find the last heading whose top has crossed or reached the reading offset
+      let candidateId: string | null = null
+      for (const el of headingElements) {
+        const top = el.getBoundingClientRect().top
+        if (top <= HEADER_SCROLL_OFFSET) {
+          candidateId = el.id
+        } else {
+          break
+        }
+      }
+
+      return candidateId ?? headingElements[0]?.id ?? null
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
+        if (
+          clickLockRef.current &&
+          Date.now() < clickLockRef.current.until
+        ) {
+          return
+        }
+
+        // Check if DOM layout geometry is active (non-zero bounding rects or scrollHeight)
+        const hasLayoutGeometry =
+          document.documentElement.scrollHeight > 0 ||
+          headingElements.some((el) => {
+            const rect = el.getBoundingClientRect()
+            return rect.top !== 0 || rect.bottom !== 0 || rect.height !== 0
+          })
+
+        if (hasLayoutGeometry) {
+          const nextId = computeActiveByPosition()
+          if (nextId) {
+            setActiveId(nextId)
+            return
+          }
+        }
+
         const visible = entries
           .filter((entry) => entry.isIntersecting)
           .sort(
@@ -44,7 +167,7 @@ export function ProjectTOC({
         }
       },
       {
-        rootMargin: "-88px 0px -65% 0px",
+        rootMargin: "-96px 0px -60% 0px",
         threshold: [0, 1],
       }
     )
@@ -53,10 +176,38 @@ export function ProjectTOC({
       observer.observe(el)
     }
 
-    return () => observer.disconnect()
-  }, [items])
+    let rafId: number | null = null
+    const handleScroll = () => {
+      if (rafId !== null) return
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null
+        if (
+          clickLockRef.current &&
+          Date.now() < clickLockRef.current.until
+        ) {
+          return
+        }
+        const nextId = computeActiveByPosition()
+        if (nextId) {
+          setActiveId(nextId)
+        }
+      })
+    }
 
-  if (!items || items.length < 2) {
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("hashchange", syncFromLocationHash)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("hashchange", syncFromLocationHash)
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId)
+      }
+    }
+  }, [numberedItems])
+
+  if (!numberedItems || numberedItems.length === 0) {
     return null
   }
 
@@ -65,49 +216,54 @@ export function ProjectTOC({
       <nav
         aria-label="On this page"
         className={cn(
-          "rounded-sm border border-border bg-surface",
+          "rounded-xl border border-border bg-surface",
           className
         )}
       >
         <details ref={detailsRef} className="group">
-          <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2 px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-foreground select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">
-            <span className="inline-flex items-center gap-2">
-              <ListTreeIcon
-                className="size-3.5 text-muted-foreground"
-                aria-hidden="true"
-              />
-              <span>On this page ({items.length})</span>
-            </span>
+          <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2 rounded-xl px-4 py-3 font-sans text-sm font-medium text-foreground select-none transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">
+            <span>On this page</span>
             <ChevronDownIcon
               className="size-4 text-muted-foreground transition-transform duration-150 group-open:rotate-180"
               aria-hidden="true"
             />
           </summary>
 
-          <ol className="border-t border-border px-4 py-3 space-y-1.5">
-            {items.map((item) => {
+          <ol className="space-y-1 border-t border-border/80 px-4 py-3">
+            {numberedItems.map((item) => {
               const isActive = activeId === item.id
               return (
                 <li
                   key={item.id}
-                  className={cn(item.level === 3 && "pl-3.5")}
+                  className={cn(item.level === 3 && "pl-4")}
                 >
                   <a
                     href={`#${item.id}`}
-                    onClick={() => {
-                      if (detailsRef.current) {
-                        detailsRef.current.open = false
-                      }
-                      setActiveId(item.id)
-                    }}
+                    onClick={() => handleSelectHeading(item.id, true)}
+                    aria-current={isActive ? "location" : undefined}
                     className={cn(
-                      "block rounded-sm py-1 font-sans text-xs leading-snug transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      "group/item -mx-1.5 flex items-baseline gap-2.5 rounded-md px-1.5 py-1.5 font-sans text-[13px] leading-snug transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       isActive
                         ? "font-medium text-primary"
                         : "text-muted-foreground hover:text-foreground"
                     )}
                   >
-                    {item.text}
+                    <span
+                      className={cn(
+                        "shrink-0 font-mono text-[11px] leading-snug tabular-nums transition-colors",
+                        item.level === 3
+                          ? "min-w-[1.75rem]"
+                          : "min-w-[1.25rem]",
+                        isActive
+                          ? "text-primary"
+                          : "text-muted-foreground/75 group-hover/item:text-muted-foreground"
+                      )}
+                    >
+                      {item.number}
+                    </span>
+                    <span className="min-w-0 flex-1 break-words">
+                      {item.text}
+                    </span>
                   </a>
                 </li>
               )
@@ -119,29 +275,50 @@ export function ProjectTOC({
   }
 
   return (
-    <nav aria-label="On this page" className={cn("space-y-2.5", className)}>
-      <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+    <nav
+      aria-label="On this page"
+      className={cn(
+        "rounded-xl border border-border bg-surface p-4",
+        className
+      )}
+    >
+      <h2 className="font-sans text-sm font-medium text-foreground">
         On this page
       </h2>
 
-      <ol className="space-y-1 border-l border-border">
-        {items.map((item) => {
+      <ol className="mt-3 space-y-1 border-t border-border/80 pt-3">
+        {numberedItems.map((item) => {
           const isActive = activeId === item.id
           return (
-            <li key={item.id}>
+            <li
+              key={item.id}
+              className={cn(item.level === 3 && "pl-4")}
+            >
               <a
                 href={`#${item.id}`}
-                onClick={() => setActiveId(item.id)}
+                onClick={() => handleSelectHeading(item.id, false)}
                 aria-current={isActive ? "location" : undefined}
                 className={cn(
-                  "-ml-px block border-l-2 py-1 pr-2 font-sans text-xs leading-snug transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring break-words",
-                  item.level === 3 ? "pl-6" : "pl-3.5",
+                  "group -mx-1.5 flex items-baseline gap-2.5 rounded-md px-1.5 py-1 font-sans text-[13px] leading-snug transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   isActive
-                    ? "border-primary font-medium text-primary"
-                    : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
+                    ? "font-medium text-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                {item.text}
+                <span
+                  className={cn(
+                    "shrink-0 font-mono text-[11px] leading-snug tabular-nums transition-colors",
+                    item.level === 3 ? "min-w-[1.75rem]" : "min-w-[1.25rem]",
+                    isActive
+                      ? "text-primary"
+                      : "text-muted-foreground/75 group-hover:text-muted-foreground"
+                  )}
+                >
+                  {item.number}
+                </span>
+                <span className="min-w-0 flex-1 break-words">
+                  {item.text}
+                </span>
               </a>
             </li>
           )

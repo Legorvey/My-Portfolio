@@ -1,4 +1,7 @@
+import * as React from "react"
+import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
+import { ProjectResources } from "@/components/projects/project-resources"
 import {
   ProjectFrontmatterSchema,
   ProjectResourceSchema,
@@ -189,5 +192,43 @@ describe("ProjectResourceSchema & Resource Utilities", () => {
     expect(parsed.subtitle).toBe("Connected automatic fish-feeding system")
     expect(parsed.cover?.fit).toBe("cover")
     expect(parsed.resources).toHaveLength(1)
+  })
+
+  it("renders ProjectResources empty state card when no resources are linked", () => {
+    const html = renderToStaticMarkup(
+      React.createElement(ProjectResources, { resources: [] })
+    )
+
+    expect(html).toContain("Project resources")
+    expect(html).toContain("No public resources linked yet.")
+    expect(html).toContain("rounded-xl")
+    expect(html).not.toContain("<a ")
+  })
+
+  it("renders ProjectResources rows with category icons, titles, and secondary descriptions", () => {
+    const html = renderToStaticMarkup(
+      React.createElement(ProjectResources, {
+        resources: [
+          {
+            label: "Simulator Source Code",
+            url: "https://github.com/Legorvey/SITL-PID-Simulator",
+            kind: "repository",
+            description: "Next.js, TypeScript, and Plotly.js repository",
+          },
+          {
+            label: "Original Photos",
+            url: "https://drive.google.com/drive/folders/example",
+            kind: "photos",
+          },
+        ],
+      })
+    )
+
+    expect(html).toContain("Project resources")
+    expect(html).toContain("Simulator Source Code")
+    expect(html).toContain("Next.js, TypeScript, and Plotly.js repository")
+    expect(html).toContain("Original Photos")
+    expect(html).toContain("Google Drive · Photos &amp; Media")
+    expect(html).not.toContain("No public resources linked yet.")
   })
 })

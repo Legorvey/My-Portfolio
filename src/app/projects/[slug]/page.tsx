@@ -168,7 +168,7 @@ async function ProjectDetail({ params }: ProjectPageProps) {
         }
       : null
 
-  const hasSidebarContent = resources.length > 0 || tocItems.length >= 2
+  const hasToc = tocItems.length > 0
 
   const projectJsonLd = {
     "@context": "https://schema.org",
@@ -246,22 +246,16 @@ async function ProjectDetail({ params }: ProjectPageProps) {
         />
 
         {/* Mobile/Tablet Resource & TOC Access (below lg breakpoint) */}
-        {hasSidebarContent && (
-          <div className="space-y-4 lg:hidden">
-            {resources.length > 0 && (
-              <ProjectResources
-                resources={resources}
-                headingId="project-resources-mobile-heading"
-              />
-            )}
-            {tocItems.length >= 2 && (
-              <ProjectTOC items={tocItems} variant="mobile" />
-            )}
-          </div>
-        )}
+        <div className="space-y-3.5 lg:hidden">
+          <ProjectResources
+            resources={resources}
+            headingId="project-resources-mobile-heading"
+          />
+          {hasToc && <ProjectTOC items={tocItems} variant="mobile" />}
+        </div>
 
         {/* Responsive Dossier Two-Column Grid on Desktop (>= lg) */}
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_280px] xl:grid-cols-[minmax(0,760px)_300px] lg:justify-between lg:gap-12 xl:gap-14">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_288px] xl:grid-cols-[minmax(0,760px)_304px] lg:justify-between lg:gap-12 xl:gap-14">
           <div className="min-w-0">
             <article className="min-w-0">
               <MDXRemote
@@ -281,24 +275,18 @@ async function ProjectDetail({ params }: ProjectPageProps) {
             />
           </div>
 
-          {hasSidebarContent && (
-            <aside
-              aria-label="Project navigation and resources"
-              className="hidden lg:block"
-            >
-              <div className="sticky top-24 max-h-[calc(100vh-7rem)] space-y-6 overflow-y-auto pr-1">
-                {resources.length > 0 && (
-                  <ProjectResources
-                    resources={resources}
-                    headingId="project-resources-desktop-heading"
-                  />
-                )}
-                {tocItems.length >= 2 && (
-                  <ProjectTOC items={tocItems} variant="desktop" />
-                )}
-              </div>
-            </aside>
-          )}
+          <aside
+            aria-label="Project navigation and resources"
+            className="hidden lg:block"
+          >
+            <div className="sticky top-24 max-h-[calc(100vh-7rem)] space-y-3.5 overflow-y-auto">
+              <ProjectResources
+                resources={resources}
+                headingId="project-resources-desktop-heading"
+              />
+              {hasToc && <ProjectTOC items={tocItems} variant="desktop" />}
+            </div>
+          </aside>
         </div>
       </Container>
     </>
